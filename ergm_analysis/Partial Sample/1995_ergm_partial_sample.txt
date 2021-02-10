@@ -1,0 +1,415 @@
+
+ 
+
+==========================
+Summary of model fit
+==========================
+
+Formula:   agg.network ~ edges + mutual + gwesp(decay = 1) + nodecov("gdp_o") + 
+    edgecov(dist.network, attrname = "distw") + edgecov(lang.network) + 
+    edgecov(contig.network) + edgecov(rta.network)
+
+Iterations:  4 out of 250 
+
+Monte Carlo MLE Results:
+                         Estimate Std. Error MCMC % z value Pr(>|z|)    
+edges                  -6.213e+00  7.665e-03    100 -810.51   <1e-04 ***
+mutual                 -9.341e-02  3.930e-04    100 -237.68   <1e-04 ***
+gwesp                   8.340e+00  4.098e-03    100 2034.96   <1e-04 ***
+gwesp.decay            -3.101e-01  7.813e-04    100 -396.88   <1e-04 ***
+nodecov.gdp_o           6.139e-07  4.183e-08      0   14.68   <1e-04 ***
+edgecov.distw          -6.594e-05  4.955e-06      0  -13.31   <1e-04 ***
+edgecov.lang.network    5.339e-01  6.306e-04    100  846.74   <1e-04 ***
+edgecov.contig.network  1.403e+00  1.793e-03    100  782.48   <1e-04 ***
+edgecov.rta.network     1.071e+00  8.026e-04    100 1335.06   <1e-04 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+     Null Deviance: 4907  on 3540  degrees of freedom
+ Residual Deviance: 4293  on 3531  degrees of freedom
+ 
+AIC: 4311    BIC: 4367    (Smaller is better.) 
+
+
+===========
+Diagnostics
+===========
+
+Sample statistics summary:
+
+Iterations = 1e+05:400099000
+Thinning interval = 1000 
+Number of chains = 1 
+Sample size per chain = 4e+05 
+
+1. Empirical mean and standard deviation for each variable,
+   plus standard error of the mean:
+
+                             Mean        SD  Naive SE Time-series SE
+edges                   7.238e-01 2.358e+01 3.728e-02      1.102e-01
+mutual                  2.649e-01 1.425e+01 2.253e-02      7.115e-02
+gwesp                   9.474e-01 1.732e+01 2.739e-02      8.118e-02
+gwesp.decay             6.618e+00 1.454e+02 2.300e-01      6.828e-01
+nodecov.gdp_o           1.119e+06 2.527e+07 3.996e+04      2.888e+05
+edgecov.distw           3.881e+03 2.121e+05 3.354e+02      8.642e+02
+edgecov.lang.network    2.735e-02 8.671e+00 1.371e-02      4.000e-02
+edgecov.contig.network -5.343e-02 3.591e+00 5.678e-03      2.025e-02
+edgecov.rta.network     1.839e-01 8.776e+00 1.388e-02      5.200e-02
+
+2. Quantiles for each variable:
+
+                             2.5%        25%        50%       75%     97.5%
+edges                  -4.500e+01 -1.500e+01  1.000e+00 1.700e+01 4.700e+01
+mutual                 -2.800e+01 -9.000e+00  0.000e+00 1.000e+01 2.800e+01
+gwesp                  -3.300e+01 -1.090e+01  7.465e-01 1.247e+01 3.511e+01
+gwesp.decay            -2.772e+02 -9.111e+01  6.095e+00 1.042e+02 2.929e+02
+nodecov.gdp_o          -4.526e+07 -1.647e+07 -5.743e+04 1.758e+07 5.364e+07
+edgecov.distw          -4.116e+05 -1.390e+05  3.979e+03 1.469e+05 4.202e+05
+edgecov.lang.network   -1.700e+01 -6.000e+00  0.000e+00 6.000e+00 1.700e+01
+edgecov.contig.network -7.000e+00 -3.000e+00  0.000e+00 2.000e+00 7.000e+00
+edgecov.rta.network    -1.700e+01 -6.000e+00  0.000e+00 6.000e+00 1.800e+01
+
+
+Sample statistics cross-correlations:
+                           edges    mutual     gwesp gwesp.decay nodecov.gdp_o
+edges                  1.0000000 0.7017987 0.9994484   0.9987976   0.239354711
+mutual                 0.7017987 1.0000000 0.7025920   0.7020822   0.307592908
+gwesp                  0.9994484 0.7025920 1.0000000   0.9990651   0.235617392
+gwesp.decay            0.9987976 0.7020822 0.9990651   1.0000000   0.238511448
+nodecov.gdp_o          0.2393547 0.3075929 0.2356174   0.2385114   1.000000000
+edgecov.distw          0.8074504 0.4716909 0.8061287   0.8081282   0.312819540
+edgecov.lang.network   0.3127484 0.2884219 0.3124739   0.3133099   0.065529751
+edgecov.contig.network 0.1209817 0.1886121 0.1211342   0.1206403   0.007807046
+edgecov.rta.network    0.2471891 0.3385379 0.2480665   0.2459027  -0.089854544
+                       edgecov.distw edgecov.lang.network
+edges                    0.807450405           0.31274835
+mutual                   0.471690872           0.28842185
+gwesp                    0.806128664           0.31247386
+gwesp.decay              0.808128226           0.31330991
+nodecov.gdp_o            0.312819540           0.06552975
+edgecov.distw            1.000000000           0.24240363
+edgecov.lang.network     0.242403631           1.00000000
+edgecov.contig.network  -0.000931155           0.09782973
+edgecov.rta.network     -0.040860462           0.04435541
+                       edgecov.contig.network edgecov.rta.network
+edges                             0.120981729          0.24718911
+mutual                            0.188612063          0.33853786
+gwesp                             0.121134198          0.24806652
+gwesp.decay                       0.120640328          0.24590269
+nodecov.gdp_o                     0.007807046         -0.08985454
+edgecov.distw                    -0.000931155         -0.04086046
+edgecov.lang.network              0.097829729          0.04435541
+edgecov.contig.network            1.000000000          0.11678920
+edgecov.rta.network               0.116789200          1.00000000
+
+Sample statistics auto-correlation:
+Chain 1 
+             edges    mutual     gwesp gwesp.decay nodecov.gdp_o edgecov.distw
+Lag 0    1.0000000 1.0000000 1.0000000   1.0000000     1.0000000     1.0000000
+Lag 1000 0.6879366 0.6518618 0.6892685   0.6896082     0.8305540     0.6573259
+Lag 2000 0.4930799 0.4511839 0.4949238   0.4958405     0.7234933     0.4458770
+Lag 3000 0.3661447 0.3303708 0.3680854   0.3690886     0.6469345     0.3121239
+Lag 4000 0.2785984 0.2516737 0.2804778   0.2814657     0.5897762     0.2233010
+Lag 5000 0.2185866 0.1986718 0.2203059   0.2212160     0.5443381     0.1643104
+         edgecov.lang.network edgecov.contig.network edgecov.rta.network
+Lag 0               1.0000000              1.0000000           1.0000000
+Lag 1000            0.7743112              0.8517733           0.8480340
+Lag 2000            0.6045059              0.7259785           0.7240492
+Lag 3000            0.4747331              0.6195742           0.6211481
+Lag 4000            0.3748043              0.5291722           0.5352036
+Lag 5000            0.2973421              0.4527694           0.4632898
+
+Sample statistics burn-in diagnostic (Geweke):
+Chain 1 
+
+Fraction in 1st window = 0.1
+Fraction in 2nd window = 0.5 
+
+                 edges                 mutual                  gwesp 
+                0.6128                 2.5453                 0.6183 
+           gwesp.decay          nodecov.gdp_o          edgecov.distw 
+                0.5338                 0.7387                -0.3897 
+  edgecov.lang.network edgecov.contig.network    edgecov.rta.network 
+               -1.0912                 1.1198                 0.2080 
+
+Individual P-values (lower = worse):
+                 edges                 mutual                  gwesp 
+            0.53998651             0.01091808             0.53640279 
+           gwesp.decay          nodecov.gdp_o          edgecov.distw 
+            0.59349424             0.46010025             0.69672450 
+  edgecov.lang.network edgecov.contig.network    edgecov.rta.network 
+            0.27519143             0.26281234             0.83521046 
+Joint P-value (lower = worse):  0.9978973 .
+
+MCMC diagnostics shown here are from the last round of simulation, prior to computation of final parameter estimates. Because the final estimates are refinements of those used for this simulation run, these diagnostics may understate model performance. To directly assess the performance of the final model on in-model statistics, please use the GOF command: gof(ergmFitObject, GOF=~model).
+
+
+===============
+Goodness-of-fit
+===============
+
+* GoF with Model Attributes *
+Goodness-of-fit for model statistics 
+
+                              obs        min         mean        max MC p-value
+edges                        1740       1677 1.734370e+03       1787       0.76
+mutual                        486        448 4.845900e+02        520       0.88
+esp#1                          12          0 2.000000e-01          4       0.00
+esp#2                          21          0 7.000000e-02          1       0.00
+esp#3                          10          0 9.700000e-01          5       0.00
+esp#4                          17          0 2.470000e+00          9       0.00
+esp#5                          41          0 7.270000e+00         18       0.00
+esp#6                          27          4 1.573000e+01         29       0.06
+esp#7                          38         12 2.956000e+01         49       0.34
+esp#8                          27         31 4.915000e+01         84       0.00
+esp#9                          30         42 7.135000e+01        103       0.00
+esp#10                         22         67 9.426000e+01        127       0.00
+esp#11                         29         82 1.152100e+02        158       0.00
+esp#12                         17        102 1.288600e+02        163       0.00
+esp#13                         23        103 1.393600e+02        183       0.00
+esp#14                         18        100 1.377200e+02        179       0.00
+esp#15                         28        111 1.367400e+02        185       0.00
+esp#16                         29        102 1.277800e+02        160       0.00
+esp#17                         32         80 1.166000e+02        147       0.00
+esp#18                         41         76 1.050600e+02        133       0.00
+esp#19                         79         65 9.180000e+01        118       0.34
+esp#20                         61         52 7.807000e+01        112       0.10
+esp#21                         68         41 6.160000e+01         86       0.58
+esp#22                         76         31 4.924000e+01         68       0.00
+esp#23                         84         24 3.928000e+01         58       0.00
+esp#24                         55         17 3.153000e+01         47       0.00
+esp#25                         12         14 2.568000e+01         37       0.00
+esp#26                         24          8 2.262000e+01         37       0.80
+esp#27                        223          8 1.914000e+01         35       0.00
+esp#28                        594          5 1.507000e+01         26       0.00
+esp#29                          0          2 1.257000e+01         22       0.00
+esp#30                          0          2 9.060000e+00         19       0.00
+nodecov.gdp_o          2335218399 2252965739 2.336742e+09 2400698119       0.86
+edgecov.distw            10590935   10021720 1.054447e+07   11123800       0.90
+edgecov.lang.network          260        237 2.590600e+02        284       1.00
+edgecov.contig.network        122        113 1.216800e+02        131       1.00
+edgecov.rta.network           383        357 3.829000e+02        408       0.98
+
+
+* GoF with Default Terms *
+Goodness-of-fit for in-degree 
+
+   obs min mean max MC p-value
+9    0   0 0.01   1       1.00
+11   0   0 0.01   1       1.00
+12   0   0 0.04   1       1.00
+13   0   0 0.06   1       1.00
+14   0   0 0.08   1       1.00
+15   0   0 0.17   2       1.00
+16   0   0 0.42   3       1.00
+17   0   0 0.45   5       1.00
+18   0   0 0.69   3       1.00
+19   0   0 0.82   4       0.86
+20   0   0 1.30   4       0.54
+21   0   0 1.89   6       0.20
+22   0   0 2.14   6       0.20
+23   0   0 2.69   7       0.10
+24   0   0 3.29   9       0.04
+25   0   0 3.58   8       0.08
+26   0   1 3.66   7       0.00
+27   0   1 3.80   9       0.00
+28   0   1 4.44   9       0.00
+29  60   1 4.32  10       0.00
+30   0   0 3.67   9       0.10
+31   0   0 3.83   8       0.04
+32   0   1 3.63   9       0.00
+33   0   0 3.52   8       0.06
+34   0   0 3.41  10       0.04
+35   0   0 2.47   7       0.22
+36   0   0 1.49   5       0.54
+37   0   0 0.73   4       1.00
+38   0   0 0.25   2       1.00
+39   0   0 0.15   2       1.00
+40   0   0 0.07   1       1.00
+41   0   0 0.05   1       1.00
+42   0   0 0.05   1       1.00
+43   0   0 0.12   1       1.00
+44   0   0 0.11   1       1.00
+45   0   0 0.14   1       1.00
+46   0   0 0.17   1       1.00
+47   0   0 0.24   2       1.00
+48   0   0 0.25   2       1.00
+49   0   0 0.26   1       1.00
+50   0   0 0.22   2       1.00
+51   0   0 0.35   2       1.00
+52   0   0 0.40   2       1.00
+53   0   0 0.29   2       1.00
+54   0   0 0.20   1       1.00
+55   0   0 0.07   1       1.00
+
+Goodness-of-fit for out-degree 
+
+   obs min mean max MC p-value
+1    1   0 0.00   0       0.00
+2    2   0 0.00   0       0.00
+3    1   0 0.00   0       0.00
+4    2   0 0.00   0       0.00
+5    2   0 0.00   0       0.00
+6    3   0 0.00   0       0.00
+7    1   0 0.00   0       0.00
+8    1   0 0.00   0       0.00
+9    1   0 0.00   0       0.00
+10   4   0 0.00   0       0.00
+12   1   0 0.06   1       0.12
+13   1   0 0.06   1       0.12
+14   3   0 0.14   1       0.00
+15   1   0 0.14   1       0.28
+16   1   0 0.28   2       0.50
+17   1   0 0.44   3       0.70
+18   2   0 0.64   3       0.24
+19   1   0 0.92   3       1.00
+20   0   0 1.29   4       0.56
+21   0   0 1.76   5       0.34
+22   0   0 2.40   7       0.16
+23   0   0 2.69   7       0.16
+24   0   0 3.38   8       0.06
+25   2   0 3.74   8       0.54
+26   0   0 3.20   8       0.04
+27   0   1 4.02   9       0.00
+28   0   0 4.03  10       0.02
+29   1   0 4.00  10       0.26
+30   1   0 4.20   9       0.14
+31   0   0 4.11   8       0.02
+32   1   0 3.71   9       0.20
+33   1   0 3.48   8       0.24
+34   0   0 3.05   6       0.04
+35   0   0 2.70   7       0.10
+36   1   0 1.56   7       1.00
+37   0   0 0.79   4       1.00
+38   2   0 0.26   3       0.08
+39   1   0 0.08   1       0.16
+40   0   0 0.10   2       1.00
+41   1   0 0.07   1       0.14
+42   1   0 0.02   1       0.04
+43   0   0 0.08   1       1.00
+44   0   0 0.12   1       1.00
+45   2   0 0.12   1       0.00
+46   0   0 0.14   1       1.00
+47   1   0 0.20   1       0.40
+48   1   0 0.16   2       0.30
+49   0   0 0.20   1       1.00
+50   0   0 0.26   2       1.00
+51   0   0 0.35   2       1.00
+52   1   0 0.39   2       0.68
+53   0   0 0.43   2       1.00
+54   0   0 0.17   1       1.00
+55   1   0 0.06   1       0.12
+57   1   0 0.00   0       0.00
+58   3   0 0.00   0       0.00
+59   9   0 0.00   0       0.00
+
+Goodness-of-fit for edgewise shared partner 
+
+      obs min   mean max MC p-value
+esp0    2   0   0.00   0       0.00
+esp1   12   0   0.12   2       0.00
+esp2   21   0   0.08   1       0.00
+esp3   10   0   0.88   7       0.00
+esp4   17   0   2.22   8       0.00
+esp5   41   0   6.68  16       0.00
+esp6   27   5  14.39  32       0.04
+esp7   38  12  28.29  48       0.24
+esp8   27  27  47.29  69       0.02
+esp9   30  50  67.81 105       0.00
+esp10  22  64  92.37 126       0.00
+esp11  29  85 112.98 139       0.00
+esp12  17 100 130.70 167       0.00
+esp13  23 106 139.44 164       0.00
+esp14  18 108 141.00 172       0.00
+esp15  28 107 137.35 176       0.00
+esp16  29  95 128.91 169       0.00
+esp17  32  91 119.45 153       0.00
+esp18  41  83 107.43 134       0.00
+esp19  79  55  93.09 128       0.34
+esp20  61  51  78.15 117       0.12
+esp21  68  33  64.95 106       0.76
+esp22  76  31  51.65  84       0.06
+esp23  84  22  41.00  69       0.00
+esp24  55  17  33.03  50       0.00
+esp25  12  12  26.82  40       0.02
+esp26  24  11  21.09  32       0.64
+esp27 223   7  18.43  33       0.00
+esp28 594   7  15.69  28       0.00
+esp29   0   3  12.79  28       0.00
+esp30   0   3   9.89  20       0.00
+esp31   0   0   0.02   1       1.00
+esp32   0   0   0.02   2       1.00
+esp33   0   0   0.01   1       1.00
+esp35   0   0   0.01   1       1.00
+esp36   0   0   0.02   1       1.00
+esp37   0   0   0.02   1       1.00
+esp39   0   0   0.01   1       1.00
+esp41   0   0   0.05   1       1.00
+esp42   0   0   0.03   1       1.00
+esp43   0   0   0.03   1       1.00
+esp44   0   0   0.04   1       1.00
+esp46   0   0   0.03   1       1.00
+
+Goodness-of-fit for minimum geodesic distance 
+
+   obs  min    mean  max MC p-value
+1 1740 1686 1744.26 1798       0.84
+2 1695 1742 1795.74 1854       0.00
+3  105    0    0.00    0       0.00
+
+Goodness-of-fit for model statistics 
+
+                              obs        min         mean        max MC p-value
+edges                        1740       1686 1.744260e+03       1798       0.84
+mutual                        486        447 4.864300e+02        520       1.00
+esp#1                          12          0 1.200000e-01          2       0.00
+esp#2                          21          0 8.000000e-02          1       0.00
+esp#3                          10          0 8.800000e-01          7       0.00
+esp#4                          17          0 2.220000e+00          8       0.00
+esp#5                          41          0 6.680000e+00         16       0.00
+esp#6                          27          5 1.439000e+01         32       0.04
+esp#7                          38         12 2.829000e+01         48       0.24
+esp#8                          27         27 4.729000e+01         69       0.02
+esp#9                          30         50 6.781000e+01        105       0.00
+esp#10                         22         64 9.237000e+01        126       0.00
+esp#11                         29         85 1.129800e+02        139       0.00
+esp#12                         17        100 1.307000e+02        167       0.00
+esp#13                         23        106 1.394400e+02        164       0.00
+esp#14                         18        108 1.410000e+02        172       0.00
+esp#15                         28        107 1.373500e+02        176       0.00
+esp#16                         29         95 1.289100e+02        169       0.00
+esp#17                         32         91 1.194500e+02        153       0.00
+esp#18                         41         83 1.074300e+02        134       0.00
+esp#19                         79         55 9.309000e+01        128       0.34
+esp#20                         61         51 7.815000e+01        117       0.12
+esp#21                         68         33 6.495000e+01        106       0.76
+esp#22                         76         31 5.165000e+01         84       0.06
+esp#23                         84         22 4.100000e+01         69       0.00
+esp#24                         55         17 3.303000e+01         50       0.00
+esp#25                         12         12 2.682000e+01         40       0.02
+esp#26                         24         11 2.109000e+01         32       0.64
+esp#27                        223          7 1.843000e+01         33       0.00
+esp#28                        594          7 1.569000e+01         28       0.00
+esp#29                          0          3 1.279000e+01         28       0.00
+esp#30                          0          3 9.890000e+00         20       0.00
+nodecov.gdp_o          2335218399 2229337312 2.331996e+09 2408979487       0.88
+edgecov.distw            10590935   10008580 1.061385e+07   11152855       0.92
+edgecov.lang.network          260        244 2.614200e+02        288       0.92
+edgecov.contig.network        122        113 1.214000e+02        128       1.00
+edgecov.rta.network           383        363 3.834900e+02        403       0.94
+
+
+=================
+Coefficient Table
+=================
+
+                            Estimate   Std. Error MCMC %     Pr(>|z|)
+edges                  -6.212944e+00 7.665453e-03    100 0.000000e+00
+mutual                 -9.340665e-02 3.929992e-04    100 0.000000e+00
+gwesp                   8.339714e+00 4.098217e-03    100 0.000000e+00
+gwesp.decay            -3.100913e-01 7.813194e-04    100 0.000000e+00
+nodecov.gdp_o           6.139539e-07 4.182523e-08      0 8.783384e-49
+edgecov.distw          -6.593812e-05 4.955243e-06      0 2.115200e-40
+edgecov.lang.network    5.339474e-01 6.305931e-04    100 0.000000e+00
+edgecov.contig.network  1.403094e+00 1.793134e-03    100 0.000000e+00
+edgecov.rta.network     1.071465e+00 8.025599e-04    100 0.000000e+00

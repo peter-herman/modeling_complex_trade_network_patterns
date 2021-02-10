@@ -1,0 +1,60 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+          &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+          &\multicolumn{1}{c}{trade\_value\_rescale}&\multicolumn{1}{c}{trade\_value\_rescale}&\multicolumn{1}{c}{trade\_value\_rescale}&\multicolumn{1}{c}{trade\_value}\\
+\hline
+lndist    &   -0.672\sym{***}&   -0.684\sym{***}&   -0.684\sym{***}&   -0.687\sym{***}\\
+          & (0.0330)         & (0.0328)         & (0.0331)         & (0.0377)         \\
+
+contig    &    0.407\sym{***}&    0.420\sym{***}&    0.422\sym{***}&    0.479\sym{***}\\
+          & (0.0588)         & (0.0582)         & (0.0580)         & (0.0966)         \\
+
+comlang\_ethno&    0.234\sym{***}&    0.229\sym{***}&    0.228\sym{***}&    0.541\sym{***}\\
+          & (0.0623)         & (0.0627)         & (0.0627)         & (0.0755)         \\
+
+colony    &    0.147         &    0.135         &    0.133         &   -0.201\sym{*}  \\
+          & (0.0950)         & (0.0961)         & (0.0957)         &  (0.101)         \\
+
+rta       &    0.637\sym{***}&    0.579\sym{***}&    0.581\sym{***}&   -0.106         \\
+          & (0.0647)         & (0.0625)         & (0.0625)         &  (0.112)         \\
+
+
+
+recip\_dummy&                  &                  &    1.863\sym{***}&    0.510\sym{***}\\
+          &                  &                  &  (0.123)         &  (0.152)         \\
+
+transitive\_count&                  &                  & -0.00353         & -0.00328         \\
+          &                  &                  &(0.00285)         &(0.00455)         \\
+
+cyclical\_count&                  &                  &  0.00391         &   0.0151\sym{***}\\
+          &                  &                  &(0.00246)         &(0.00442)         \\
+
+importer\_imp\_degree&                  &                  &   0.0104\sym{***}& 0.000813         \\
+          &                  &                  &(0.00267)         &(0.00346)         \\
+
+importer\_exp\_degree&                  &                  & -0.00619\sym{**} & -0.00809\sym{*}  \\
+          &                  &                  &(0.00195)         &(0.00325)         \\
+
+exporter\_exp\_degree&                  &                  &  0.00432         &  0.00935\sym{*}  \\
+          &                  &                  &(0.00266)         &(0.00425)         \\
+
+exporter\_imp\_degree&                  &                  &  0.00374         &  -0.0190\sym{***}\\
+          &                  &                  &(0.00251)         &(0.00464)         \\
+
+lngdp\_o   &                  &                  &                  &    0.788\sym{***}\\
+          &                  &                  &                  & (0.0256)         \\
+
+lngdp\_d   &                  &                  &                  &    0.790\sym{***}\\
+          &                  &                  &                  & (0.0362)         \\
+\hline
+\(N\)     &   511704         &   511704         &   511704         &   362074         \\
+pseudo \(R^{2}\)&                  &                  &                  &                  \\
+\textit{AIC}& 113661.4         & 108150.7         & 107282.2         &5.16198e+10         \\
+ll        & -52010.7         & -53646.3         & -53205.1         &-2.58099e+10         \\
+\hline\hline
+\multicolumn{5}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{5}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+}
