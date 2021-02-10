@@ -1,0 +1,293 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\1995\1995_results\1995_partial_gravity_log.txt 
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 2 Feb 2021, 15:37:20
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. local use_year 1995
+{txt}
+{com}. 
+. import delimited "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\partial_data_set_hs36_top50_with_ntw_vars.csv", varnames(1) clear
+{res}{text}(30 vars, 29,400 obs)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\PETER~1.HER\AppData\Local\Temp\5\STD4824_000000.tmp"
+{txt}
+{com}. local use_year 1995
+{txt}
+{com}. 
+. import delimited "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\partial_data_set_hs36_top50_with_ntw_vars.csv", varnames(1) clear
+{res}{text}(30 vars, 29,400 obs)
+
+{com}. 
+. 
+. keep if year == `use_year'
+{txt}(26,950 observations deleted)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\PETER~1.HER\AppData\Local\Temp\5\STD4824_000000.tmp"
+{txt}
+{com}. * fix the fact that the missing values are reading in as "NA" and, as a result, GDP is being loaded as strings.
+. replace gdp_o = "." if gdp_o == "NA"
+{txt}(0 real changes made)
+
+{com}. destring gdp_o, replace
+{txt}gdp_o: all characters numeric; {res}replaced {txt}as {res}double
+{txt}
+{com}. 
+. replace gdp_d = "." if gdp_d == "NA"
+{txt}(0 real changes made)
+
+{com}. destring gdp_d, replace
+{txt}gdp_d: all characters numeric; {res}replaced {txt}as {res}double
+{txt}
+{com}. 
+. replace lngdp_o = "." if lngdp_o == "NA"
+{txt}(0 real changes made)
+
+{com}. destring lngdp_o, replace
+{txt}lngdp_o: all characters numeric; {res}replaced {txt}as {res}double
+{txt}
+{com}. 
+. replace lngdp_d = "." if lngdp_d == "NA"
+{txt}(0 real changes made)
+
+{com}. destring lngdp_d, replace
+{txt}lngdp_d: all characters numeric; {res}replaced {txt}as {res}double
+{txt}
+{com}. 
+. replace lngdpcap_o = "." if lngdpcap_o == "NA"
+{txt}(0 real changes made)
+
+{com}. destring lngdpcap_o, replace
+{txt}lngdpcap_o: all characters numeric; {res}replaced {txt}as {res}double
+{txt}
+{com}. 
+. replace lngdpcap_d = "." if lngdpcap_d == "NA"
+{txt}(0 real changes made)
+
+{com}. destring lngdpcap_d, replace
+{txt}lngdpcap_d: all characters numeric; {res}replaced {txt}as {res}double
+{txt}
+{com}. 
+. 
+. * Create fixed effects
+. tostring year, gen(year_str)
+{txt}year_str generated as {res:str4}
+
+{com}. gen imp_year = importer+ "_" + year_str
+{txt}
+{com}. gen exp_year = exporter+ "_" + year_str
+{txt}
+{com}. 
+. qui tab exporter, gen(exp_fe)
+{txt}
+{com}. qui tab importer, gen(imp_fe)
+{txt}
+{com}. qui tab year, gen(year_fe)
+{txt}
+{com}. qui tab imp_year, gen(imp_year_fe)
+{txt}
+{com}. qui tab exp_year, gen(exp_year_fe)
+{txt}
+{com}. 
+. * Create Cluster ID
+. gen clusterid = exporter+importer
+{txt}
+{com}. 
+. 
+. * Generate Remotness measures based on Baldwin and Harrigan (2011)
+. gen distw = exp(lndist)
+{txt}
+{com}. 
+. gen weighted_dist_o = gdp_d/distw
+{txt}
+{com}. bysort exp_year: egen remoteness_o=sum(weighted_dist_o)
+{txt}
+{com}. replace remoteness_o=1/remoteness_o
+{txt}(2,450 real changes made)
+
+{com}. gen lnremoteness_o = log(remoteness_o)
+{txt}
+{com}. 
+. gen weighted_dist_d = gdp_o/distw
+{txt}
+{com}. bysort imp_year: egen remoteness_d=sum(weighted_dist_d)
+{txt}
+{com}. replace remoteness_d=1/remoteness_d
+{txt}(2,450 real changes made)
+
+{com}. gen lnremoteness_d = log(remoteness_d)
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\PETER~1.HER\AppData\Local\Temp\5\STD4824_000000.tmp"
+{txt}
+{com}. probit traded lndist contig comlang_ethno colony rta exp_fe*  imp_fe*, vce(robust) noconstant
+
+{txt}note: exp_fe1 != 0 predicts failure perfectly
+      exp_fe1 dropped and 49 obs not used
+
+note: exp_fe14 != 0 predicts failure perfectly
+      exp_fe14 dropped and 49 obs not used
+
+note: exp_fe17 != 0 predicts success perfectly
+      exp_fe17 dropped and 49 obs not used
+
+note: exp_fe32 != 0 predicts failure perfectly
+      exp_fe32 dropped and 49 obs not used
+
+note: imp_fe50 omitted because of collinearity
+{res}{txt}Iteration 0:{space 3}log pseudolikelihood = {res:-1562.3537}  
+Iteration 1:{space 3}log pseudolikelihood = {res:-789.91043}  
+Iteration 2:{space 3}log pseudolikelihood = {res:-765.39393}  
+Iteration 3:{space 3}log pseudolikelihood = {res:-764.86022}  
+Iteration 4:{space 3}log pseudolikelihood = {res:-764.85791}  
+Iteration 5:{space 3}log pseudolikelihood = {res:-764.85791}  
+{res}
+{txt}Probit regression{col 49}Number of obs{col 67}= {res}     2,254
+{txt}{col 49}Wald chi2({res}100{txt}){col 67}= {res}    735.79
+{txt}Log pseudolikelihood = {res}-764.85791{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{hline 14}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 15}{c |}{col 27}    Robust
+{col 1}       traded{col 15}{c |}      Coef.{col 27}   Std. Err.{col 39}      z{col 47}   P>|z|{col 55}     [95% Con{col 68}f. Interval]
+{hline 14}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lndist {c |}{col 15}{res}{space 2}-.9753313{col 27}{space 2} .0895507{col 38}{space 1}  -10.89{col 47}{space 3}0.000{col 55}{space 4}-1.150847{col 68}{space 3}-.7998152
+{txt}{space 7}contig {c |}{col 15}{res}{space 2} .7479158{col 27}{space 2}  .295238{col 38}{space 1}    2.53{col 47}{space 3}0.011{col 55}{space 4}   .16926{col 68}{space 3} 1.326572
+{txt}comlang_ethno {c |}{col 15}{res}{space 2} .4096542{col 27}{space 2} .1543067{col 38}{space 1}    2.65{col 47}{space 3}0.008{col 55}{space 4} .1072186{col 68}{space 3} .7120897
+{txt}{space 7}colony {c |}{col 15}{res}{space 2} .6788684{col 27}{space 2} .2330579{col 38}{space 1}    2.91{col 47}{space 3}0.004{col 55}{space 4} .2220833{col 68}{space 3} 1.135654
+{txt}{space 10}rta {c |}{col 15}{res}{space 2}-.2595463{col 27}{space 2} .1623095{col 38}{space 1}   -1.60{col 47}{space 3}0.110{col 55}{space 4}-.5776669{col 68}{space 3} .0585744
+{txt}{space 6}exp_fe1 {c |}{col 15}{res}{space 2}        0{col 27}{txt}  (omitted)
+{space 6}exp_fe2 {c |}{col 15}{res}{space 2} 9.016206{col 27}{space 2} .9157276{col 38}{space 1}    9.85{col 47}{space 3}0.000{col 55}{space 4} 7.221413{col 68}{space 3}   10.811
+{txt}{space 6}exp_fe3 {c |}{col 15}{res}{space 2} 9.830999{col 27}{space 2} .9228379{col 38}{space 1}   10.65{col 47}{space 3}0.000{col 55}{space 4} 8.022269{col 68}{space 3} 11.63973
+{txt}{space 6}exp_fe4 {c |}{col 15}{res}{space 2} 10.18175{col 27}{space 2} .8592684{col 38}{space 1}   11.85{col 47}{space 3}0.000{col 55}{space 4} 8.497617{col 68}{space 3} 11.86589
+{txt}{space 6}exp_fe5 {c |}{col 15}{res}{space 2} 10.02593{col 27}{space 2} .8604957{col 38}{space 1}   11.65{col 47}{space 3}0.000{col 55}{space 4} 8.339385{col 68}{space 3} 11.71247
+{txt}{space 6}exp_fe6 {c |}{col 15}{res}{space 2} 9.817513{col 27}{space 2} .9003659{col 38}{space 1}   10.90{col 47}{space 3}0.000{col 55}{space 4} 8.052829{col 68}{space 3}  11.5822
+{txt}{space 6}exp_fe7 {c |}{col 15}{res}{space 2} 9.738116{col 27}{space 2} .8920247{col 38}{space 1}   10.92{col 47}{space 3}0.000{col 55}{space 4}  7.98978{col 68}{space 3} 11.48645
+{txt}{space 6}exp_fe8 {c |}{col 15}{res}{space 2}  9.99235{col 27}{space 2} .8641723{col 38}{space 1}   11.56{col 47}{space 3}0.000{col 55}{space 4} 8.298603{col 68}{space 3}  11.6861
+{txt}{space 6}exp_fe9 {c |}{col 15}{res}{space 2} 8.954547{col 27}{space 2} .9212037{col 38}{space 1}    9.72{col 47}{space 3}0.000{col 55}{space 4} 7.149021{col 68}{space 3} 10.76007
+{txt}{space 5}exp_fe10 {c |}{col 15}{res}{space 2} 11.35132{col 27}{space 2} .9576315{col 38}{space 1}   11.85{col 47}{space 3}0.000{col 55}{space 4} 9.474398{col 68}{space 3} 13.22824
+{txt}{space 5}exp_fe11 {c |}{col 15}{res}{space 2} 9.261201{col 27}{space 2} .8389132{col 38}{space 1}   11.04{col 47}{space 3}0.000{col 55}{space 4} 7.616961{col 68}{space 3} 10.90544
+{txt}{space 5}exp_fe12 {c |}{col 15}{res}{space 2} 11.77884{col 27}{space 2} .9240269{col 38}{space 1}   12.75{col 47}{space 3}0.000{col 55}{space 4} 9.967784{col 68}{space 3}  13.5899
+{txt}{space 5}exp_fe13 {c |}{col 15}{res}{space 2} 9.605902{col 27}{space 2} .8508006{col 38}{space 1}   11.29{col 47}{space 3}0.000{col 55}{space 4} 7.938364{col 68}{space 3} 11.27344
+{txt}{space 5}exp_fe14 {c |}{col 15}{res}{space 2}        0{col 27}{txt}  (omitted)
+{space 5}exp_fe15 {c |}{col 15}{res}{space 2} 10.26618{col 27}{space 2} .8808712{col 38}{space 1}   11.65{col 47}{space 3}0.000{col 55}{space 4} 8.539708{col 68}{space 3} 11.99266
+{txt}{space 5}exp_fe16 {c |}{col 15}{res}{space 2} 8.935247{col 27}{space 2} .8662685{col 38}{space 1}   10.31{col 47}{space 3}0.000{col 55}{space 4} 7.237392{col 68}{space 3}  10.6331
+{txt}{space 5}exp_fe17 {c |}{col 15}{res}{space 2}        0{col 27}{txt}  (omitted)
+{space 5}exp_fe18 {c |}{col 15}{res}{space 2}  11.0312{col 27}{space 2} .8846236{col 38}{space 1}   12.47{col 47}{space 3}0.000{col 55}{space 4} 9.297372{col 68}{space 3} 12.76503
+{txt}{space 5}exp_fe19 {c |}{col 15}{res}{space 2} 8.218849{col 27}{space 2} .8596878{col 38}{space 1}    9.56{col 47}{space 3}0.000{col 55}{space 4} 6.533892{col 68}{space 3} 9.903806
+{txt}{space 5}exp_fe20 {c |}{col 15}{res}{space 2} 9.882026{col 27}{space 2} .9154501{col 38}{space 1}   10.79{col 47}{space 3}0.000{col 55}{space 4} 8.087777{col 68}{space 3} 11.67628
+{txt}{space 5}exp_fe21 {c |}{col 15}{res}{space 2} 9.004816{col 27}{space 2} .8388394{col 38}{space 1}   10.73{col 47}{space 3}0.000{col 55}{space 4} 7.360721{col 68}{space 3} 10.64891
+{txt}{space 5}exp_fe22 {c |}{col 15}{res}{space 2} 9.382005{col 27}{space 2} .8915499{col 38}{space 1}   10.52{col 47}{space 3}0.000{col 55}{space 4} 7.634599{col 68}{space 3} 11.12941
+{txt}{space 5}exp_fe23 {c |}{col 15}{res}{space 2} 10.23847{col 27}{space 2} .8705906{col 38}{space 1}   11.76{col 47}{space 3}0.000{col 55}{space 4} 8.532143{col 68}{space 3}  11.9448
+{txt}{space 5}exp_fe24 {c |}{col 15}{res}{space 2} 8.760345{col 27}{space 2} .8747208{col 38}{space 1}   10.02{col 47}{space 3}0.000{col 55}{space 4} 7.045924{col 68}{space 3} 10.47477
+{txt}{space 5}exp_fe25 {c |}{col 15}{res}{space 2} 7.102235{col 27}{space 2}  .945404{col 38}{space 1}    7.51{col 47}{space 3}0.000{col 55}{space 4} 5.249277{col 68}{space 3} 8.955193
+{txt}{space 5}exp_fe26 {c |}{col 15}{res}{space 2} 7.495691{col 27}{space 2} .8459159{col 38}{space 1}    8.86{col 47}{space 3}0.000{col 55}{space 4} 5.837726{col 68}{space 3} 9.153656
+{txt}{space 5}exp_fe27 {c |}{col 15}{res}{space 2} 10.54911{col 27}{space 2}  .869911{col 38}{space 1}   12.13{col 47}{space 3}0.000{col 55}{space 4}  8.84412{col 68}{space 3} 12.25411
+{txt}{space 5}exp_fe28 {c |}{col 15}{res}{space 2} 11.20977{col 27}{space 2} .9030678{col 38}{space 1}   12.41{col 47}{space 3}0.000{col 55}{space 4} 9.439792{col 68}{space 3} 12.97975
+{txt}{space 5}exp_fe29 {c |}{col 15}{res}{space 2} 10.25596{col 27}{space 2} .8916598{col 38}{space 1}   11.50{col 47}{space 3}0.000{col 55}{space 4} 8.508334{col 68}{space 3} 12.00358
+{txt}{space 5}exp_fe30 {c |}{col 15}{res}{space 2} 7.430512{col 27}{space 2} .9933274{col 38}{space 1}    7.48{col 47}{space 3}0.000{col 55}{space 4} 5.483626{col 68}{space 3} 9.377397
+{txt}{space 5}exp_fe31 {c |}{col 15}{res}{space 2} 9.191866{col 27}{space 2}  .892813{col 38}{space 1}   10.30{col 47}{space 3}0.000{col 55}{space 4} 7.441984{col 68}{space 3} 10.94175
+{txt}{space 5}exp_fe32 {c |}{col 15}{res}{space 2}        0{col 27}{txt}  (omitted)
+{space 5}exp_fe33 {c |}{col 15}{res}{space 2} 10.40814{col 27}{space 2} .8633241{col 38}{space 1}   12.06{col 47}{space 3}0.000{col 55}{space 4} 8.716057{col 68}{space 3} 12.10023
+{txt}{space 5}exp_fe34 {c |}{col 15}{res}{space 2} 8.905417{col 27}{space 2} .8565772{col 38}{space 1}   10.40{col 47}{space 3}0.000{col 55}{space 4} 7.226557{col 68}{space 3} 10.58428
+{txt}{space 5}exp_fe35 {c |}{col 15}{res}{space 2} 9.141799{col 27}{space 2} .8964636{col 38}{space 1}   10.20{col 47}{space 3}0.000{col 55}{space 4} 7.384763{col 68}{space 3} 10.89884
+{txt}{space 5}exp_fe36 {c |}{col 15}{res}{space 2} 8.820522{col 27}{space 2} .8397093{col 38}{space 1}   10.50{col 47}{space 3}0.000{col 55}{space 4} 7.174722{col 68}{space 3} 10.46632
+{txt}{space 5}exp_fe37 {c |}{col 15}{res}{space 2} 8.146274{col 27}{space 2} .8826356{col 38}{space 1}    9.23{col 47}{space 3}0.000{col 55}{space 4}  6.41634{col 68}{space 3} 9.876208
+{txt}{space 5}exp_fe38 {c |}{col 15}{res}{space 2} 7.400505{col 27}{space 2} .8509821{col 38}{space 1}    8.70{col 47}{space 3}0.000{col 55}{space 4} 5.732611{col 68}{space 3} 9.068399
+{txt}{space 5}exp_fe39 {c |}{col 15}{res}{space 2} 8.431424{col 27}{space 2}  .851977{col 38}{space 1}    9.90{col 47}{space 3}0.000{col 55}{space 4}  6.76158{col 68}{space 3} 10.10127
+{txt}{space 5}exp_fe40 {c |}{col 15}{res}{space 2} 7.393944{col 27}{space 2} .8892612{col 38}{space 1}    8.31{col 47}{space 3}0.000{col 55}{space 4} 5.651024{col 68}{space 3} 9.136864
+{txt}{space 5}exp_fe41 {c |}{col 15}{res}{space 2} 9.699054{col 27}{space 2} .8967843{col 38}{space 1}   10.82{col 47}{space 3}0.000{col 55}{space 4} 7.941389{col 68}{space 3} 11.45672
+{txt}{space 5}exp_fe42 {c |}{col 15}{res}{space 2} 8.081787{col 27}{space 2} .8472931{col 38}{space 1}    9.54{col 47}{space 3}0.000{col 55}{space 4} 6.421124{col 68}{space 3} 9.742451
+{txt}{space 5}exp_fe43 {c |}{col 15}{res}{space 2} 10.39764{col 27}{space 2} .8749506{col 38}{space 1}   11.88{col 47}{space 3}0.000{col 55}{space 4}  8.68277{col 68}{space 3} 12.11251
+{txt}{space 5}exp_fe44 {c |}{col 15}{res}{space 2} 9.792147{col 27}{space 2} .8981677{col 38}{space 1}   10.90{col 47}{space 3}0.000{col 55}{space 4}  8.03177{col 68}{space 3} 11.55252
+{txt}{space 5}exp_fe45 {c |}{col 15}{res}{space 2} 8.672987{col 27}{space 2} .8179874{col 38}{space 1}   10.60{col 47}{space 3}0.000{col 55}{space 4} 7.069761{col 68}{space 3} 10.27621
+{txt}{space 5}exp_fe46 {c |}{col 15}{res}{space 2}  6.88048{col 27}{space 2} .8410354{col 38}{space 1}    8.18{col 47}{space 3}0.000{col 55}{space 4} 5.232081{col 68}{space 3} 8.528879
+{txt}{space 5}exp_fe47 {c |}{col 15}{res}{space 2} 13.08431{col 27}{space 2} 1.018693{col 38}{space 1}   12.84{col 47}{space 3}0.000{col 55}{space 4}  11.0877{col 68}{space 3} 15.08091
+{txt}{space 5}exp_fe48 {c |}{col 15}{res}{space 2} 7.085957{col 27}{space 2} 1.019102{col 38}{space 1}    6.95{col 47}{space 3}0.000{col 55}{space 4} 5.088553{col 68}{space 3} 9.083361
+{txt}{space 5}exp_fe49 {c |}{col 15}{res}{space 2} 6.936526{col 27}{space 2} .9446364{col 38}{space 1}    7.34{col 47}{space 3}0.000{col 55}{space 4} 5.085073{col 68}{space 3} 8.787979
+{txt}{space 5}exp_fe50 {c |}{col 15}{res}{space 2} 8.582758{col 27}{space 2} .9121856{col 38}{space 1}    9.41{col 47}{space 3}0.000{col 55}{space 4} 6.794907{col 68}{space 3} 10.37061
+{txt}{space 6}imp_fe1 {c |}{col 15}{res}{space 2}-1.907998{col 27}{space 2} .3131328{col 38}{space 1}   -6.09{col 47}{space 3}0.000{col 55}{space 4}-2.521727{col 68}{space 3}-1.294269
+{txt}{space 6}imp_fe2 {c |}{col 15}{res}{space 2}-.4246001{col 27}{space 2} .3325363{col 38}{space 1}   -1.28{col 47}{space 3}0.202{col 55}{space 4}-1.076359{col 68}{space 3} .2271591
+{txt}{space 6}imp_fe3 {c |}{col 15}{res}{space 2}-.3604377{col 27}{space 2} .3705281{col 38}{space 1}   -0.97{col 47}{space 3}0.331{col 55}{space 4} -1.08666{col 68}{space 3} .3657841
+{txt}{space 6}imp_fe4 {c |}{col 15}{res}{space 2}-.9297821{col 27}{space 2} .3794762{col 38}{space 1}   -2.45{col 47}{space 3}0.014{col 55}{space 4}-1.673542{col 68}{space 3}-.1860225
+{txt}{space 6}imp_fe5 {c |}{col 15}{res}{space 2}-.9977588{col 27}{space 2}  .350526{col 38}{space 1}   -2.85{col 47}{space 3}0.004{col 55}{space 4}-1.684777{col 68}{space 3}-.3107405
+{txt}{space 6}imp_fe6 {c |}{col 15}{res}{space 2}-.0507015{col 27}{space 2}  .329538{col 38}{space 1}   -0.15{col 47}{space 3}0.878{col 55}{space 4}-.6965842{col 68}{space 3} .5951812
+{txt}{space 6}imp_fe7 {c |}{col 15}{res}{space 2} .3379798{col 27}{space 2} .3141013{col 38}{space 1}    1.08{col 47}{space 3}0.282{col 55}{space 4}-.2776474{col 68}{space 3}  .953607
+{txt}{space 6}imp_fe8 {c |}{col 15}{res}{space 2} -.911167{col 27}{space 2} .3409662{col 38}{space 1}   -2.67{col 47}{space 3}0.008{col 55}{space 4}-1.579449{col 68}{space 3}-.2428855
+{txt}{space 6}imp_fe9 {c |}{col 15}{res}{space 2}-.5928752{col 27}{space 2} .3257847{col 38}{space 1}   -1.82{col 47}{space 3}0.069{col 55}{space 4}-1.231401{col 68}{space 3}  .045651
+{txt}{space 5}imp_fe10 {c |}{col 15}{res}{space 2}-1.682855{col 27}{space 2} .3639371{col 38}{space 1}   -4.62{col 47}{space 3}0.000{col 55}{space 4}-2.396158{col 68}{space 3}-.9695511
+{txt}{space 5}imp_fe11 {c |}{col 15}{res}{space 2}-1.922751{col 27}{space 2} .3704061{col 38}{space 1}   -5.19{col 47}{space 3}0.000{col 55}{space 4}-2.648733{col 68}{space 3}-1.196768
+{txt}{space 5}imp_fe12 {c |}{col 15}{res}{space 2} .2404131{col 27}{space 2} .3497256{col 38}{space 1}    0.69{col 47}{space 3}0.492{col 55}{space 4}-.4450364{col 68}{space 3} .9258626
+{txt}{space 5}imp_fe13 {c |}{col 15}{res}{space 2}-1.599733{col 27}{space 2} .3723584{col 38}{space 1}   -4.30{col 47}{space 3}0.000{col 55}{space 4}-2.329542{col 68}{space 3}-.8699235
+{txt}{space 5}imp_fe14 {c |}{col 15}{res}{space 2}-2.728641{col 27}{space 2} .4140165{col 38}{space 1}   -6.59{col 47}{space 3}0.000{col 55}{space 4}-3.540098{col 68}{space 3}-1.917183
+{txt}{space 5}imp_fe15 {c |}{col 15}{res}{space 2}-1.023137{col 27}{space 2} .3145468{col 38}{space 1}   -3.25{col 47}{space 3}0.001{col 55}{space 4}-1.639637{col 68}{space 3}-.4066361
+{txt}{space 5}imp_fe16 {c |}{col 15}{res}{space 2}-1.447805{col 27}{space 2} .3381067{col 38}{space 1}   -4.28{col 47}{space 3}0.000{col 55}{space 4}-2.110482{col 68}{space 3}-.7851277
+{txt}{space 5}imp_fe17 {c |}{col 15}{res}{space 2} -.332878{col 27}{space 2} .3401684{col 38}{space 1}   -0.98{col 47}{space 3}0.328{col 55}{space 4}-.9995958{col 68}{space 3} .3338398
+{txt}{space 5}imp_fe18 {c |}{col 15}{res}{space 2} -.666135{col 27}{space 2} .3350338{col 38}{space 1}   -1.99{col 47}{space 3}0.047{col 55}{space 4}-1.322789{col 68}{space 3}-.0094809
+{txt}{space 5}imp_fe19 {c |}{col 15}{res}{space 2}-1.420656{col 27}{space 2} .3173167{col 38}{space 1}   -4.48{col 47}{space 3}0.000{col 55}{space 4}-2.042585{col 68}{space 3}-.7987265
+{txt}{space 5}imp_fe20 {c |}{col 15}{res}{space 2}-1.054522{col 27}{space 2} .3606134{col 38}{space 1}   -2.92{col 47}{space 3}0.003{col 55}{space 4}-1.761312{col 68}{space 3} -.347733
+{txt}{space 5}imp_fe21 {c |}{col 15}{res}{space 2}-1.830059{col 27}{space 2} .3471404{col 38}{space 1}   -5.27{col 47}{space 3}0.000{col 55}{space 4}-2.510442{col 68}{space 3}-1.149677
+{txt}{space 5}imp_fe22 {c |}{col 15}{res}{space 2}-1.026504{col 27}{space 2} .3448551{col 38}{space 1}   -2.98{col 47}{space 3}0.003{col 55}{space 4}-1.702407{col 68}{space 3}-.3505999
+{txt}{space 5}imp_fe23 {c |}{col 15}{res}{space 2}-1.787675{col 27}{space 2} .3986478{col 38}{space 1}   -4.48{col 47}{space 3}0.000{col 55}{space 4} -2.56901{col 68}{space 3} -1.00634
+{txt}{space 5}imp_fe24 {c |}{col 15}{res}{space 2}-1.625283{col 27}{space 2} .3563942{col 38}{space 1}   -4.56{col 47}{space 3}0.000{col 55}{space 4}-2.323803{col 68}{space 3}-.9267637
+{txt}{space 5}imp_fe25 {c |}{col 15}{res}{space 2}-3.426934{col 27}{space 2} .4966713{col 38}{space 1}   -6.90{col 47}{space 3}0.000{col 55}{space 4}-4.400392{col 68}{space 3}-2.453476
+{txt}{space 5}imp_fe26 {c |}{col 15}{res}{space 2}-2.698051{col 27}{space 2} .3470836{col 38}{space 1}   -7.77{col 47}{space 3}0.000{col 55}{space 4}-3.378322{col 68}{space 3}-2.017779
+{txt}{space 5}imp_fe27 {c |}{col 15}{res}{space 2}-1.104777{col 27}{space 2} .3212031{col 38}{space 1}   -3.44{col 47}{space 3}0.001{col 55}{space 4}-1.734324{col 68}{space 3}-.4752307
+{txt}{space 5}imp_fe28 {c |}{col 15}{res}{space 2}-.5420891{col 27}{space 2} .3375806{col 38}{space 1}   -1.61{col 47}{space 3}0.108{col 55}{space 4}-1.203735{col 68}{space 3} .1195567
+{txt}{space 5}imp_fe29 {c |}{col 15}{res}{space 2}-.7544547{col 27}{space 2} .3360017{col 38}{space 1}   -2.25{col 47}{space 3}0.025{col 55}{space 4}-1.413006{col 68}{space 3}-.0959034
+{txt}{space 5}imp_fe30 {c |}{col 15}{res}{space 2}-.7432598{col 27}{space 2} .3487363{col 38}{space 1}   -2.13{col 47}{space 3}0.033{col 55}{space 4} -1.42677{col 68}{space 3}-.0597492
+{txt}{space 5}imp_fe31 {c |}{col 15}{res}{space 2}-1.158803{col 27}{space 2} .3539026{col 38}{space 1}   -3.27{col 47}{space 3}0.001{col 55}{space 4}-1.852439{col 68}{space 3}-.4651666
+{txt}{space 5}imp_fe32 {c |}{col 15}{res}{space 2} -2.43475{col 27}{space 2} .4043843{col 38}{space 1}   -6.02{col 47}{space 3}0.000{col 55}{space 4}-3.227329{col 68}{space 3}-1.642172
+{txt}{space 5}imp_fe33 {c |}{col 15}{res}{space 2}-.6335226{col 27}{space 2} .3319592{col 38}{space 1}   -1.91{col 47}{space 3}0.056{col 55}{space 4}-1.284151{col 68}{space 3} .0171055
+{txt}{space 5}imp_fe34 {c |}{col 15}{res}{space 2}-.7662314{col 27}{space 2} .3508868{col 38}{space 1}   -2.18{col 47}{space 3}0.029{col 55}{space 4}-1.453957{col 68}{space 3} -.078506
+{txt}{space 5}imp_fe35 {c |}{col 15}{res}{space 2}-1.862243{col 27}{space 2} .3879596{col 38}{space 1}   -4.80{col 47}{space 3}0.000{col 55}{space 4} -2.62263{col 68}{space 3}-1.101856
+{txt}{space 5}imp_fe36 {c |}{col 15}{res}{space 2}-2.572913{col 27}{space 2} .3739122{col 38}{space 1}   -6.88{col 47}{space 3}0.000{col 55}{space 4}-3.305768{col 68}{space 3}-1.840059
+{txt}{space 5}imp_fe37 {c |}{col 15}{res}{space 2}-.5438908{col 27}{space 2} .3373982{col 38}{space 1}   -1.61{col 47}{space 3}0.107{col 55}{space 4}-1.205179{col 68}{space 3} .1173974
+{txt}{space 5}imp_fe38 {c |}{col 15}{res}{space 2}-2.089705{col 27}{space 2} .3859825{col 38}{space 1}   -5.41{col 47}{space 3}0.000{col 55}{space 4}-2.846216{col 68}{space 3}-1.333193
+{txt}{space 5}imp_fe39 {c |}{col 15}{res}{space 2}-1.267689{col 27}{space 2} .3188921{col 38}{space 1}   -3.98{col 47}{space 3}0.000{col 55}{space 4}-1.892706{col 68}{space 3}-.6426723
+{txt}{space 5}imp_fe40 {c |}{col 15}{res}{space 2}-1.166539{col 27}{space 2} .3125132{col 38}{space 1}   -3.73{col 47}{space 3}0.000{col 55}{space 4}-1.779053{col 68}{space 3} -.554024
+{txt}{space 5}imp_fe41 {c |}{col 15}{res}{space 2}-.2145393{col 27}{space 2} .3474399{col 38}{space 1}   -0.62{col 47}{space 3}0.537{col 55}{space 4} -.895509{col 68}{space 3} .4664304
+{txt}{space 5}imp_fe42 {c |}{col 15}{res}{space 2}-2.489569{col 27}{space 2} .3929883{col 38}{space 1}   -6.33{col 47}{space 3}0.000{col 55}{space 4}-3.259812{col 68}{space 3}-1.719326
+{txt}{space 5}imp_fe43 {c |}{col 15}{res}{space 2}-.4591251{col 27}{space 2} .3379947{col 38}{space 1}   -1.36{col 47}{space 3}0.174{col 55}{space 4}-1.121583{col 68}{space 3} .2033324
+{txt}{space 5}imp_fe44 {c |}{col 15}{res}{space 2}-1.178309{col 27}{space 2} .3487245{col 38}{space 1}   -3.38{col 47}{space 3}0.001{col 55}{space 4}-1.861797{col 68}{space 3}-.4948221
+{txt}{space 5}imp_fe45 {c |}{col 15}{res}{space 2}-1.848569{col 27}{space 2} .3103487{col 38}{space 1}   -5.96{col 47}{space 3}0.000{col 55}{space 4}-2.456841{col 68}{space 3}-1.240297
+{txt}{space 5}imp_fe46 {c |}{col 15}{res}{space 2}-2.863494{col 27}{space 2} .3742728{col 38}{space 1}   -7.65{col 47}{space 3}0.000{col 55}{space 4}-3.597056{col 68}{space 3}-2.129933
+{txt}{space 5}imp_fe47 {c |}{col 15}{res}{space 2} .7661942{col 27}{space 2} .3644664{col 38}{space 1}    2.10{col 47}{space 3}0.036{col 55}{space 4} .0518532{col 68}{space 3} 1.480535
+{txt}{space 5}imp_fe48 {c |}{col 15}{res}{space 2}-1.611114{col 27}{space 2}  .350432{col 38}{space 1}   -4.60{col 47}{space 3}0.000{col 55}{space 4}-2.297948{col 68}{space 3}-.9242802
+{txt}{space 5}imp_fe49 {c |}{col 15}{res}{space 2}-2.589628{col 27}{space 2}  .394118{col 38}{space 1}   -6.57{col 47}{space 3}0.000{col 55}{space 4}-3.362086{col 68}{space 3}-1.817171
+{txt}{space 5}imp_fe50 {c |}{col 15}{res}{space 2}        0{col 27}{txt}  (omitted)
+{hline 14}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: 0 failures and 1 success completely determined.{p_end}
+
+{com}. estimates store probit_simple
+{txt}
+{com}. predict phat_standard
+{txt}(option {bf:pr} assumed; Pr(traded))
+(196 missing values generated)
+
+{com}. 
+{txt}end of do-file
+
+{com}. mata
+{txt}{hline 49} mata (type {cmd:end} to exit) {hline}
+{com}: 2450-196
+{res}  2254
+
+{com}: 49*4
+{res}  196
+
+{com}: end
+{txt}{hline}
+
+{com}. exit, clear

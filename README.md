@@ -1,575 +1,301 @@
+# Replication Instructions
+This repository contains instructions for how to replicate the work in the 2021 revision of "Modeling Complex Network Patterns in Trade" by Peter Herman. To do so, follow the instructions below in sequence to reproduce all of the analysis. 
 
+## Source Data Files
+The following files reflect the source data used in the analysis. Two of the files are included here as comma separated text files. The remaining files are not included due to file size, but are readily available from their original sources at http://www.cepii.fr/cepii/en/bdd_modele/bdd.asp. The specific versions used for the original analysis are available by request from the author.
 
-The following describes the files used to generate the empirical results in the the revised version of "Modeling Complex Network Patterns in International Trade".
+**Data Files:**
+* data/207countrylist.csv  (A list of countries for use in main analysis, included in repo in .txt format)
+* data/baci92_1995.csv (1995 trade flows from BACI dataset) 
+* data/baci92_2006.csv (2006 trade flows from BACI dataset) 
+* data/country_name_correspondence.dta (Correspondences for renaming country codes, included in repo in .txt format)
+* data/geo_cepii.dta (GEO CEPII dataset)
+* data/grav_data_1995to2015.csv (CEPII Gravity dataset for 1995--2006)
+* Source BACI data files (BACI trade data files for 1995--2006)
 
+## Trade Data Prep
+**Scripts:**
+* data/gravity_data_constructor.R
+ 
+**Inputs:**
+* data/country_name_correspondence.dta
+* data/grav_data_1995to2015.csv
+* Source BACI data files
 
 
-# Data Preparation
 
-## Gravity Data
-The dataset used for estimating the full gravity models in section 2. It contains all 207 countries for 1995--2006.
+## Gravity Analysis
+The analysis is made up of two components: a PPML analysis using trade values and an extensive margin analysis using probit and OLS estimators.
 
-### Scripts
-**Main Script:** gravity_data_constructor.R 
+### PPML
+**Scripts:**
+* gravity/PPML/two_stage_ppml.do
 
-(Originally: "P\Documents\Working Papers\Extensive Margin Estimation with Network Attributes\Data Construction v2.R")
+**Inputs:**
+* data\gravity_estimation_data.csv (estimating data)
 
-### Inputs
-**CEPII Gravity Dataset:** Not included here (Originally "P:\Documents\Working Papers\Data Various\gravdata_cepii.dta")
+**Outputs:**
+* gravity/PPML/results/ppml_hdfe_multi-specs_output.txt (table of first stage PPML results)
+* gravity/PPML/results/ppml_hdfe_[multiple].dta (results from each individual PPML specification)
+* gravity/PPML/results/second_stage.txt (table of second stage results)
+* gravity/PPML/results/second_stage_data.dta (data sample created in first stage and used in second stage, saved for convenience)
+* gravity/PPML/results/standard_fe_estimates.csv (fixed effect estimates, used for full sample ERGMs)
+* gravity/PPML/results/two_stage_ppml_log.txt (stata log file)
 
-**Country Name Concordance:** Not included here (Originally "P:\Documents\Working Papers\Data Various\countrynamecorrespondence_stata12.dta")
+### Extensive Margin
 
-**BACI Datasets:** Not included here (Originally "P:\Documents\Working Papers\Data Various\BACI\")
+#### Probit Model
+**Scripts:** 
+* gravity/extensive_margin/extensive_margin_probit.do
 
-### Outputs
-**Gravity Estimation Data:** gravity_estimation_data.rda (originally: "P:\Documents\Working Papers\Extensive Margin Estimation with Network Attributes\combineddata.rda")
+**Inputs:**
+* data\gravity_estimation_data.csv (estimating data)
 
-Data later converted to .dta instead of .rda.
+**Outputs:**
+* gravity/extensive_margin/results_probit/probit_stata_output.txt (table of results)
+* gravity/extensive_margin/results_probit/extensive_margin_estimation_log.txt (stata log file)
+* gravity/extensive_margin/results_probit/probit_[multiple].csv (results for each individual specification)
 
+#### OLS Model
+**Scripts:**
+* gravity/extensive_margin/extensive_margin_ols.do
 
+**Inputs:**
+* data\gravity_estimation_data.csv (estimating data)
 
+**Outputs:**
+* gravity/extensive_margin/ols_results/ols_stata_output.txt (table of results)
+* gravity/extensive_margin/ols_results/extensive_margin_estimation_log.txt (stata log file)
+* gravity/extensive_margin/ols_results/ols_[multiple].csv (results for each individual specification)
 
-## 60 Country, 50th Percentile Dataset:  
-The dataset used for the partial sample ERGM estimates and both ERGM and Probit comparison estimations. It contains data for the top 60 importers between 1995--2006 and the top 50 percent of imports by value for each importer. The bottom fifty percent of imports were converted to zeros.
 
-### Scripts
 
-**Step 1 - Create List of top 60 Importers:** create_top_60_countries.R 
 
-Takes in: gravity_estimation_data.dta
 
-Outputs: top_60_importers.csv
 
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v2_common_data_sets\v2_country_set.R")
+## ERGM Analysis
 
 
+The analysis takes place in two parts. The first chunk analyzes the 1995 and 2006 trade networks using the full sample of 207 countries. The second piece uses a subsample of HS 36 trade among the top 50 trading countries in 1995 and 2006.
 
-**Step 2 -  Create Subsample of 60 countries and 50 percentile:** create_subsample_60ctrys_50pct.do
+### Support Functions
 
-Takes in: gravity_estimation_data.dta, top_60_importers.csv
+* ergm_analysis/BACI.functions.R
+* ergm_analysis/BACI_node_attributes.R
 
-Outputs: partial_dataset_60-ctrys_50-pct_95-06_full_sample_network_vars.csv
+### Full Sample ERGM
 
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\create_subsample_60ctrys_50pct.do")
+#### 1995 
+**Scripts:** 
+* ergm_analysis/Full Sample/1995_full_sample_ergm.R
 
-**Step 3 - Recreate Network Variables Fir Partial Sample:** recreate_partial_sample_network_variables.R
+**Inputs:** 
+* data\\207countrylist.csv
+* data\\geo_cepii.dta
+* data\\grav_data_1995to2015.csv
+* data\\baci92_1995.csv
+* data\\country_name_correspondence.dta
+* ergm_analysis\\BACI.functions.R
+* ergm_analysis\\BACI_node_attributes.R
+* gravity\\main_analysis\\PPML\\results\\standard_fe_estimates.csv
 
-Takes in: partial_dataset_60-ctrys_50-pct_95-06_full_sample_network_vars.csv
+**Outputs:** 
+* ergm_analysis/Full Sample/ERGM_full_sample_results/1995_full_sample_ergm_results.txt (main findings)
+* ergm_analysis/Full Sample/ERGM_full_sample_results/[various other outputs]
+
+#### 2006 
+**Scripts:** 
+* ergm_analysis/Full Sample/2006_full_sample_ergm.R
+
+**Inputs:** 
+* data\\207countrylist.csv
+* data\\geo_cepii.dta
+* data\\grav_data_1995to2015.csv
+* data\\baci92_2006.csv
+* data\\country_name_correspondence.dta
+* ergm_analysis\\BACI.functions.R
+* ergm_analysis\\BACI_node_attributes.R
+* gravity\\main_analysis\\PPML\\results\\standard_fe_estimates.csv
+
+**Outputs:** 
+* ergm_analysis/Full Sample/ERGM_full_sample_results/2006_full_sample_ergm_results.txt (main findings)
+* ergm_analysis/Full Sample/ERGM_full_sample_results/[various other outputs]
+
+
+### Partial Sample ERGM
+
+The partial sample has three steps
+1. Create the partial sample
+2. Estimate PPML models to get fixed effects for multilateral resistances
+3. Estimate ERGMs
+
+#### Step 1 Create partial sample
+**Scripts:** 
+* ergm_analysis/HS 50 countries/create_partial_sample.py
+
+**Inputs:**
+* Source BACI data files
+* data\\country_name_correspondence.dta
+* data\\grav_data_1995to2015.csv
+* data\\country_code_baci92.csv
+* data\\baci92_1995.csv
+* data\\baci92_2006.csv
+
+**Outputs:**
+* "ergm_analysis\\HS 50 countries\\hs36_baci_data_1995_top50_traders.csv" (1995 partial network trade for ERGM)
+* "ergm_analysis\\HS 50 countries\\hs36_baci_data_2006_top50_traders.csv" (1995 partial network trade for ERGM)
+* "ergm_analysis\\HS 50 countries\\ppml_hs2_panel_top50.dta" (Multi-year panel dataset for probit estimation)
+* "ergm_analysis\\HS 50 countries\\top_50_countries.csv" (List of countries in partial sample)
+
+#### Step 2 Estimate fixed effects for MRT covariates
+**Scripts:**
+* ergm_analysis/HS 50 countries/ppml_hs36_top50.do
+
+**Inputs:**
+* "ergm_analysis\\HS 50 countries\\ppml_hs2_panel_top50.dta" (Multi-year panel dataset for estimation)
+
+**Outputs:**
+* "ergm_analysis\HS 50 countries\ppml_hs36_top50_log.txt" (stata log file)
+* "ergm_analysis\HS 50 countries\ppml_hdfe_standard_fe_estimates.dta" (country-year fixed effect estimates)
+* "ergm_analysis\HS 50 countries\ppml_hs36_top50_output.txt" (ppml estimates table)
+* "ergm_analysis/HS 50 countries/ppml_hdfe_standard.dta" (datafile of estimate values)
+
+
+#### Step 3 Estimate ERGMs
 
-Outputs: partial_dataset_60_ctrys_50_pct_95-06_partial_sample_network_stats.csv
+##### 1995
+**Scripts:** 
+* "ergm_analysis/HS 50 countries/1995_HS36_50cntrys_ergm.R"
 
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\Data_Construction_for_60-ctry_50-pct_subsamples_1995.R")
+**Inputs:**
+* "ergm_analysis\\HS 50 countries\\hs36_baci_data_1995_top50_traders.csv" (1995 partial network from [ERGM step 1](#-step-1-create-partial-sample)) 
+* "ergm_analysis\\HS 50 countries\\ppml_hs36_top50_standard_fe_estimates.csv" (Fixed effect estimates from [ERGM step 2](#-step-1-create-partial-sample))
+* "ergm_analysis\\BACI.functions.R"
+* "ergm_analysis\\BACI_node_attributes.R"
+* "data\\grav_data_1995to2015.csv"
+* "data\\country_name_correspondence.dta"
 
+**Outputs:**
+* "ergm_analysis\\HS 50 countries\\ERGM_results\\1995_ergm_hs36_top50.txt" (Main findings)
+* "ergm_analysis\\HS 50 countries\\ERGM_results\\1995_ergm_hs36_top50_[timestamp]_gof_obj.rda" (goodness of fit R object)
+* "ergm_analysis\\HS 50 countries\\ERGM_results\\1995_ergm_hs36_top50_[timestamp]_output.rda" (model fit R object)
+* "ergm_analysis/HS 50 countries/ERGM_results/1995_ergm_hs36_top50_[timestamp]_diagnostic_plots.pdf (diagnostic plots)
+* "ergm_analysis/HS 50 countries/ERGM_results/1995_ergm_hs36_top50_[timestamp]_gof_plots.pdf" (goodness of fit plots)
 
+##### 1995
+**Scripts:** 
+* "ergm_analysis/HS 50 countries/2006_HS36_50cntrys_ergm.R"
 
+**Inputs:**
+* "ergm_analysis\\HS 50 countries\\hs36_baci_data_2006_top50_traders.csv" (2006 partial network from [ERMG step 1](#-step-1-create-partial-sample)) 
+* "ergm_analysis\\HS 50 countries\\ppml_hs36_top50_standard_fe_estimates.csv" (Fixed effect estimates from [ERGM step 2](#-step-1-create-partial-sample))
+* "ergm_analysis\\BACI.functions.R"
+* "ergm_analysis\\BACI_node_attributes.R"
+* "data\\grav_data_1995to2015.csv"
+* "data\\country_name_correspondence.dta"
 
-
-
-### Inputs
-
-**Gravity Estimation Data:** gravity_estimation_data.dta (originally: "P:\Documents\Working Papers\Extensive Margin Estimation with Network Attributes\combineddata.dta")
-
-### Outputs
-**60 Country, 50th Percentile Dataset with partial sample network variables:** partial_dataset_60_ctrys_50_pct_95-06_partial_sample_network_stats.csv
-
-(Originally: "G:\data\Peter Herman\Trade Network Reserach\Data\60-ctrys_50-pct_95-06_subset_network_stats.csv")
-
-**60 Country, 50th Percentile Dataset with original network variables** partial_dataset_60-ctrys_50-pct_95-06_full_sample_network_vars.csv
-
-(Originally: "G:\data\Peter Herman\Trade Network Reserach\Data\60-ctrys_50-pct_95-06.csv")
-
-**Top 60 Importers:** top_60_importers.csv
-
-(Originally: "G:\data\Peter Herman\Trade Network Reserach\Data\top_60_importers.csv")
-
-
-
-
-
-
-
-
-# Gravity Analysis
-The gravity analysis has two parts. The first covers a full panel of countries, years, and trade flows using both PPML and probit models, which is presented in section 2 of the paper. The second considers only a subset of the data and probit models for use in the comparisons of section 4.  
-
-
-
-
-## Full Gravity analysis
-### Scripts 
-**Main Script:** "full_gravity_analysis.do"
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v1 - first revision\gravity_estimations_rr_v1.do")
-
-### Inputs
-**Primary Data:** gravity_estimation_data.dta 
-
-(Originally: "P:\Documents\Working Papers\Extensive Margin Estimation with Network Attributes\combineddata.dta")
-
-### Outputs
-**Log File:** log_gravity_estimation.txt 
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v1 - first revision\log_gravity_estimation_v1.txt")
-
-**PPML Table in Paper:** ppml_network_stata_output_long.tex 
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v1 - first revision\ppml_network_stata_output_long.tex")
-
-**Probit Table in Paper:** probit_stata_output_long.tex
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v1 - first revision\probit_stata_output_long.tex")
-
-**Other Unused Tables:** 
-* ppml_network_stata_output.txt (Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v1 - first revision\ppml_network_stata_output.txt")
-* ppml_network_stata_output_wide.tex (Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v1 - first revision\ppml_network_stata_output_wide.tex")
-* probit_stata_output.tex (Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v1 - first revision\probit_stata_output.tex")
-* probit_stata_output.txt (Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v1 - first revision\probit_stata_output.txt")
-
-
-
-## Partial Gravity Analysis for Comparisons
-
-### Scripts
-**1995 Script:** 1995_partial_gravity_analysis_for_comparisons.do
-
-Takes in: partial_dataset_60_ctrys_50_pct_95-06_partial_sample_network_stats.csv
-
-Outputs: "1995_partial_garvity_log.txt", "1995_probit_predicted_probabilities_subset_network_stats.csv", probit_stat_output.tex, probit_stata_output.txt, and other tables.
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v3 - 60 countries\60-ctrys_50-pct_1995_subset_network_stats\v3_60-ctrys_50-pct_1995_subset_network_stats.do")
-
-**2006 Script:** "D:\work\Peter_Herman\projects\trade_network_research\files_used_in_submission\gravity_analysis\comparrison_specifications\2006\2006_partial_gravity_analysis_for_comparisons.do"
-
-Takes in: partial_dataset_60_ctrys_50_pct_95-06_partial_sample_network_stats.csv
-
-Outputs: 2006_probit_predicted_probabilities_subset_network_stats, regression tables
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v3 - 60 countries\60-ctrys_50-pct_2006_subset_network_stats\v3_60-ctrys_50-pct_2006_subset_network_stats.do")
-
-### Inputs
-**60 Country, 50th Percentile Dataset with partial sample network variables:** partial_dataset_60_ctrys_50_pct_95-06_partial_sample_network_stats.csv
-
-(Originally: "G:\data\Peter Herman\Trade Network Reserach\Data\60-ctrys_50-pct_95-06_subset_network_stats.csv")
-
-### Outputs
-**1995 Predicted Probabilities:** 1995_probit_predicted_probabilities_subset_network_stats
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v3 - 60 countries\60-ctrys_50-pct_1995_subset_network_stats\probit_predicted_probabilities_subset_network_stats.csv")
-
-**2006 Predicted Probabilities:** 2006_probit_predicted_probabilities_subset_network_stats
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\Gravity Modeling\Stata Analysis\v3 - 60 countries\60-ctrys_50-pct_2006_subset_network_stats\probit_predicted_probabilities_subset_network_stats.csv")
-
-**Multiple unlisted and unused tables**
-
-
-
-# ERGM Analysis
-
-The ERGM analysis contains two components. The first uses the full sample of countries. The second uses a subsample of 60 countries and the top 50 percent of trade flows for each importer.
-
-## Full Sample Models
-
-
-### Scripts
-
-**1995 Model:** 1995_full_sample_ergm.R
-
-Takes in: 207countrylist.csv, geo_cepii.dta, grav_data_1995to2015.csv, BACI.functions.R, BACI_node_attributes.R, baci92_1995.csv, country_name_correspondence.dta
-
-Outputs: 1995_model_fit.rda, 1995_full_sample_results.txt, 1995_full_sample_results_gof_plots.pdf, 1995_full_sample_resultsdiagnostic_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\original_code\ERGM_BACIagg_v4_gravity4paper.R")
-
-**2006 Model:** 2006_full_sample_ergm.R
-
-Takes in: 207countrylist.csv, geo_cepii.dta, grav_data_1995to2015.csv, BACI.functions.R, BACI_node_attributes.R, baci92_2006.csv, country_name_correspondence.dta
-
-Outputs: 2006_model_fit.rda, 2006_full_sample_results.txt, 2006_full_sample_results_gof_plots.pdf, 2006_full_sample_results_diagnostic_plots.pdf
-
-
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\original_code\ERGM_BACIagg_v4_gravity4paper_2006.R")
-
-
-
-### Inputs
-
-**BACI Trade Data:** baci92_1995.csv, baci92_2006.csv
-
-(originally in: P:\\Documents\\Working Papers\\Data Various\\BACI (HS92)\\)
-
-**Support Functions** BACI.functions.R
-
-(Originally: D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\original_code\\BACI.functions.R)
-
-**Support Functions:** BACI_node_attributes.R
-
-(originally: D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\original_code\\BACI_node_attributes.R)
-
-**List of countries:** 207countrylist.csv
-
-(originally: "P:\Documents\Working Papers\ERGM Trade Networks\Data Work\BACISectors_v1\207countrylist.csv")
-
-**Geographic Characteristics:** geo_cepii.dta
-
-(originally: "G:\data\Peter Herman\Trade Network Reserach\Data\geo_cepii.dta")
-
-**Gravity Data:** grav_data_1995to2015.csv
-
-(originally: "G:\data\Peter Herman\Trade Network Reserach\Data\grav_data_1995to2015.csv")
-
-**Country Name Correspondence:** country_name_correspondence.dta
-
-(Originally: "P:\Documents\Working Papers\Data Various\countrynamecorrespondence_stata12.dta")
-
-
-
-### Outputs
-**1995 Model Fit** 1995_model_fit.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\original_code\results\BACI_agg_fit_extendedgravity1995_v1.rda")
-
-**1995 Results Summary:** 1995_full_sample_results.txt
-
-(Originally "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\original_code\results\ERGM_BACIagg_v4_gravity4paper_2019-04-30_13-06.txt")
-
-**1995 GoF Plots:** 1995_full_sample_results_gof_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\original_code\results\ERGM_BACIagg_v4_gravity4paper_2019-04-30_13-06__gof_plots.pdf")
-
-**1995 Diagnostic Plots:** 1995_full_sample_results_diagnostic_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\original_code\results\ERGM_BACIagg_v4_gravity4paper_2019-04-30_13-06__diagnostic_plots.pdf")
-
-
-**2006 Model Fit** 2006_model_fit.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\original_code\results\BACI_agg_fit_extendedgravity2006_v1.rda")
-
-**2006 Results Summary:** 2006_full_sample_results.txt
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\original_code\results\v4_2006_results_2019-06-21_11-54.txt" )
-
-**2006 GoF Plots:** 2006_full_sample_results_gof_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\original_code\results\ERGM_BACIagg_v4_gravity4paper_2019-04-30_13-06__gof_plots.pdf")
-
-**2006 Diagnostic Plots:** 2006_full_sample_results_diagnostic_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\original_code\results\ERGM_BACIagg_v4_gravity4paper_2019-04-30_13-06__diagnostic_plots.pdf")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Partial Sample Models
-
-### Scripts
-
-**1995 Model:** 1995_partial_sample_ergm.r 
-
-Takes in: 207countrylist.csv, geo_cepii.dta, grav_data_1948to2015.csv, partial_dataset_60-ctrys_50-pct_95-06_full_sample_network_vars.csv (doesn't use the network vars)
-
-Outputs: 1995_ergm_partial_sample.txt, 1995_ergm_partial_sample_gof_obj.rda, 1995_ergm_partial_sample_gof_plots.pdf, 1995_ergm_partial_sample_diagnostic_plots.pdf, 1995_ergm_partial_sample_output.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\june 17 60 countries 1995 gwesp.r")
-
-
-
-**2006 Model:** 2006_partial_sample_ergm.r
-
-Takes in: Takes in: 207countrylist.csv, geo_cepii.dta, grav_data_1948to2015.csv, partial_dataset_60-ctrys_50-pct_95-06_full_sample_network_vars.csv (doesn't use the network vars)
-
-Outputs: 2006_ergm_partial_sample.txt, 2006_ergm_partial_sample_gof_obj.rda, 2006_ergm_partial_sample_gof_plots.pdf, 2006_ergm_partial_sample_diagnostic_plots.pdf, 2006_ergm_partial_sample_output.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\june 13 60 countries 2006 gwesp.r")
-
-### Inputs
-
-**60 Country, 50th Percentile Dataset with original network variables** partial_dataset_60-ctrys_50-pct_95-06_full_sample_network_vars.csv
-
-[Note: the ERGMS do not use the network stats so this version of the partial sample is fine.]
-
-(Originally: "G:\data\Peter Herman\Trade Network Reserach\Data\60-ctrys_50-pct_95-06.csv") 
-
-**Support Functions** BACI.functions.R
-
-(Originally: D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\original_code\\BACI.functions.R)
-
-**Support Functions:** BACI_node_attributes.R
-
-(originally: D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\original_code\\BACI_node_attributes.R)
-
-**List of countries:** 207countrylist.csv
-
-(originally: "P:\Documents\Working Papers\ERGM Trade Networks\Data Work\BACISectors_v1\207countrylist.csv")
-
-**Geographic Characteristics:** geo_cepii.dta
-
-(originally: "G:\data\Peter Herman\Trade Network Reserach\Data\geo_cepii.dta")
-
-**Gravity Data:** grav_data_1995to2015.csv
-
-(originally: "G:\data\Peter Herman\Trade Network Reserach\Data\grav_data_1995to2015.csv")
-
-### Outputs
-
-
-
-**1995 Summary of Results** 1995_ergm_partial_sample.txt
-(Originally:"D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\60_countries_50_percentile_1995_v1_2019-06-18_03-09.txt")
-
-**1995 Goodness of Fit Object** 1995_ergm_partial_sample_gof_obj.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\60_countries_50_percentile_1995_v1_2019-06-18_03-09.txt_gof_obj.rda")
-
-**1995 Goodness of Fit Plots** 1995_ergm_partial_sample_gof_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\60_countries_50_percentile_1995_v1_2019-06-18_03-09__gof_plots.pdf")
-
-**1995 Diagnostic Plots** 1995_ergm_partial_sample_diagnostic_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\60_countries_50_percentile_1995_v1_2019-06-18_03-09__diagnostic_plots.pdf")
-
-**1995 Model Fit Object** 1995_ergm_partial_sample_output.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\60_countries_50_percentile_1995_v1_output.rda")
-
-**2006 Summary of Results** 2006_ergm_partial_sample.txt
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\60_countries_50_percentile_2006_v2_2019-06-14_02-20.txt")
-
-**2006 Goodness of Fit Object** 2006_ergm_partial_sample_gof_obj.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\60_countries_50_percentile_2006_v2_2019-06-14_02-20.txt_gof_obj.rda")
-
-**2006 Goodness of Fit Plots** 2006_ergm_partial_sample_gof_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\60_countries_50_percentile_2006_v2_2019-06-14_02-20__gof_plots.pdf")
-
-**2006 Diagnostic Plots** 2006_ergm_partial_sample_diagnostic_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\60_countries_50_percentile_2006_v2_2019-06-14_02-20__diagnostic_plots.pdf")
-
-**2006 Model Fit Object** 2006_ergm_partial_sample_output.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\rr_ergm_analysis\100_countries\60_countries_50_percentile_2006_v2_output.rda")
-
-
-
-
-
-# Comparisons
-
-## Setp 1: Probit Network Simulation Scripts
-
-
-**1995 Standard Probit Simulation:** 1995_standard_probit_simulation.R
-
-Takes In: 1995_probit_predicted_probabilities_subset_network_stats.csv, BACI.functions.r
-
-Outputs: 1995_standard_probit_simulation_gof_plots.pdf, 1995_standard_probit_simulation_gof_obj.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\1995\probit_simulation_v3_60-countries_50-pct_1995.R")
-
-
-**1995 Network Probit Simulation:** 1995_probit_network_simulation.R
-
-Takes in: 1995_probit_predicted_probabilities_subset_network_stats.csv, BACI.functions.r
-
-Outputs: 1995_network_probit_simulation_gof_plots.pdf, 1995_network_probit_simulation_gof_obj.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\1995\network_probit_simulation_v3_60-countries_50-pct_1995_subset_network_stats.R")
-
-
-**2006 Standard Probit Simulation:** 2006_standard_probit_simulation.R
-
-Takes in: 2006_probit_predicted_probabilities_subset_network_stats.csv, BACI.functions.r
-
-Outputs: 2006_standard_probit_simulation_gof_plots.pdf, 2006_standard_probit_simulation_gof_obj.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\2006\probit_simulation_v3_60-countries_50-pct_2006.R")
-
-
-**2006 Network Probit Simulation:** 2006_network_probit_simulation.R
-
-Takes in: 2006_probit_predicted_probabilities_subset_network_stats.csv, BACI.functions.r
-
-Outputs: 2006_network_probit_simulation_gof_plots.pdf, 2006_network_probit_simulation_gof_obj.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\2006\network_probit_simulation_v3_60-countries_50-pct_2006_subset_network_stats.R")
-
-
-### Inputs
-
-**Predicted Link Probabilities from Probit Model:** 1995_probit_predicted_probabilities_subset_network_stats.csv
-
-(Located: "D:\work\Peter_Herman\projects\trade_network_research\files_used_in_submission\gravity_analysis\comparrison_specifications\1995\1995_probit_predicted_probabilities_subset_network_stats.csv")
-
-(Originally: D:\\work\\Peter_Herman\\projects\\trade_network_research\\Gravity Modeling\\Stata Analysis\\v3 - 60 countries\\60-ctrys_50-pct_1995_subset_network_stats\\probit_predicted_probabilities_subset_network_stats.csv)
-
-
-**Support Functions:** BACI.functions.R 
-
-(Located: "D:\work\Peter_Herman\projects\trade_network_research\files_used_in_submission\ergm_analysis\BACI.functions.R")
-
-(Originally: "D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\original_code\\BACI.functions.R")
-
-
-### Outputs
-
-**1995 Network Probit Goodness of Fit Object:** 1995_network_probit_simulation_gof_obj.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\2006\network_probit_simulation_v3_60-ctrys_50-pct_2006_subset_network_stats_gof_obj.rda")
-
-
-**1995 Network Probit Goodness of Fit Plots:** 1995_network_probit_simulation_gof_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\2006\network_probit_simulation_v3_60-ctrys_50-pct_2006_subset_network_stats_gof_plots.pdf")
-
-
-**1995 Standard Probit Goodness of Fit Object:** 1995_standard_probit_situation_gof_obj.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\1995\probit_simulation_v3_60-ctrys_50-pct_1995_gof_obj.rda")
-
-
-**1995 Standard Probit Goodness of Fit Plots:** 1995_standard_probit_situation_gof_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\1995\probit_simulation_v3_60-ctrys_50-pct_1995_gof_plots.pdf")
-
-
-**2006 Network Probit Goodness of Fit Object:** 2006_network_probit_simulation_gof_obj.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\2006\network_probit_simulation_v3_60-ctrys_50-pct_2006_subset_network_stats_gof_obj.rda")
-
-
-**2006 Network Probit Goodness of Fit Plots:** 2006_network_probit_simulation_gof_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\2006\network_probit_simulation_v3_60-ctrys_50-pct_2006_subset_network_stats_gof_plots.pdf")
-
-
-**2006 Standard Probit Goodness of Fit Object:** 2006_standard_probit_simulation_gof_obj.rda
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\2006\probit_simulation_v3_60-ctrys_50-pct_2006_gof_obj.rda")
-
-
-**2006 Standard Probit Goodness of Fit Plots:** 2006_standard_probit_simulation_gof_plots.pdf
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\2006\probit_simulation_v3_60-ctrys_50-pct_2006_gof_plots.pdf")
-
-
-
-
-
-
-
-## Step 2: Compare Simulation
-
-**1995 ERGM/Probit Comparisons:** 1995_ergm_probit_comparison.R
-
-Takes in: comparison_functions.r, 1995_ergm_partial_sample_gof_obj.rda, 1995_standard_probit_situation_gof_obj.rda, 1995_network_probit_simulation_gof_obj.rda
-
-Outputs: 1995_combined_gof_tables_standard_probit.csv, 1995_combined_gof_tables_network_probit.csv 
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\1995\ergm_probit_comparrison_60-ctrys_50-pct_1995.R")
-
-
-
-**2006 ERGM/Probit Comparisons:**
-
-Takes in: comparison_functions.r, 2006_ergm_partial_sample_gof_obj.rda, 2006_standard_probit_simulation_gof_obj.rda, 2006_network_probit_simulation_gof_obj.rda
-
-Outputs: 2006_combined_gof_tables_standard_probit.csv, 2006_combined_gof_tables_network_probit.csv
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\2006\ergm_probit_comparrison_60-ctrys_50-pct_2006.R")
-
-
-**Comparison Tools:** comparison_functions.R
-
-A collection of tools to extract, combine, and report comparisons from goodness of fit objects.
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\comparison_function.R")
-
-
-
-### Inputs
-
-**1995 ERGM GoF Object:** 1995_ergm_partial_sample_gof_obj.rda
-
-(Located: "D:\work\Peter_Herman\projects\trade_network_research\files_used_in_submission\ergm_analysis\Partial Sample\1995_ergm_partial_sample_gof_obj.rda")
-
-(Originally: D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\100_countries\\60_countries_50_percentile_1995_v1_2019-06-18_03-09.txt_gof_obj.rda)
-
-
-**1995 Standard Probit GoF Object:** 1995_standard_probit_situation_gof_obj.rda
-
-(Originally: "D:\\work\\Peter_Herman\\projects\\trade_network_research\\probit_ergm_gof\\v3_60_countries_50_percent\\1995\\probit_simulation_v3_60-ctrys_50-pct_1995_gof_obj.rda")
-
-
-**1995 Network Probit GoF Object:** 1995_network_probit_simulation_gof_obj.rda
-
-(Originally: "D:\\work\\Peter_Herman\\projects\\trade_network_research\\probit_ergm_gof\\v3_60_countries_50_percent\\1995\\network_probit_simulation_v3_60-ctrys_50-pct_1995_subset_network_stats_gof_obj.rda")
-
-
-**2006 ERGM GoF Object:** 2006_ergm_partial_sample_gof_obj.rda
-
-(Located: "D:\work\Peter_Herman\projects\trade_network_research\files_used_in_submission\ergm_analysis\Partial Sample\2006_ergm_partial_sample_gof_obj.rda")
-
-(Originally: "D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\100_countries\\60_countries_50_percentile_2006_v2_2019-06-14_02-20.txt_gof_obj.rda")
-
-
-**2006 Standard Probit Object:** 2006_standard_probit_simulation_gof_obj.rda
-
-(Originally: "D:\\work\\Peter_Herman\\projects\\trade_network_research\\probit_ergm_gof\\v3_60_countries_50_percent\\2006\\probit_simulation_v3_60-ctrys_50-pct_2006_gof_obj.rda")
-
-
-**2006 Network Probit Object** 2006_network_probit_simulation_gof_obj.rda
-
-(Originally: "D:\\work\\Peter_Herman\\projects\\trade_network_research\\probit_ergm_gof\\v3_60_countries_50_percent\\2006\\network_probit_simulation_v3_60-ctrys_50-pct_2006_subset_network_stats_gof_obj.rda")
-
-
-**Support Functions:** BACI.functions.R 
-
-(Located: "D:\work\Peter_Herman\projects\trade_network_research\files_used_in_submission\ergm_analysis\BACI.functions.R")
-
-(Originally: "D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\original_code\\BACI.functions.R")
-
-
-
-### Outputs
-
-**1995 ERGM/Standard Probit Comparison Tables:** 1995_combined_gof_tables_standard_probit.csv
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\1995\combined_gof_tables_standard_probit.csv")
-
-
-**1995 ERGM/Network Probit Comparison Tables:** 1995_combined_gof_tables_network_probit.csv
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\1995\combined_gof_tables_network_probit_subset_network_stats.csv")
-
-
-**2006 ERGM/Standard Probit Comparison Tables:** 2006_combined_gof_tables_standard_probit.csv
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\2006\combined_gof_tables_standard_probit.csv")
-
-
-**2006 ERGM/Network Probit Comparison Tables:** 2006_combined_gof_tables_network_probit.csv
-
-(Originally: "D:\work\Peter_Herman\projects\trade_network_research\probit_ergm_gof\v3_60_countries_50_percent\2006\combined_gof_tables_network_probit_subset_network_stats.csv")
-
-
-
-
-
-
-
+**Outputs:**
+* "ergm_analysis\\HS 50 countries\\ERGM_results\\2006_ergm_hs36_top50.txt" (Main findings)
+* "ergm_analysis\\HS 50 countries\\ERGM_results\\2006_ergm_hs36_top50_[timestamp]_gof_obj.rda" (goodness of fit R object)
+* "ergm_analysis\\HS 50 countries\\ERGM_results\\2006_ergm_hs36_top50_[timestamp]_output.rda" (model fit R object)
+* "ergm_analysis/HS 50 countries/ERGM_results/2006_ergm_hs36_top50_[timestamp]_diagnostic_plots.pdf (diagnostic plots)
+* "ergm_analysis/HS 50 countries/ERGM_results/2006_ergm_hs36_top50_[timestamp]_gof_plots.pdf" (goodness of fit plots)
+
+
+## Comparisons
+
+### Step 0 Create gravity subsample with network variables
+This step creates network variables based on the subsamples and adds them to the estimating panel.
+
+**Scripts:** 
+* comparisons/recreate_partial_sample_network_variables.R
+
+**Inputs:**
+* ergm_analysis\\HS 50 countries\\ppml_hs2_panel_top50.dta (created by subsample python script in [ERGM step 1](#-step-1-create-partial-sample))
+
+**Outputs:** 
+* comparisons/partial_data_set_hs36_top50_with_ntw_vars.csv
+
+### Step 1 Estimate partial sample probit
+This step estimates two probit models for 1995 and 2006. The estimated models are each used to predict link formation probabilities that are used in the next step to simulate networks.
+
+**Scripts:**
+* comparisons/1995/step1_1995_partial_gravity_analysis_for_comparisons.do 
+* comparisons/2006/step_1_2006_partial_gravity_analysis_for_comparisons.do
+
+**Inputs:** 
+* comparisons/partial_data_set_hs36_top50_with_ntw_vars.csv (estimating data from [comparison step 1](#-step-0-create-gravity-subsample-with-network-variables))
+
+**Outputs:** 
+
+[1995]
+* comparisons/1995/1995_results/1995_partial_gravity_log.txt (stata log file)
+* comparisons/1995/1995_results/1995_partial_probit_stata_output.txt (table of estimates)
+* comparisons/1995/1995_results/1995_probit_predicted_probabilities_subset_network_stats.csv (predicted probabilities)
+
+[2006]
+* comparisons/2006/2006_results/2006_partial_gravity_log.txt (stata log file)
+* comparisons/2006/2006_results/2006_partial_probit_stata_output.txt (table of estimates)
+* comparisons/2006/2006_results/2006_probit_predicted_probabilities_subset_network_stats.csv (predicted probabilities)
+
+### Step 2 Simulate probit networks
+For each year, there are 2 sets of simulations. The first simulates a probit model that did not network covariates. The second simulates a probit model that does include network covariates.
+ 
+**Scripts:**
+
+[1995]
+* comparisons/1995/step_2a_1995_standard_probit_simulation.R (standard probit script)
+* comparisons/1995/step_2b_1995_network_probit_simulation.R (network probit script)
+
+[2006]
+* comparisons/2006/step_2a_2006_standard_probit_simulation.R (standard probit script)
+* comparisons/2006/step_2b_2006_network_probit_simulation.R (network probit script)
+
+**Inputs:**
+* ergm_analysis/BACI.functions.R
+
+[1995]
+* comparisons/1995/1995_results/1995_probit_predicted_probabilities_subset_network_stats.csv
+
+[2006]
+* comparisons/2006/2006_results/2006_probit_predicted_probabilities_subset_network_stats.csv
+
+**Outputs:**
+
+[1995]
+* comparisons/1995/1995_results/1995_network_probit_simulation_gof_obj.rda (network probit goodness of fit object)
+* comparisons/1995/1995_results/1995_network_probit_simulation_gof_plots.pdf (network probit goodness of fit plots)
+
+[2006]
+* comparisons/1995/1995_results/1995_standard_probit_simulation_gof_obj.rda (standard probit goodness of fit object)
+* comparisons/1995/1995_results/1995_standard_probit_simulation_gof_plots.pdf (network probit goodness of fit plots)
+
+### Step 3 Compare ERGM and probit fits
+This step generates ISE measures for each of the three models (ERGM, standard probit, and network probit) and creates files containing the comparrisons. Two outputs get created: a standard probit and network probit file. The ERGM results are included in both files.
+
+**Scripts:**
+* comparisons/1995/step_3_1995_ergm_probit_comparison.R
+* comparisons/2006/step_3_2006_ergm_probit_comparison.R
+
+**Inputs:** 
+* comparisons/comparison_functions.R
+
+[1995]
+* ergm_analysis\\HS 50 countries\\ERGM_results\\1995_ergm_hs36_top50_[time stamp].txt_gof_obj.rda (ERGM goodness of fit object)
+* comparisons\\1995\\1995_results\\1995_standard_probit_simulation_gof_obj.rda (standard probit goodness of fit object)
+* comparisons\\1995\\1995_results\\1995_network_probit_simulation_gof_obj.rda (network goodness of fit object)
+
+[2006]
+* ergm_analysis/HS 50 countries/ERGM_results/2006_ergm_hs36_top50_2021-01-30_23-38.txt_gof_obj.rda
+* comparisons/2006/2006_results/2006_standard_probit_simulation_gof_obj.rda
+* comparisons/2006/2006_results/2006_network_probit_simulation_gof_obj.rda
+
+**Outputs:**
+
+[1995]
+* comparisons/1995/1995_results/1995_combined_gof_tables_network_probit.txt (ERGM/standard probit comparison)
+* comparisons/1995/1995_results/1995_combined_gof_tables_standard_probit.txt (ERGM/network probit comparison)
+
+[2006]
+* comparisons/2006/2006_results/2006_combined_gof_tables_standard_probit.txt (ERGM/standard probit comparison)
+* comparisons/2006/2006_results/2006_combined_gof_tables_network_probit.txt (ERGM/network probit comparison)

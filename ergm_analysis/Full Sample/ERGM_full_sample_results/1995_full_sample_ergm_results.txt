@@ -1,0 +1,157 @@
+
+==========================
+Summary of model fit
+==========================
+
+Formula:   agg.network ~ edges + mutual + nodecov("gdp_o") + edgecov(dist.network, 
+    attrname = "distw") + edgecov(lang.network) + edgecov(contig.network) + 
+    edgecov(rta.network) + edgecov(mrt.network, attrname = "mr_prod")
+
+Iterations:  6 out of 100 
+
+Monte Carlo MLE Results:
+                         Estimate Std. Error MCMC %  z value Pr(>|z|)    
+edges                  -1.444e+00  4.211e-04    100 -3427.88   <1e-04 ***
+mutual                  2.707e+00  4.876e-04    100  5551.47   <1e-04 ***
+nodecov.gdp_o           1.718e-06  6.351e-08      0    27.05   <1e-04 ***
+edgecov.distw          -8.292e-05  1.259e-06      0   -65.88   <1e-04 ***
+edgecov.lang.network   -3.091e-02  4.965e-04    100   -62.25   <1e-04 ***
+edgecov.contig.network  3.282e-01  1.976e-03    100   166.05   <1e-04 ***
+edgecov.rta.network     4.869e-01  1.448e-03    100   336.17   <1e-04 ***
+edgecov.mr_prod         1.829e+04  2.091e+01    100   874.64   <1e-04 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+     Null Deviance: 59114  on 42642  degrees of freedom
+ Residual Deviance: 34274  on 42634  degrees of freedom
+ 
+AIC: 34290    BIC: 34359    (Smaller is better.) 
+
+
+===========
+Diagnostics
+=========== 
+Sample statistics summary:
+
+Iterations = 1e+05:400099000
+Thinning interval = 1000 
+Number of chains = 1 
+Sample size per chain = 4e+05 
+
+1. Empirical mean and standard deviation for each variable,
+   plus standard error of the mean:
+
+                             Mean        SD  Naive SE Time-series SE
+edges                  -7.762e+01 1.028e+02 1.625e-01      2.090e+00
+mutual                  1.467e+01 5.323e+01 8.417e-02      1.110e+00
+nodecov.gdp_o           2.483e+06 1.787e+07 2.826e+04      4.079e+05
+edgecov.distw           8.740e+04 9.021e+05 1.426e+03      1.715e+04
+edgecov.lang.network   -4.249e+00 4.144e+01 6.553e-02      8.458e-01
+edgecov.contig.network -1.149e+00 1.052e+01 1.663e-02      2.415e-01
+edgecov.rta.network    -1.901e+00 1.525e+01 2.412e-02      3.541e-01
+edgecov.mr_prod         2.081e-02 2.147e-03 3.395e-06      4.775e-05
+
+2. Quantiles for each variable:
+
+                             2.5%        25%        50%        75%     97.5%
+edges                  -2.820e+02 -1.460e+02 -7.700e+01 -9.000e+00 1.240e+02
+mutual                 -9.100e+01 -2.100e+01  1.500e+01  5.000e+01 1.180e+02
+nodecov.gdp_o          -3.287e+07 -9.575e+06  2.596e+06  1.456e+07 3.733e+07
+edgecov.distw          -1.697e+06 -5.155e+05  9.133e+04  6.928e+05 1.854e+06
+edgecov.lang.network   -8.600e+01 -3.200e+01 -4.000e+00  2.400e+01 7.700e+01
+edgecov.contig.network -2.100e+01 -8.000e+00 -1.000e+00  6.000e+00 2.000e+01
+edgecov.rta.network    -3.100e+01 -1.200e+01 -2.000e+00  8.000e+00 2.900e+01
+edgecov.mr_prod         1.662e-02  1.935e-02  2.080e-02  2.226e-02 2.503e-02
+
+
+Sample statistics cross-correlations:
+                            edges     mutual nodecov.gdp_o edgecov.distw
+edges                  1.00000000 0.88274245   0.484883211   0.866434349
+mutual                 0.88274245 1.00000000   0.495167111   0.733070136
+nodecov.gdp_o          0.48488321 0.49516711   1.000000000   0.472730846
+edgecov.distw          0.86643435 0.73307014   0.472730846   1.000000000
+edgecov.lang.network   0.40249321 0.35055957   0.198552665   0.328387298
+edgecov.contig.network 0.08815388 0.09371391   0.007927422   0.004171085
+edgecov.rta.network    0.14950772 0.15810952   0.035046934   0.031393933
+edgecov.mr_prod        0.42307698 0.44827399   0.446456955   0.418195895
+                       edgecov.lang.network edgecov.contig.network
+edges                            0.40249321            0.088153878
+mutual                           0.35055957            0.093713913
+nodecov.gdp_o                    0.19855266            0.007927422
+edgecov.distw                    0.32838730            0.004171085
+edgecov.lang.network             1.00000000            0.086566740
+edgecov.contig.network           0.08656674            1.000000000
+edgecov.rta.network              0.19122482            0.217375167
+edgecov.mr_prod                  0.14238320           -0.002379701
+                       edgecov.rta.network edgecov.mr_prod
+edges                           0.14950772     0.423076984
+mutual                          0.15810952     0.448273986
+nodecov.gdp_o                   0.03504693     0.446456955
+edgecov.distw                   0.03139393     0.418195895
+edgecov.lang.network            0.19122482     0.142383200
+edgecov.contig.network          0.21737517    -0.002379701
+edgecov.rta.network             1.00000000     0.034982844
+edgecov.mr_prod                 0.03498284     1.000000000
+
+Sample statistics auto-correlation:
+Chain 1 
+             edges    mutual nodecov.gdp_o edgecov.distw edgecov.lang.network
+Lag 0    1.0000000 1.0000000     1.0000000     1.0000000            1.0000000
+Lag 1000 0.9857722 0.9872391     0.9884394     0.9842289            0.9851516
+Lag 2000 0.9719707 0.9747658     0.9771401     0.9688959            0.9707715
+Lag 3000 0.9586068 0.9625975     0.9661055     0.9540121            0.9568115
+Lag 4000 0.9455892 0.9506618     0.9553662     0.9395110            0.9431378
+Lag 5000 0.9329547 0.9389950     0.9448814     0.9253855            0.9298648
+         edgecov.contig.network edgecov.rta.network edgecov.mr_prod
+Lag 0                 1.0000000           1.0000000       1.0000000
+Lag 1000              0.9883026           0.9884346       0.9885466
+Lag 2000              0.9768479           0.9771751       0.9773274
+Lag 3000              0.9656935           0.9661594       0.9663580
+Lag 4000              0.9548274           0.9554000       0.9556026
+Lag 5000              0.9441967           0.9448380       0.9450724
+
+Sample statistics burn-in diagnostic (Geweke):
+Chain 1 
+
+Fraction in 1st window = 0.1
+Fraction in 2nd window = 0.5 
+
+                 edges                 mutual          nodecov.gdp_o 
+               -1.6535                -1.6789                -0.9998 
+         edgecov.distw   edgecov.lang.network edgecov.contig.network 
+               -0.7209                -1.2997                 0.6741 
+   edgecov.rta.network        edgecov.mr_prod 
+               -0.3341                 0.5788 
+
+Individual P-values (lower = worse):
+                 edges                 mutual          nodecov.gdp_o 
+            0.09822519             0.09316238             0.31741921 
+         edgecov.distw   edgecov.lang.network edgecov.contig.network 
+            0.47097601             0.19370402             0.50026185 
+   edgecov.rta.network        edgecov.mr_prod 
+            0.73831299             0.56274888 
+Joint P-value (lower = worse):  0.9983961 .
+
+MCMC diagnostics shown here are from the last round of simulation, prior to computation of final parameter estimates. Because the final estimates are refinements of those used for this simulation run, these diagnostics may understate model performance. To directly assess the performance of the final model on in-model statistics, please use the GOF command: gof(ergmFitObject, GOF=~model).
+
+% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Sun, Jan 31, 2021 - 2:06:42 PM
+\begin{table}[!htbp] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}} ccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & Estimate & Std. Error & z value & Pr(\textgreater \textbar z\textbar ) \\ 
+\hline \\[-1.8ex] 
+edges & $$-$1.444$ & $0.0004$ & $$-$3,427.876$ & $0$ \\ 
+mutual & $2.707$ & $0.0005$ & $5,551.466$ & $0$ \\ 
+nodecov.gdp\_o & $0.00000$ & $0.00000$ & $27.053$ & $0$ \\ 
+edgecov.distw & $$-$0.0001$ & $0.00000$ & $$-$65.878$ & $0$ \\ 
+edgecov.lang.network & $$-$0.031$ & $0.0005$ & $$-$62.247$ & $0$ \\ 
+edgecov.contig.network & $0.328$ & $0.002$ & $166.048$ & $0$ \\ 
+edgecov.rta.network & $0.487$ & $0.001$ & $336.172$ & $0$ \\ 
+edgecov.mr\_prod & $18,289.260$ & $20.911$ & $874.645$ & $0$ \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table} 

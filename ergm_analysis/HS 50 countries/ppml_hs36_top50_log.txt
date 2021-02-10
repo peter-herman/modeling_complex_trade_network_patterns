@@ -1,0 +1,129 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\ergm_analysis\HS 50 countries\ppml_hs36_top50_log_v1a.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}28 Jan 2021, 09:56:36
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. use "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\ergm_analysis\HS 45 countries\ppml_hs2_panel_top50.dta", clear
+{err}{p 0 4 2}
+file D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\ergm_analysis\HS 45 countries\ppml_hs2_panel_top50.dta
+not found
+{p_end}
+{txt}{search r(601), local:r(601);}
+
+end of do-file
+
+{search r(601), local:r(601);}
+
+{com}. do "C:\Users\PETER~1.HER\AppData\Local\Temp\5\STD5c04_000000.tmp"
+{txt}
+{com}. 
+. clear all
+{res}{txt}
+{com}. set matsize 8000
+{txt}{bf:set matsize} ignored.
+{p 4 4 2}
+Matrix sizes are no longer limited by
+{bf:c(matsize)} in modern Statas.
+Matrix sizes are now limited by flavor of Stata.
+See {help limits} for more details.
+{p_end}
+
+{com}. set maxvar 30000
+
+{txt}
+{com}. 
+. cd "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\ergm_analysis\HS 50 countries"
+{res}D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\ergm_analysis\HS 50 countries
+{txt}
+{com}. log using "ppml_hs36_top50_log_v1a.txt", replace
+{err}log file already open
+{txt}{search r(604), local:r(604);}
+
+end of do-file
+
+{search r(604), local:r(604);}
+
+{com}. do "C:\Users\PETER~1.HER\AppData\Local\Temp\5\STD5c04_000000.tmp"
+{txt}
+{com}. 
+. use "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\ergm_analysis\HS 50 countries\ppml_hs2_panel_top50.dta", clear
+{txt}
+{com}. 
+. keep if hs2 == "36"
+{txt}(0 observations deleted)
+
+{com}. 
+. gen clusterid = exporter + importer
+{txt}
+{com}. 
+. ppml_panel_sg trade_value lndist contig comlang_ethno colony rta, ex(exporter) im(importer) y(year) nopair cluster(clusterid) genS(exp_fe) genM(imp_fe) genO(omr_est) genI(imr_est)
+Initializing...
+{res}Checking for possible non-existence issues...
+Iterating...
+
+{txt}{hline 12}{c -}{c TT}{c -}{hline 10}{c -}{c -}
+{ralign 12:Variable} {c |} {center 10:active} {space 1}
+{hline 12}{c -}{c +}{c -}{hline 10}{c -}{c -}
+{res}{txt}{space 6}lndist {c |}{res} {ralign 10:-.4548491}{txt} {space 1}
+{res}{txt}{space 6}contig {c |}{res} {ralign 10:.84309175}{txt} {space 1}
+{res}{txt}comlang_et~o {c |}{res} {ralign 10:.09396334}{txt} {space 1}
+{res}{txt}{space 6}colony {c |}{res} {ralign 10:-.08228259}{txt} {space 1}
+{res}{txt}{space 9}rta {c |}{res} {ralign 10:.56222913}{txt} {space 1}
+{res}{txt}{hline 12}{c -}{c BT}{c -}{hline 10}{c -}{c -}
+{res}iterations: 98
+tolerance: 1.000e-12
+{txt}Computing standard errors
+{res}
+{txt} ******* PPML Panel Structural Gravity Estimation ********** 
+
+{col 49}Number of obs{col 67}= {res}    42,140
+{txt}Log likelihood = {res} -19799716{txt}{col 49}R-squared{col 67}= {res}    0.8555
+{txt}{hline 14}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}  trade_value{col 15}{c |}      Coef.{col 27}   Std. Err.{col 39}      z{col 47}   P>|z|{col 55}     [95% Con{col 68}f. Interval]
+{hline 14}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lndist {c |}{col 15}{res}{space 2}-.4548491{col 27}{space 2} .1105678{col 38}{space 1}   -4.11{col 47}{space 3}0.000{col 55}{space 4}-.6715579{col 68}{space 3}-.2381403
+{txt}{space 7}contig {c |}{col 15}{res}{space 2} .8430918{col 27}{space 2} .1613978{col 38}{space 1}    5.22{col 47}{space 3}0.000{col 55}{space 4} .5267579{col 68}{space 3} 1.159426
+{txt}comlang_ethno {c |}{col 15}{res}{space 2} .0939633{col 27}{space 2} .1723513{col 38}{space 1}    0.55{col 47}{space 3}0.586{col 55}{space 4} -.243839{col 68}{space 3} .4317657
+{txt}{space 7}colony {c |}{col 15}{res}{space 2}-.0822826{col 27}{space 2} .1677008{col 38}{space 1}   -0.49{col 47}{space 3}0.624{col 55}{space 4}-.4109701{col 68}{space 3} .2464049
+{txt}{space 10}rta {c |}{col 15}{res}{space 2} .5622291{col 27}{space 2} .1650356{col 38}{space 1}    3.41{col 47}{space 3}0.001{col 55}{space 4} .2387654{col 68}{space 3} .8856929
+{txt}{hline 14}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+Fixed Effects included: exporter-year, importer-year
+Clustered standard errors, clustered by clusterid (user-specified)
+1960 obs. dropped because they belong to groups with all zeros or missing values
+
+
+{com}. 
+. 
+. parmest, saving(ppml_hdfe_standard_v1a, replace) stars(0.1 0.05 0.01)
+{res}{txt}(note: file ppml_hdfe_standard_v1a.dta not found)
+file ppml_hdfe_standard_v1a.dta saved
+
+{com}. estimates store standard_ppml
+{txt}
+{com}. 
+. 
+. keep exporter importer year exp_fe imp_fe
+{txt}
+{com}. export delimited using ppml_hs36_top50_standard_fe_estimates.csv, replace
+{res}{txt}(note: file ppml_hs36_top50_standard_fe_estimates.csv not found)
+{txt}file ppml_hs36_top50_standard_fe_estimates.csv saved
+
+{com}. 
+. esttab standard_ppml using ppml_hs36_top50_output_v1a.txt, se aic pr2 scalars(ll) star(* 0.1 ** 0.05 *** 0.01) replace 
+{res}{txt}(note: file ppml_hs36_top50_output_v1a.txt not found)
+(output written to {browse  `"ppml_hs36_top50_output_v1a.txt"'})
+
+{com}. // esttab standard_ppml using ppml_hs14_top30_output_v1a.tex, se aic pr2 scalars(ll) star(* 0.1 ** 0.05 *** 0.01) replace 
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\ergm_analysis\HS 50 countries\ppml_hs36_top50_log_v1a.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}28 Jan 2021, 09:57:04
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

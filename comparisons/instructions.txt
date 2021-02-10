@@ -1,0 +1,19 @@
+1. Create subsample with network stats
+
+Script: "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\recreate_partial_sample_network_variables.R"
+In: "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\HS 50 countries\\ppml_hs2_panel_top50.dta" (from ERGM python script)
+Out: "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\comparisons\\partial_data_set_hs36_top50_with_ntw_vars.csv"
+
+2. Run probit simulations and generate probit predictions
+
+Script: [1995] "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\1995\step1_1995_partial_gravity_analysis_for_comparisons.do" 
+        [2006] "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\2006\step1_2006_partial_gravity_analysis_for_comparisons.do"
+In: "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\comparisons\\partial_data_set_hs36_top50_with_ntw_vars.csv"
+Out: [1995]
+        "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\1995\1995_results\1995_partial_gravity_log.txt"
+        "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\1995\1995_results\1995_partial_probit_stata_output.txt"
+        "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\1995\1995_results\1995_probit_predicted_probabilities_subset_network_stats.csv"
+     [2006]
+        "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\2006\2006_results\2006_partial_gravity_log.txt"
+        "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\2006\2006_results\2006_partial_probit_stata_output.txt"
+        "D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\comparisons\2006\2006_results\2006_probit_predicted_probabilities_subset_network_stats.csv"

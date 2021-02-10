@@ -1,0 +1,2456 @@
+{smcl}
+{txt}{sf}{ul off}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\gravity\main_analysis\PPML\results_v1c\two_stage_ppml_log_v1a.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}22 Jan 2021, 11:45:41
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. use "D:\work\Peter_Herman\projects\trade_network_research\files_used_in_submission\data\gravity_estimation_data.dta", clear
+{txt}(Written by R.              )
+
+{com}. 
+. 
+. 
+. tostring year, gen(year_str)
+{txt}year_str generated as {res:str4}
+
+{com}. //tostring importer, gen(imp)
+. decode importer, gen(imp)
+{txt}
+{com}. gen imp_year = imp+ "_" + year_str
+{txt}
+{com}. 
+. // tostring exporter, gen(exp)
+. decode exporter, gen(exp)
+{txt}
+{com}. gen exp_year = exp+ "_" + year_str
+{txt}
+{com}. 
+. * Generate Remotness measures based on Baldwin and Harrigan (2011)
+. gen weighted_dist_o = distw/gdp_d
+{txt}(81,164 missing values generated)
+
+{com}. bysort exp_year: egen remoteness_o=sum(weighted_dist_o)
+{txt}
+{com}. replace remoteness_o=1/remoteness_o
+{txt}(511,704 real changes made)
+
+{com}. gen lnremoteness_o = log(remoteness_o)
+{txt}
+{com}. 
+. gen weighted_dist_d = distw/gdp_o
+{txt}(81,164 missing values generated)
+
+{com}. bysort exp_year: egen remoteness_d=sum(weighted_dist_d)
+{txt}
+{com}. replace remoteness_d=1/remoteness_d
+{txt}(511,704 real changes made, 81,164 to missing)
+
+{com}. gen lnremoteness_d = log(remoteness_d)
+{txt}(81,164 missing values generated)
+
+{com}. 
+. sum weighted_dist_o weighted_dist_d remoteness_o remoteness_d
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+weighted_d~o {c |}{res}    430,540    7.489175    24.84682   .0001304   415.3763
+{txt}weighted_d~d {c |}{res}    430,540    7.489175    24.84682   .0001304   415.3763
+{txt}remoteness_o {c |}{res}    511,704    .0007856     .000116   .0005976   .0011687
+{txt}remoteness_d {c |}{res}    430,540    .1150584    .4718857   .0000182   6.810324
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\PETER~1.HER\AppData\Local\Temp\8\STD486c_000000.tmp"
+{txt}
+{com}. use "D:\work\Peter_Herman\projects\trade_network_research\files_used_in_submission\data\gravity_estimation_data.dta", clear
+{txt}(Written by R.              )
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\PETER~1.HER\AppData\Local\Temp\8\STD486c_000000.tmp"
+{txt}
+{com}. sum gdp_o gdp_d weighted_dist_o weighted_dist_d remoteness_o remoteness_d
+{err}variable {bf}weighted_dist_o{sf} not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "C:\Users\PETER~1.HER\AppData\Local\Temp\8\STD486c_000000.tmp"
+{txt}
+{com}. tostring year, gen(year_str)
+{txt}year_str generated as {res:str4}
+
+{com}. //tostring importer, gen(imp)
+. decode importer, gen(imp)
+{txt}
+{com}. gen imp_year = imp+ "_" + year_str
+{txt}
+{com}. 
+. // tostring exporter, gen(exp)
+. decode exporter, gen(exp)
+{txt}
+{com}. gen exp_year = exp+ "_" + year_str
+{txt}
+{com}. 
+. * Generate Remotness measures based on Baldwin and Harrigan (2011)
+. gen weighted_dist_o = distw/gdp_d
+{txt}(81,164 missing values generated)
+
+{com}. bysort exp_year: egen remoteness_o=sum(weighted_dist_o)
+{txt}
+{com}. replace remoteness_o=1/remoteness_o
+{txt}(511,704 real changes made)
+
+{com}. gen lnremoteness_o = log(remoteness_o)
+{txt}
+{com}. 
+. gen weighted_dist_d = distw/gdp_o
+{txt}(81,164 missing values generated)
+
+{com}. bysort exp_year: egen remoteness_d=sum(weighted_dist_d)
+{txt}
+{com}. replace remoteness_d=1/remoteness_d
+{txt}(511,704 real changes made, 81,164 to missing)
+
+{com}. gen lnremoteness_d = log(remoteness_d)
+{txt}(81,164 missing values generated)
+
+{com}. 
+. sum gdp_o gdp_d weighted_dist_o weighted_dist_d remoteness_o remoteness_d
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 7}gdp_o {c |}{res}    430,540    196760.5    881686.2   46.00296   1.32e+07
+{txt}{space 7}gdp_d {c |}{res}    430,540    196760.5    881686.2   46.00296   1.32e+07
+{txt}weighted_d~o {c |}{res}    430,540    7.489175    24.84682   .0001304   415.3763
+{txt}weighted_d~d {c |}{res}    430,540    7.489175    24.84682   .0001304   415.3763
+{txt}remoteness_o {c |}{res}    511,704    .0007856     .000116   .0005976   .0011687
+{txt}{hline 13}{c +}{hline 57}
+remoteness_d {c |}{res}    430,540    .1150584    .4718857   .0000182   6.810324
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. browse is remoteness_d == .
+{err}variable {bf}is{sf} not found
+{txt}{search r(111), local:r(111);}
+
+{com}. browse if remoteness_d == .
+
+. do "C:\Users\PETER~1.HER\AppData\Local\Temp\8\STD486c_000000.tmp"
+{txt}
+{com}. use "D:\work\Peter_Herman\projects\trade_network_research\files_used_in_submission\data\gravity_estimation_data.dta", clear
+{txt}(Written by R.              )
+
+{com}. 
+. 
+. 
+. tostring year, gen(year_str)
+{txt}year_str generated as {res:str4}
+
+{com}. //tostring importer, gen(imp)
+. decode importer, gen(imp)
+{txt}
+{com}. gen imp_year = imp+ "_" + year_str
+{txt}
+{com}. 
+. // tostring exporter, gen(exp)
+. decode exporter, gen(exp)
+{txt}
+{com}. gen exp_year = exp+ "_" + year_str
+{txt}
+{com}. 
+. * Generate Remotness measures based on Baldwin and Harrigan (2011)
+. gen weighted_dist_o = distw/gdp_d
+{txt}(81,164 missing values generated)
+
+{com}. bysort exp_year: egen remoteness_o=sum(weighted_dist_o)
+{txt}
+{com}. replace remoteness_o=1/remoteness_o
+{txt}(511,704 real changes made)
+
+{com}. gen lnremoteness_o = log(remoteness_o)
+{txt}
+{com}. 
+. gen weighted_dist_d = distw/gdp_o
+{txt}(81,164 missing values generated)
+
+{com}. bysort imp_year: egen remoteness_d=sum(weighted_dist_d)
+{txt}
+{com}. replace remoteness_d=1/remoteness_d
+{txt}(511,704 real changes made)
+
+{com}. gen lnremoteness_d = log(remoteness_d)
+{txt}
+{com}. 
+. sum gdp_o gdp_d weighted_dist_o weighted_dist_d remoteness_o remoteness_d
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 7}gdp_o {c |}{res}    430,540    196760.5    881686.2   46.00296   1.32e+07
+{txt}{space 7}gdp_d {c |}{res}    430,540    196760.5    881686.2   46.00296   1.32e+07
+{txt}weighted_d~o {c |}{res}    430,540    7.489175    24.84682   .0001304   415.3763
+{txt}weighted_d~d {c |}{res}    430,540    7.489175    24.84682   .0001304   415.3763
+{txt}remoteness_o {c |}{res}    511,704    .0007856     .000116   .0005976   .0011687
+{txt}{hline 13}{c +}{hline 57}
+remoteness_d {c |}{res}    511,704    .0007856     .000116   .0005976   .0011687
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\PETER~1.HER\AppData\Local\Temp\8\STD486c_000000.tmp"
+{txt}
+{com}. use "D:\work\Peter_Herman\projects\trade_network_research\files_used_in_submission\data\gravity_estimation_data.dta", clear
+{txt}(Written by R.              )
+
+{com}. 
+. 
+. 
+. tostring year, gen(year_str)
+{txt}year_str generated as {res:str4}
+
+{com}. //tostring importer, gen(imp)
+. decode importer, gen(imp)
+{txt}
+{com}. gen imp_year = imp+ "_" + year_str
+{txt}
+{com}. 
+. // tostring exporter, gen(exp)
+. decode exporter, gen(exp)
+{txt}
+{com}. gen exp_year = exp+ "_" + year_str
+{txt}
+{com}. 
+. * Generate Remotness measures based on Baldwin and Harrigan (2011)
+. gen weighted_dist_o = distw/gdp_d
+{txt}(81,164 missing values generated)
+
+{com}. bysort exp_year: egen remoteness_o=sum(weighted_dist_o)
+{txt}
+{com}. replace remoteness_o=1/remoteness_o
+{txt}(511,704 real changes made)
+
+{com}. gen lnremoteness_o = log(remoteness_o)
+{txt}
+{com}. 
+. gen weighted_dist_d = distw/gdp_o
+{txt}(81,164 missing values generated)
+
+{com}. bysort imp_year: egen remoteness_d=sum(weighted_dist_d)
+{txt}
+{com}. replace remoteness_d=1/remoteness_d
+{txt}(511,704 real changes made)
+
+{com}. gen lnremoteness_d = log(remoteness_d)
+{txt}
+{com}. 
+. sum gdp_o gdp_d weighted_dist_o weighted_dist_d remoteness_o remoteness_d
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 7}gdp_o {c |}{res}    430,540    196760.5    881686.2   46.00296   1.32e+07
+{txt}{space 7}gdp_d {c |}{res}    430,540    196760.5    881686.2   46.00296   1.32e+07
+{txt}weighted_d~o {c |}{res}    430,540    7.489175    24.84682   .0001304   415.3763
+{txt}weighted_d~d {c |}{res}    430,540    7.489175    24.84682   .0001304   415.3763
+{txt}remoteness_o {c |}{res}    511,704    .0007856     .000116   .0005976   .0011687
+{txt}{hline 13}{c +}{hline 57}
+remoteness_d {c |}{res}    511,704    .0007856     .000116   .0005976   .0011687
+{txt}
+{com}. 
+. qui tab exporter, gen(exp_fe)
+{txt}
+{com}. qui tab importer, gen(imp_fe)
+{txt}
+{com}. qui tab year, gen(year_fe)
+{txt}
+{com}. qui tab imp_year, gen(imp_year_fe)
+{txt}
+{com}. qui tab exp_year, gen(exp_year_fe)
+{txt}
+{com}. //
+. // gen trade_value_rescale = trade_value/1000000
+. 
+. 
+.  
+. * HDFE PPML
+. *ppml trade_value lndist contig comlang_ethno colony rta exp_year_fe* imp_year_fe*, cluster(clusterid)
+. ppml_panel_sg trade_value lndist contig comlang_ethno colony rta, ex(exporter) im(importer) y(year) nopair cluster(clusterid) genS(exp_fe) genM(imp_fe) genO(omr_est) genI(imr_est)
+Initializing...
+{res}Checking for possible non-existence issues...
+Iterating...
+
+{txt}{hline 12}{c -}{c TT}{c -}{hline 10}{c -}{c -}
+{ralign 12:Variable} {c |} {center 10:active} {space 1}
+{hline 12}{c -}{c +}{c -}{hline 10}{c -}{c -}
+{res}{txt}{space 6}lndist {c |}{res} {ralign 10:-.67177065}{txt} {space 1}
+{res}{txt}{space 6}contig {c |}{res} {ralign 10:.40697354}{txt} {space 1}
+{res}{txt}comlang_et~o {c |}{res} {ralign 10:.23409961}{txt} {space 1}
+{res}{txt}{space 6}colony {c |}{res} {ralign 10:.14716698}{txt} {space 1}
+{res}{txt}{space 9}rta {c |}{res} {ralign 10:.63663756}{txt} {space 1}
+{res}{txt}{hline 12}{c -}{c BT}{c -}{hline 10}{c -}{c -}
+{res}iterations: 387
+tolerance: 1.000e-12
+{txt}Computing standard errors
+{res}
+{txt} ******* PPML Panel Structural Gravity Estimation ********** 
+
+{col 49}Number of obs{col 67}= {res}   511,704
+{txt}Log likelihood = {res}-1.326e+10{txt}{col 49}R-squared{col 67}= {res}    0.9334
+{txt}{hline 14}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}  trade_value{col 15}{c |}      Coef.{col 27}   Std. Err.{col 39}      z{col 47}   P>|z|{col 55}     [95% Con{col 68}f. Interval]
+{hline 14}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lndist {c |}{col 15}{res}{space 2}-.6717706{col 27}{space 2} .0330329{col 38}{space 1}  -20.34{col 47}{space 3}0.000{col 55}{space 4} -.736514{col 68}{space 3}-.6070273
+{txt}{space 7}contig {c |}{col 15}{res}{space 2} .4069735{col 27}{space 2} .0588216{col 38}{space 1}    6.92{col 47}{space 3}0.000{col 55}{space 4} .2916854{col 68}{space 3} .5222617
+{txt}comlang_ethno {c |}{col 15}{res}{space 2} .2340996{col 27}{space 2} .0622924{col 38}{space 1}    3.76{col 47}{space 3}0.000{col 55}{space 4} .1120088{col 68}{space 3} .3561904
+{txt}{space 7}colony {c |}{col 15}{res}{space 2}  .147167{col 27}{space 2} .0949915{col 38}{space 1}    1.55{col 47}{space 3}0.121{col 55}{space 4} -.039013{col 68}{space 3} .3333469
+{txt}{space 10}rta {c |}{col 15}{res}{space 2} .6366376{col 27}{space 2} .0646978{col 38}{space 1}    9.84{col 47}{space 3}0.000{col 55}{space 4} .5098323{col 68}{space 3} .7634428
+{txt}{hline 14}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+Fixed Effects included: exporter-year, importer-year
+Clustered standard errors, clustered by clusterid (user-specified)
+
+
+{com}. 
+. parmest, saving(ppml_hdfe_standard_v1a, replace) stars(0.1 0.05 0.01)
+{res}{txt}(note: file ppml_hdfe_standard_v1a.dta not found)
+file ppml_hdfe_standard_v1a.dta saved
+
+{com}. estimates store standard_ppml
+{txt}
+{com}. // rename __hdfe1__ exp_fe
+. // rename __hdfe2__ imp_fe
+. 
+. 
+. 
+. // preserve
+. // keep exporter year exp_fe
+. // duplicates drop
+. // export delimited using standard_fe_estimates_exporter.csv, replace
+. // restore */
+. 
+. 
+. * HDFE PPML with Network Effects (values)
+. replace transitive_value = 1 if transitive_value == 0
+{txt}(107 real changes made)
+
+{com}. gen ln_transitive = log(transitive_value)
+{txt}
+{com}. replace cyclical_value = 1 if cyclical_value == 0
+{txt}(107 real changes made)
+
+{com}. gen ln_cyclical = log(cyclical_value)
+{txt}
+{com}. replace recip_exp = 1 if recip_exp == 0
+{txt}(248,972 real changes made)
+
+{com}. gen ln_recip = log(recip_exp)
+{txt}
+{com}. 
+. ppmlhdfe trade_value lndist contig comlang_ethno colony rta ln_recip ln_cyclical ln_transitive, absorb(exp_year imp_year) cluster(clusterid)
+{res}{err}warning: dependent variable takes very low values after standardizing (4.5246e-07)
+{res}{txt}{col  0}Iteration 1:{txt}{col 16}deviance = {res}8.7099e+10 {col 39}{txt}eps = {res}.        {txt}{col 55}{txt}iters = {res}6{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res} -5.61  {txt}P   
+{txt}{col  0}Iteration 2:{txt}{col 16}deviance = {res}4.2310e+10 {col 39}{txt}eps = {res}1.06e+00 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res} -7.30  {txt}    
+{txt}{col  0}Iteration 3:{txt}{col 16}deviance = {res}2.8000e+10 {col 39}{txt}eps = {res}5.11e-01 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res} -9.44  {txt}    
+{txt}{col  0}Iteration 4:{txt}{col 16}deviance = {res}2.3487e+10 {col 39}{txt}eps = {res}1.92e-01 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res}-11.62  {txt}    
+{txt}{col  0}Iteration 5:{txt}{col 16}deviance = {res}2.2355e+10 {col 39}{txt}eps = {res}5.07e-02 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res}-13.08  {txt}    
+{txt}{col  0}Iteration 6:{txt}{col 16}deviance = {res}2.2105e+10 {col 39}{txt}eps = {res}1.13e-02 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res}-14.36  {txt}    
+{txt}{col  0}Iteration 7:{txt}{col 16}deviance = {res}2.2049e+10 {col 39}{txt}eps = {res}2.54e-03 {txt}{col 55}{txt}iters = {res}3{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {err}-15.62  {txt}    
+{txt}{col  0}Iteration 8:{txt}{col 16}deviance = {res}2.2038e+10 {col 39}{txt}eps = {res}5.19e-04 {txt}{col 55}{txt}iters = {res}2{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {err}-17.17  {txt}    
+{txt}{col  0}Iteration 9:{txt}{col 16}deviance = {res}2.2035e+10 {col 39}{txt}eps = {res}9.54e-05 {txt}{col 55}{txt}iters = {res}2{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {err}-18.88  {txt}    
+{txt}{col  0}Iteration 10:{txt}{col 16}deviance = {res}2.2035e+10 {col 39}{txt}eps = {res}1.61e-05 {txt}{col 55}{txt}iters = {res}2{col 68}{txt}tol ={res} 1.0e-05{col 82}{txt} min(eta) = {err}-20.22  {txt}    
+{txt}{col  0}Iteration 11:{txt}{col 16}deviance = {res}2.2035e+10 {col 39}{txt}eps = {res}2.34e-06 {txt}{col 55}{txt}iters = {res}2{col 68}{txt}tol ={res} 1.0e-05{col 82}{txt} min(eta) = {err}-20.92  {txt} S  
+{txt}{col  0}Iteration 12:{txt}{col 16}deviance = {res}2.2035e+10 {col 39}{txt}eps = {res}2.42e-07 {txt}{col 55}{txt}iters = {res}2{col 68}{txt}tol ={res} 1.0e-06{col 82}{txt} min(eta) = {err}-21.59  {txt} S  
+{txt}{col  0}Iteration 13:{txt}{col 16}deviance = {res}2.2035e+10 {col 39}{txt}eps = {res}1.62e-08 {txt}{col 55}{txt}iters = {res}2{col 68}{txt}tol ={res} 1.0e-07{col 82}{txt} min(eta) = {err}-22.41  {txt} S  
+{txt}{col  0}Iteration 14:{txt}{col 16}deviance = {res}2.2035e+10 {col 39}{txt}eps = {res}6.22e-10 {txt}{col 55}{txt}iters = {res}3{col 68}{txt}tol ={res} 1.0e-08{col 82}{txt} min(eta) = {err}-22.74  {txt} S O
+{txt}{hline 108}
+{txt}(legend: {res}p{txt}: exact partial-out   {res}s{txt}: exact solver   {res}h{txt}: step-halving   {res}o{txt}: epsilon below tolerance)
+{txt}Converged in 14 iterations and 44 HDFE sub-iterations (tol = 1.0e-08)
+{res}{txt}
+HDFE {help ppmlhdfe##description:PPML} regression{col 51}No. of obs{col 67}={col 69}{res}   511,704
+{txt}Absorbing 2 HDFE groups{col 51}Residual df{col 67}={col 69}{res}    42,641
+{txt}Statistics robust to heteroskedasticity{col 51}Wald chi2({res}8{txt}){col 67}={col 69}{res}   5405.49
+{txt}Deviance{col 22}={col 24}{res} 2.20350e+10{txt}{col 51}Prob > chi2{col 67}={col 69}{res}    0.0000
+{txt}Log pseudolikelihood ={col 24}{res}-1.10187e+10{txt}{col 51}Pseudo R2{col 67}={col 69}{res}    0.9646
+{txt}
+Number of clusters ({res}clusterid{txt}){col 29}={col 31}{res}    42,642
+{txt}{ralign 79:(Std. Err. adjusted for {res:42,642} clusters in clusterid)}
+{hline 14}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 15}{c |}{col 27}    Robust
+{col 1}  trade_value{col 15}{c |}      Coef.{col 27}   Std. Err.{col 39}      z{col 47}   P>|z|{col 55}     [95% Con{col 68}f. Interval]
+{hline 14}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lndist {c |}{col 15}{res}{space 2}-.4286916{col 27}{space 2} .0350061{col 38}{space 1}  -12.25{col 47}{space 3}0.000{col 55}{space 4}-.4973023{col 68}{space 3}-.3600808
+{txt}{space 7}contig {c |}{col 15}{res}{space 2} .2791872{col 27}{space 2} .0516573{col 38}{space 1}    5.40{col 47}{space 3}0.000{col 55}{space 4} .1779408{col 68}{space 3} .3804336
+{txt}comlang_ethno {c |}{col 15}{res}{space 2} .1263049{col 27}{space 2} .0521758{col 38}{space 1}    2.42{col 47}{space 3}0.015{col 55}{space 4} .0240422{col 68}{space 3} .2285675
+{txt}{space 7}colony {c |}{col 15}{res}{space 2} .0988479{col 27}{space 2} .0722748{col 38}{space 1}    1.37{col 47}{space 3}0.171{col 55}{space 4}-.0428081{col 68}{space 3}  .240504
+{txt}{space 10}rta {c |}{col 15}{res}{space 2} .4305939{col 27}{space 2} .0561964{col 38}{space 1}    7.66{col 47}{space 3}0.000{col 55}{space 4} .3204509{col 68}{space 3} .5407369
+{txt}{space 5}ln_recip {c |}{col 15}{res}{space 2} .3413889{col 27}{space 2} .0154272{col 38}{space 1}   22.13{col 47}{space 3}0.000{col 55}{space 4} .3111522{col 68}{space 3} .3716257
+{txt}{space 2}ln_cyclical {c |}{col 15}{res}{space 2} .0906214{col 27}{space 2} .0655074{col 38}{space 1}    1.38{col 47}{space 3}0.167{col 55}{space 4}-.0377706{col 68}{space 3} .2190135
+{txt}ln_transitive {c |}{col 15}{res}{space 2}-.1166705{col 27}{space 2}  .061967{col 38}{space 1}   -1.88{col 47}{space 3}0.060{col 55}{space 4}-.2381236{col 68}{space 3} .0047826
+{txt}{space 8}_cons {c |}{col 15}{res}{space 2} 14.51871{col 27}{space 2} 1.451195{col 38}{space 1}   10.00{col 47}{space 3}0.000{col 55}{space 4} 11.67443{col 68}{space 3}   17.363
+{txt}{hline 14}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Absorbed degrees of freedom:
+{res}{col 1}{text}{hline 13}{c TT}{hline 12}{hline 12}{hline 14}{hline 1}{c TRC}
+{col 1}{text} Absorbed FE{col 14}{c |} Categories{col 27} - Redundant{col 39}  = Num. Coefs{col 54}{c |}
+{res}{col 1}{text}{hline 13}{c +}{hline 12}{hline 12}{hline 14}{hline 1}{c RT}
+{col 1}{text}    exp_year{col 14}{c |}{space 1}     2484{col 27}{space 1}        0{col 39}{result}{space 1}     2484{col 53}{text} {col 54}{c |}
+{res}{col 1}{text}    imp_year{col 14}{c |}{space 1}     2484{col 27}{space 1}       12{col 39}{result}{space 1}     2472{col 53}{text} {col 54}{c |}
+{res}{col 1}{text}{hline 13}{c BT}{hline 12}{hline 12}{hline 14}{hline 1}{c BRC}
+{res}{txt}
+{com}. parmest, saving(ppml_hdfe_network_values_v1a, replace) stars(0.1 0.05 0.01)
+{res}{txt}(note: file ppml_hdfe_network_values_v1a.dta not found)
+file ppml_hdfe_network_values_v1a.dta saved
+
+{com}. estimates store network_ppml_values
+{txt}
+{com}. 
+. 
+. * HDFE PPML with Network Effects (dummy/count)
+. ppml_panel_sg trade_value lndist contig comlang_ethno colony rta recip_dummy cyclical_count transitive_count, ex(exporter) im(importer) y(year) nopair cluster(clusterid) genS(exp_fe_network) genM(imp_fe_network) maxiter(100000) verbose(1000)
+Initializing...
+{res}Checking for possible non-existence issues...
+Iterating...
+iteration 1:   diff =            1   coeffs = -.2644354139  1.696915522   .501166591 -.0328172091  .2444391566  2.635641731
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 1000:   diff =  2.80416e-10   coeffs = -.6677139403  .4082881411  .2347504828  .1462524862  .6437373774  2.011793681
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 2000:   diff =  1.74249e-10   coeffs = -.6686425956   .408110214  .2344701566  .1460520102  .6424256601  1.978233747
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 3000:   diff =  1.07867e-10   coeffs = -.6693782793  .4079696671  .2342478629  .1458934613  .6413864709  1.952115915
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 4000:   diff =  6.65739e-11   coeffs = -.6699592303  .4078589349  .2340721866  .1457684274  .6405658226  1.931772437
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 5000:   diff =  4.09922e-11   coeffs = -.6704168819  .4077718619  .2339337104  .1456700348  .6399193297  1.915915929
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 6000:   diff =  2.04477e-09   coeffs = -.6707767366  .4077034933  .2338247729  .1455927326  .6394109774  1.903550144
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 7000:   diff =  1.54620e-11   coeffs = -.6710592917   .407649871  .2337392036  .1455320755  .6390118169  1.893902567
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 8000:   diff =  9.47860e-12   coeffs = -.6712809095    .40760785  .2336720685  .1454845246  .6386987374  1.886373212
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 9000:   diff =  5.80547e-12   coeffs = -.6714545855  .4075749421  .2336194443  .1454472753   .638453383  1.880495482
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 10000:   diff =  3.77185e-12   coeffs = -.6715757926  .4075519877  .2335827119  .1454212872  .6382821508  1.876405241
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 11000:   diff =  2.30746e-12   coeffs = -.6716854807  .4075312232  .2335494658  .1453977745  .6381271908  1.872712011
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+iteration 12000:   diff =  1.41100e-12   coeffs = -.6717713105  .4075149808  .2335234481  .1453793797  .6380059357  1.869827562
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+acceleration
+
+{txt}{hline 12}{c -}{c TT}{c -}{hline 10}{c -}{c -}
+{ralign 12:Variable} {c |} {center 10:active} {space 1}
+{hline 12}{c -}{c +}{c -}{hline 10}{c -}{c -}
+{res}{txt}{space 6}lndist {c |}{res} {ralign 10:-.6718202}{txt} {space 1}
+{res}{txt}{space 6}contig {c |}{res} {ralign 10:.4075057}{txt} {space 1}
+{res}{txt}comlang_et~o {c |}{res} {ralign 10:.23350863}{txt} {space 1}
+{res}{txt}{space 6}colony {c |}{res} {ralign 10:.14536887}{txt} {space 1}
+{res}{txt}{space 9}rta {c |}{res} {ralign 10:.6379369}{txt} {space 1}
+{res}{txt}{space 1}recip_dummy {c |}{res} {ralign 10:1.8681866}{txt} {space 1}
+{res}{txt}cyclical_c~t {c |}{res} {ralign 10:.00555405}{txt} {space 1}
+{res}{txt}transitive~t {c |}{res} {ralign 10:-.00449742}{txt} {space 1}
+{res}{txt}{hline 12}{c -}{c BT}{c -}{hline 10}{c -}{c -}
+{res}iterations: 12703
+tolerance: 1.000e-12
+{txt}Computing standard errors
+{res}
+{txt} ******* PPML Panel Structural Gravity Estimation ********** 
+
+{col 49}Number of obs{col 67}= {res}   511,704
+{txt}Log likelihood = {res}-1.308e+10{txt}{col 49}R-squared{col 67}= {res}    0.9331
+{txt}{hline 17}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     trade_value{col 18}{c |}      Coef.{col 30}   Std. Err.{col 42}      z{col 50}   P>|z|{col 58}     [95% Con{col 71}f. Interval]
+{hline 17}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}lndist {c |}{col 18}{res}{space 2}-.6718202{col 30}{space 2}  .033148{col 41}{space 1}  -20.27{col 50}{space 3}0.000{col 58}{space 4}-.7367891{col 71}{space 3}-.6068513
+{txt}{space 10}contig {c |}{col 18}{res}{space 2} .4075057{col 30}{space 2}  .058576{col 41}{space 1}    6.96{col 50}{space 3}0.000{col 58}{space 4} .2926989{col 71}{space 3} .5223126
+{txt}{space 3}comlang_ethno {c |}{col 18}{res}{space 2} .2335086{col 30}{space 2} .0622922{col 41}{space 1}    3.75{col 50}{space 3}0.000{col 58}{space 4} .1114182{col 71}{space 3} .3555991
+{txt}{space 10}colony {c |}{col 18}{res}{space 2} .1453689{col 30}{space 2} .0945108{col 41}{space 1}    1.54{col 50}{space 3}0.124{col 58}{space 4}-.0398689{col 71}{space 3} .3306066
+{txt}{space 13}rta {c |}{col 18}{res}{space 2} .6379369{col 30}{space 2} .0647747{col 41}{space 1}    9.85{col 50}{space 3}0.000{col 58}{space 4} .5109807{col 71}{space 3} .7648931
+{txt}{space 5}recip_dummy {c |}{col 18}{res}{space 2} 1.868187{col 30}{space 2} .1275525{col 41}{space 1}   14.65{col 50}{space 3}0.000{col 58}{space 4} 1.618188{col 71}{space 3} 2.118185
+{txt}{space 2}cyclical_count {c |}{col 18}{res}{space 2}  .005554{col 30}{space 2} .0028279{col 41}{space 1}    1.96{col 50}{space 3}0.050{col 58}{space 4} .0000114{col 71}{space 3} .0110967
+{txt}transitive_count {c |}{col 18}{res}{space 2}-.0044974{col 30}{space 2} .0031701{col 41}{space 1}   -1.42{col 50}{space 3}0.156{col 58}{space 4}-.0107107{col 71}{space 3} .0017158
+{txt}{hline 17}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+Fixed Effects included: exporter-year, importer-year
+Clustered standard errors, clustered by clusterid (user-specified)
+
+
+{com}. // rename __hdfe1__ exp_fe_network
+. // rename __hdfe2__ imp_fe_network
+. parmest, saving(ppml_hdfe_network_v1a, replace) stars(0.1 0.05 0.01)
+{res}{txt}(note: file ppml_hdfe_network_v1a.dta not found)
+file ppml_hdfe_network_v1a.dta saved
+
+{com}. estimates store network_ppml
+{txt}
+{com}. 
+. 
+. * HDFE PPML with only transitive
+. ppmlhdfe trade_value lndist contig comlang_ethno colony rta recip_dummy transitive_count, absorb(exp_year imp_year) cluster(clusterid)
+{res}{err}warning: dependent variable takes very low values after standardizing (4.5246e-07)
+{res}{txt}{col  0}Iteration 1:{txt}{col 16}deviance = {res}6.9964e+10 {col 39}{txt}eps = {res}.        {txt}{col 55}{txt}iters = {res}6{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res} -6.19  {txt}P   
+{txt}{col  0}Iteration 2:{txt}{col 16}deviance = {res}3.8722e+10 {col 39}{txt}eps = {res}8.07e-01 {txt}{col 55}{txt}iters = {res}5{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res} -7.57  {txt}    
+{txt}{col  0}Iteration 3:{txt}{col 16}deviance = {res}3.0735e+10 {col 39}{txt}eps = {res}2.60e-01 {txt}{col 55}{txt}iters = {res}5{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res} -8.95  {txt}    
+{txt}{col  0}Iteration 4:{txt}{col 16}deviance = {res}2.7750e+10 {col 39}{txt}eps = {res}1.08e-01 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res}-11.29  {txt}    
+{txt}{col  0}Iteration 5:{txt}{col 16}deviance = {res}2.6597e+10 {col 39}{txt}eps = {res}4.33e-02 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res}-13.77  {txt}    
+{txt}{col  0}Iteration 6:{txt}{col 16}deviance = {res}2.6264e+10 {col 39}{txt}eps = {res}1.27e-02 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {err}-16.09  {txt}    
+{txt}{col  0}Iteration 7:{txt}{col 16}deviance = {res}2.6190e+10 {col 39}{txt}eps = {res}2.84e-03 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {err}-18.23  {txt}    
+{txt}{col  0}Iteration 8:{txt}{col 16}deviance = {res}2.6178e+10 {col 39}{txt}eps = {res}4.62e-04 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {err}-20.07  {txt}    
+{txt}{col  0}Iteration 9:{txt}{col 16}deviance = {res}2.6176e+10 {col 39}{txt}eps = {res}7.26e-05 {txt}{col 55}{txt}iters = {res}3{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {err}-21.39  {txt}    
+{txt}{col  0}Iteration 10:{txt}{col 16}deviance = {res}2.6176e+10 {col 39}{txt}eps = {res}1.25e-05 {txt}{col 55}{txt}iters = {res}3{col 68}{txt}tol ={res} 1.0e-05{col 82}{txt} min(eta) = {err}-22.77  {txt}    
+{txt}{col  0}Iteration 11:{txt}{col 16}deviance = {res}2.6175e+10 {col 39}{txt}eps = {res}1.87e-06 {txt}{col 55}{txt}iters = {res}2{col 68}{txt}tol ={res} 1.0e-05{col 82}{txt} min(eta) = {err}-23.75  {txt} S  
+{txt}{col  0}Iteration 12:{txt}{col 16}deviance = {res}2.6175e+10 {col 39}{txt}eps = {res}2.05e-07 {txt}{col 55}{txt}iters = {res}2{col 68}{txt}tol ={res} 1.0e-06{col 82}{txt} min(eta) = {err}-24.97  {txt} S  
+{txt}{col  0}Iteration 13:{txt}{col 16}deviance = {res}2.6175e+10 {col 39}{txt}eps = {res}1.45e-08 {txt}{col 55}{txt}iters = {res}3{col 68}{txt}tol ={res} 1.0e-07{col 82}{txt} min(eta) = {err}-25.59  {txt} S  
+{txt}{col  0}Iteration 14:{txt}{col 16}deviance = {res}2.6175e+10 {col 39}{txt}eps = {res}5.63e-10 {txt}{col 55}{txt}iters = {res}3{col 68}{txt}tol ={res} 1.0e-08{col 82}{txt} min(eta) = {err}-25.81  {txt} S O
+{txt}{hline 108}
+{txt}(legend: {res}p{txt}: exact partial-out   {res}s{txt}: exact solver   {res}h{txt}: step-halving   {res}o{txt}: epsilon below tolerance)
+{txt}Converged in 14 iterations and 52 HDFE sub-iterations (tol = 1.0e-08)
+{res}{txt}
+HDFE {help ppmlhdfe##description:PPML} regression{col 51}No. of obs{col 67}={col 69}{res}   511,704
+{txt}Absorbing 2 HDFE groups{col 51}Residual df{col 67}={col 69}{res}    42,641
+{txt}Statistics robust to heteroskedasticity{col 51}Wald chi2({res}7{txt}){col 67}={col 69}{res}   3836.88
+{txt}Deviance{col 22}={col 24}{res} 2.61755e+10{txt}{col 51}Prob > chi2{col 67}={col 69}{res}    0.0000
+{txt}Log pseudolikelihood ={col 24}{res}-1.30890e+10{txt}{col 51}Pseudo R2{col 67}={col 69}{res}    0.9580
+{txt}
+Number of clusters ({res}clusterid{txt}){col 29}={col 31}{res}    42,642
+{txt}{ralign 82:(Std. Err. adjusted for {res:42,642} clusters in clusterid)}
+{hline 17}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 18}{c |}{col 30}    Robust
+{col 1}     trade_value{col 18}{c |}      Coef.{col 30}   Std. Err.{col 42}      z{col 50}   P>|z|{col 58}     [95% Con{col 71}f. Interval]
+{hline 17}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}lndist {c |}{col 18}{res}{space 2}-.6736281{col 30}{space 2} .0332512{col 41}{space 1}  -20.26{col 50}{space 3}0.000{col 58}{space 4}-.7387993{col 71}{space 3}-.6084568
+{txt}{space 10}contig {c |}{col 18}{res}{space 2} .4105393{col 30}{space 2} .0590581{col 41}{space 1}    6.95{col 50}{space 3}0.000{col 58}{space 4} .2947876{col 71}{space 3} .5262911
+{txt}{space 3}comlang_ethno {c |}{col 18}{res}{space 2}  .233162{col 30}{space 2} .0623092{col 41}{space 1}    3.74{col 50}{space 3}0.000{col 58}{space 4} .1110382{col 71}{space 3} .3552858
+{txt}{space 10}colony {c |}{col 18}{res}{space 2} .1457663{col 30}{space 2}  .094681{col 41}{space 1}    1.54{col 50}{space 3}0.124{col 58}{space 4} -.039805{col 71}{space 3} .3313376
+{txt}{space 13}rta {c |}{col 18}{res}{space 2} .6361845{col 30}{space 2} .0650263{col 41}{space 1}    9.78{col 50}{space 3}0.000{col 58}{space 4} .5087353{col 71}{space 3} .7636337
+{txt}{space 5}recip_dummy {c |}{col 18}{res}{space 2} 1.775139{col 30}{space 2} .1232596{col 41}{space 1}   14.40{col 50}{space 3}0.000{col 58}{space 4} 1.533554{col 71}{space 3} 2.016723
+{txt}transitive_count {c |}{col 18}{res}{space 2} -.000773{col 30}{space 2} .0023777{col 41}{space 1}   -0.33{col 50}{space 3}0.745{col 58}{space 4}-.0054332{col 71}{space 3} .0038872
+{txt}{space 11}_cons {c |}{col 18}{res}{space 2} 19.03617{col 30}{space 2} .5769444{col 41}{space 1}   32.99{col 50}{space 3}0.000{col 58}{space 4} 17.90538{col 71}{space 3} 20.16696
+{txt}{hline 17}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Absorbed degrees of freedom:
+{res}{col 1}{text}{hline 13}{c TT}{hline 12}{hline 12}{hline 14}{hline 1}{c TRC}
+{col 1}{text} Absorbed FE{col 14}{c |} Categories{col 27} - Redundant{col 39}  = Num. Coefs{col 54}{c |}
+{res}{col 1}{text}{hline 13}{c +}{hline 12}{hline 12}{hline 14}{hline 1}{c RT}
+{col 1}{text}    exp_year{col 14}{c |}{space 1}     2484{col 27}{space 1}        0{col 39}{result}{space 1}     2484{col 53}{text} {col 54}{c |}
+{res}{col 1}{text}    imp_year{col 14}{c |}{space 1}     2484{col 27}{space 1}       12{col 39}{result}{space 1}     2472{col 53}{text} {col 54}{c |}
+{res}{col 1}{text}{hline 13}{c BT}{hline 12}{hline 12}{hline 14}{hline 1}{c BRC}
+{res}{txt}
+{com}. parmest, saving(ppml_hdfe_trans_only_v1a, replace) stars(0.1 0.05 0.01)
+{res}{txt}(note: file ppml_hdfe_trans_only_v1a.dta not found)
+file ppml_hdfe_trans_only_v1a.dta saved
+
+{com}. estimates store network_ppml_transitive
+{txt}
+{com}. 
+. * HDFE PPML with only cyclical
+. ppmlhdfe trade_value lndist contig comlang_ethno colony rta recip_dummy cyclical_count, absorb(exp_year imp_year) cluster(clusterid)
+{res}{err}warning: dependent variable takes very low values after standardizing (4.5246e-07)
+{res}{txt}{col  0}Iteration 1:{txt}{col 16}deviance = {res}7.0347e+10 {col 39}{txt}eps = {res}.        {txt}{col 55}{txt}iters = {res}6{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res} -6.07  {txt}P   
+{txt}{col  0}Iteration 2:{txt}{col 16}deviance = {res}3.8730e+10 {col 39}{txt}eps = {res}8.16e-01 {txt}{col 55}{txt}iters = {res}5{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res} -7.52  {txt}    
+{txt}{col  0}Iteration 3:{txt}{col 16}deviance = {res}3.0629e+10 {col 39}{txt}eps = {res}2.64e-01 {txt}{col 55}{txt}iters = {res}5{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res} -8.90  {txt}    
+{txt}{col  0}Iteration 4:{txt}{col 16}deviance = {res}2.7685e+10 {col 39}{txt}eps = {res}1.06e-01 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res}-11.17  {txt}    
+{txt}{col  0}Iteration 5:{txt}{col 16}deviance = {res}2.6575e+10 {col 39}{txt}eps = {res}4.18e-02 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {res}-13.61  {txt}    
+{txt}{col  0}Iteration 6:{txt}{col 16}deviance = {res}2.6254e+10 {col 39}{txt}eps = {res}1.22e-02 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {err}-15.81  {txt}    
+{txt}{col  0}Iteration 7:{txt}{col 16}deviance = {res}2.6182e+10 {col 39}{txt}eps = {res}2.75e-03 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {err}-17.99  {txt}    
+{txt}{col  0}Iteration 8:{txt}{col 16}deviance = {res}2.6170e+10 {col 39}{txt}eps = {res}4.47e-04 {txt}{col 55}{txt}iters = {res}4{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {err}-19.81  {txt}    
+{txt}{col  0}Iteration 9:{txt}{col 16}deviance = {res}2.6169e+10 {col 39}{txt}eps = {res}7.07e-05 {txt}{col 55}{txt}iters = {res}3{col 68}{txt}tol ={res} 1.0e-04{col 82}{txt} min(eta) = {err}-21.13  {txt}    
+{txt}{col  0}Iteration 10:{txt}{col 16}deviance = {res}2.6168e+10 {col 39}{txt}eps = {res}1.22e-05 {txt}{col 55}{txt}iters = {res}3{col 68}{txt}tol ={res} 1.0e-05{col 82}{txt} min(eta) = {err}-22.51  {txt}    
+{txt}{col  0}Iteration 11:{txt}{col 16}deviance = {res}2.6168e+10 {col 39}{txt}eps = {res}1.81e-06 {txt}{col 55}{txt}iters = {res}2{col 68}{txt}tol ={res} 1.0e-05{col 82}{txt} min(eta) = {err}-23.46  {txt} S  
+{txt}{col  0}Iteration 12:{txt}{col 16}deviance = {res}2.6168e+10 {col 39}{txt}eps = {res}1.96e-07 {txt}{col 55}{txt}iters = {res}2{col 68}{txt}tol ={res} 1.0e-06{col 82}{txt} min(eta) = {err}-24.54  {txt} S  
+{txt}{col  0}Iteration 13:{txt}{col 16}deviance = {res}2.6168e+10 {col 39}{txt}eps = {res}1.35e-08 {txt}{col 55}{txt}iters = {res}3{col 68}{txt}tol ={res} 1.0e-07{col 82}{txt} min(eta) = {err}-25.14  {txt} S  
+{txt}{col  0}Iteration 14:{txt}{col 16}deviance = {res}2.6168e+10 {col 39}{txt}eps = {res}4.76e-10 {txt}{col 55}{txt}iters = {res}3{col 68}{txt}tol ={res} 1.0e-08{col 82}{txt} min(eta) = {err}-25.38  {txt} S O
+{txt}{hline 108}
+{txt}(legend: {res}p{txt}: exact partial-out   {res}s{txt}: exact solver   {res}h{txt}: step-halving   {res}o{txt}: epsilon below tolerance)
+{txt}Converged in 14 iterations and 52 HDFE sub-iterations (tol = 1.0e-08)
+{res}{txt}
+HDFE {help ppmlhdfe##description:PPML} regression{col 51}No. of obs{col 67}={col 69}{res}   511,704
+{txt}Absorbing 2 HDFE groups{col 51}Residual df{col 67}={col 69}{res}    42,641
+{txt}Statistics robust to heteroskedasticity{col 51}Wald chi2({res}7{txt}){col 67}={col 69}{res}   3869.05
+{txt}Deviance{col 22}={col 24}{res} 2.61682e+10{txt}{col 51}Prob > chi2{col 67}={col 69}{res}    0.0000
+{txt}Log pseudolikelihood ={col 24}{res}-1.30853e+10{txt}{col 51}Pseudo R2{col 67}={col 69}{res}    0.9580
+{txt}
+Number of clusters ({res}clusterid{txt}){col 29}={col 31}{res}    42,642
+{txt}{ralign 80:(Std. Err. adjusted for {res:42,642} clusters in clusterid)}
+{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}   trade_value{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      z{col 48}   P>|z|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}lndist {c |}{col 16}{res}{space 2}-.6705995{col 28}{space 2} .0331377{col 39}{space 1}  -20.24{col 48}{space 3}0.000{col 56}{space 4}-.7355481{col 69}{space 3}-.6056509
+{txt}{space 8}contig {c |}{col 16}{res}{space 2} .4062143{col 28}{space 2} .0585866{col 39}{space 1}    6.93{col 48}{space 3}0.000{col 56}{space 4} .2913867{col 69}{space 3} .5210418
+{txt}{space 1}comlang_ethno {c |}{col 16}{res}{space 2}  .234752{col 28}{space 2} .0622869{col 39}{space 1}    3.77{col 48}{space 3}0.000{col 56}{space 4} .1126719{col 69}{space 3}  .356832
+{txt}{space 8}colony {c |}{col 16}{res}{space 2} .1449521{col 28}{space 2} .0945992{col 39}{space 1}    1.53{col 48}{space 3}0.125{col 56}{space 4}-.0404588{col 69}{space 3} .3303631
+{txt}{space 11}rta {c |}{col 16}{res}{space 2} .6386553{col 28}{space 2} .0644314{col 39}{space 1}    9.91{col 48}{space 3}0.000{col 56}{space 4}  .512372{col 69}{space 3} .7649386
+{txt}{space 3}recip_dummy {c |}{col 16}{res}{space 2} 1.874423{col 28}{space 2} .1272035{col 39}{space 1}   14.74{col 48}{space 3}0.000{col 56}{space 4} 1.625108{col 69}{space 3} 2.123737
+{txt}cyclical_count {c |}{col 16}{res}{space 2}  .002236{col 28}{space 2} .0021261{col 39}{space 1}    1.05{col 48}{space 3}0.293{col 56}{space 4} -.001931{col 69}{space 3} .0064031
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2}  18.3979{col 28}{space 2} .5517963{col 39}{space 1}   33.34{col 48}{space 3}0.000{col 56}{space 4} 17.31639{col 69}{space 3}  19.4794
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Absorbed degrees of freedom:
+{res}{col 1}{text}{hline 13}{c TT}{hline 12}{hline 12}{hline 14}{hline 1}{c TRC}
+{col 1}{text} Absorbed FE{col 14}{c |} Categories{col 27} - Redundant{col 39}  = Num. Coefs{col 54}{c |}
+{res}{col 1}{text}{hline 13}{c +}{hline 12}{hline 12}{hline 14}{hline 1}{c RT}
+{col 1}{text}    exp_year{col 14}{c |}{space 1}     2484{col 27}{space 1}        0{col 39}{result}{space 1}     2484{col 53}{text} {col 54}{c |}
+{res}{col 1}{text}    imp_year{col 14}{c |}{space 1}     2484{col 27}{space 1}       12{col 39}{result}{space 1}     2472{col 53}{text} {col 54}{c |}
+{res}{col 1}{text}{hline 13}{c BT}{hline 12}{hline 12}{hline 14}{hline 1}{c BRC}
+{res}{txt}
+{com}. parmest, saving(ppml_hdfe_cycl_only_v1a, replace) stars(0.1 0.05 0.01)
+{res}{txt}(note: file ppml_hdfe_cycl_only_v1a.dta not found)
+file ppml_hdfe_cycl_only_v1a.dta saved
+
+{com}. estimates store network_ppml_cyclical
+{txt}
+{com}. 
+. 
+. 
+. * Store Estimates
+. esttab standard_ppml network_ppml network_ppml_transitive network_ppml_cyclical network_ppml_values using ppml_hdfe_multi-specs_output_v1a.txt, se aic pr2 scalars(ll) star(* 0.1 ** 0.05 *** 0.01) replace 
+{res}{txt}(note: file ppml_hdfe_multi-specs_output_v1a.txt not found)
+(output written to {browse  `"ppml_hdfe_multi-specs_output_v1a.txt"'})
+
+{com}. esttab standard_ppml network_ppml network_ppml_transitive network_ppml_cyclical network_ppml_values using ppml_hdfe_multi-specs_output_v1a.tex, se aic pr2 scalars(ll) star(* 0.1 ** 0.05 *** 0.01) replace 
+{res}{txt}(note: file ppml_hdfe_multi-specs_output_v1a.tex not found)
+(output written to {browse  `"ppml_hdfe_multi-specs_output_v1a.tex"'})
+
+{com}. 
+. 
+. * Store fixed effect estimates
+. preserve
+{txt}
+{com}. keep exporter importer year exp_fe imp_fe exp_fe_network imp_fe_network
+{txt}
+{com}. export delimited using standard_fe_estimates.csv, replace
+{res}{txt}(note: file standard_fe_estimates.csv not found)
+{txt}file standard_fe_estimates.csv saved
+
+{com}. restore
+{txt}
+{com}. 
+. 
+. * ###
+. * Second Stage
+. * ###
+. preserve 
+{txt}
+{com}. keep importer year imp_fe_network gdp_d gdpcap_d gatt_d importer_imp_degree importer_exp_degree  lngdp_d lngdpcap_d remoteness_d exporter year exp_fe_network gdp_o gdpcap_o gatt_o exporter_exp_degree exporter_imp_degree  lngdp_o lngdpcap_o remoteness_o
+{txt}
+{com}. save second_stage_data_v1c.dta
+{err}{p 0 4 2}
+file second_stage_data_v1c.dta
+already exists
+{p_end}
+{txt}{search r(602), local:r(602);}
+
+end of do-file
+
+{search r(602), local:r(602);}
+
+{com}. do "C:\Users\PETER~1.HER\AppData\Local\Temp\8\STD486c_000000.tmp"
+{txt}
+{com}. preserve 
+{txt}
+{com}. keep importer year imp_fe_network gdp_d gdpcap_d gatt_d importer_imp_degree importer_exp_degree  lngdp_d lngdpcap_d remoteness_d exporter year exp_fe_network gdp_o gdpcap_o gatt_o exporter_exp_degree exporter_imp_degree  lngdp_o lngdpcap_o remoteness_o
+{txt}
+{com}. save second_stage_data_v1c.dta, replace
+{txt}file second_stage_data_v1c.dta saved
+
+{com}. restore 
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\PETER~1.HER\AppData\Local\Temp\8\STD486c_000000.tmp"
+{txt}
+{com}. 
+. preserve
+{txt}
+{com}. * Generate a unilateral degree measure as the original was exclsive of link ij itselve, which created two values depending on the value of ij (x or x+1)
+. egen max_importer_imp_degree = max(importer_imp_degree), by(importer year)
+{txt}
+{com}. 
+. keep importer year imp_fe_network gdp_d gdpcap_d gatt_d max_importer_imp_degree importer_exp_degree  lngdp_d lngdpcap_d remoteness_d 
+{txt}
+{com}. duplicates drop
+
+{p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
+
+(509,220 observations deleted)
+
+{com}. gen constant = 1
+{txt}
+{com}. tab importer
+
+   {txt}importer {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+        AFG {c |}{res}         12        0.48        0.48
+{txt}        AGO {c |}{res}         12        0.48        0.97
+{txt}        AIA {c |}{res}         12        0.48        1.45
+{txt}        ALB {c |}{res}         12        0.48        1.93
+{txt}        AND {c |}{res}         12        0.48        2.42
+{txt}        ANT {c |}{res}         12        0.48        2.90
+{txt}        ARE {c |}{res}         12        0.48        3.38
+{txt}        ARG {c |}{res}         12        0.48        3.86
+{txt}        ARM {c |}{res}         12        0.48        4.35
+{txt}        ATG {c |}{res}         12        0.48        4.83
+{txt}        AUS {c |}{res}         12        0.48        5.31
+{txt}        AUT {c |}{res}         12        0.48        5.80
+{txt}        AZE {c |}{res}         12        0.48        6.28
+{txt}        BDI {c |}{res}         12        0.48        6.76
+{txt}        BEL {c |}{res}         12        0.48        7.25
+{txt}        BEN {c |}{res}         12        0.48        7.73
+{txt}        BFA {c |}{res}         12        0.48        8.21
+{txt}        BGD {c |}{res}         12        0.48        8.70
+{txt}        BGR {c |}{res}         12        0.48        9.18
+{txt}        BHR {c |}{res}         12        0.48        9.66
+{txt}        BHS {c |}{res}         12        0.48       10.14
+{txt}        BIH {c |}{res}         12        0.48       10.63
+{txt}        BLR {c |}{res}         12        0.48       11.11
+{txt}        BLZ {c |}{res}         12        0.48       11.59
+{txt}        BMU {c |}{res}         12        0.48       12.08
+{txt}        BOL {c |}{res}         12        0.48       12.56
+{txt}        BRA {c |}{res}         12        0.48       13.04
+{txt}        BRB {c |}{res}         12        0.48       13.53
+{txt}        BRN {c |}{res}         12        0.48       14.01
+{txt}        BTN {c |}{res}         12        0.48       14.49
+{txt}        CAF {c |}{res}         12        0.48       14.98
+{txt}        CAN {c |}{res}         12        0.48       15.46
+{txt}        CCK {c |}{res}         12        0.48       15.94
+{txt}        CHE {c |}{res}         12        0.48       16.43
+{txt}        CHL {c |}{res}         12        0.48       16.91
+{txt}        CHN {c |}{res}         12        0.48       17.39
+{txt}        CIV {c |}{res}         12        0.48       17.87
+{txt}        CMR {c |}{res}         12        0.48       18.36
+{txt}        COG {c |}{res}         12        0.48       18.84
+{txt}        COK {c |}{res}         12        0.48       19.32
+{txt}        COL {c |}{res}         12        0.48       19.81
+{txt}        COM {c |}{res}         12        0.48       20.29
+{txt}        CPV {c |}{res}         12        0.48       20.77
+{txt}        CRI {c |}{res}         12        0.48       21.26
+{txt}        CUB {c |}{res}         12        0.48       21.74
+{txt}        CXR {c |}{res}         12        0.48       22.22
+{txt}        CYM {c |}{res}         12        0.48       22.71
+{txt}        CYP {c |}{res}         12        0.48       23.19
+{txt}        CZE {c |}{res}         12        0.48       23.67
+{txt}        DEU {c |}{res}         12        0.48       24.15
+{txt}        DJI {c |}{res}         12        0.48       24.64
+{txt}        DMA {c |}{res}         12        0.48       25.12
+{txt}        DNK {c |}{res}         12        0.48       25.60
+{txt}        DOM {c |}{res}         12        0.48       26.09
+{txt}        DZA {c |}{res}         12        0.48       26.57
+{txt}        ECU {c |}{res}         12        0.48       27.05
+{txt}        EGY {c |}{res}         12        0.48       27.54
+{txt}        ERI {c |}{res}         12        0.48       28.02
+{txt}        ESH {c |}{res}         12        0.48       28.50
+{txt}        ESP {c |}{res}         12        0.48       28.99
+{txt}        EST {c |}{res}         12        0.48       29.47
+{txt}        ETH {c |}{res}         12        0.48       29.95
+{txt}        FIN {c |}{res}         12        0.48       30.43
+{txt}        FJI {c |}{res}         12        0.48       30.92
+{txt}        FLK {c |}{res}         12        0.48       31.40
+{txt}        FRA {c |}{res}         12        0.48       31.88
+{txt}        FSM {c |}{res}         12        0.48       32.37
+{txt}        GAB {c |}{res}         12        0.48       32.85
+{txt}        GBR {c |}{res}         12        0.48       33.33
+{txt}        GEO {c |}{res}         12        0.48       33.82
+{txt}        GHA {c |}{res}         12        0.48       34.30
+{txt}        GIB {c |}{res}         12        0.48       34.78
+{txt}        GIN {c |}{res}         12        0.48       35.27
+{txt}        GMB {c |}{res}         12        0.48       35.75
+{txt}        GNB {c |}{res}         12        0.48       36.23
+{txt}        GNQ {c |}{res}         12        0.48       36.71
+{txt}        GRC {c |}{res}         12        0.48       37.20
+{txt}        GRD {c |}{res}         12        0.48       37.68
+{txt}        GRL {c |}{res}         12        0.48       38.16
+{txt}        GTM {c |}{res}         12        0.48       38.65
+{txt}        GUY {c |}{res}         12        0.48       39.13
+{txt}        HKG {c |}{res}         12        0.48       39.61
+{txt}        HND {c |}{res}         12        0.48       40.10
+{txt}        HRV {c |}{res}         12        0.48       40.58
+{txt}        HTI {c |}{res}         12        0.48       41.06
+{txt}        HUN {c |}{res}         12        0.48       41.55
+{txt}        IDN {c |}{res}         12        0.48       42.03
+{txt}        IND {c |}{res}         12        0.48       42.51
+{txt}        IRL {c |}{res}         12        0.48       43.00
+{txt}        IRN {c |}{res}         12        0.48       43.48
+{txt}        IRQ {c |}{res}         12        0.48       43.96
+{txt}        ISL {c |}{res}         12        0.48       44.44
+{txt}        ISR {c |}{res}         12        0.48       44.93
+{txt}        ITA {c |}{res}         12        0.48       45.41
+{txt}        JAM {c |}{res}         12        0.48       45.89
+{txt}        JOR {c |}{res}         12        0.48       46.38
+{txt}        JPN {c |}{res}         12        0.48       46.86
+{txt}        KAZ {c |}{res}         12        0.48       47.34
+{txt}        KEN {c |}{res}         12        0.48       47.83
+{txt}        KGZ {c |}{res}         12        0.48       48.31
+{txt}        KHM {c |}{res}         12        0.48       48.79
+{txt}        KIR {c |}{res}         12        0.48       49.28
+{txt}        KNA {c |}{res}         12        0.48       49.76
+{txt}        KOR {c |}{res}         12        0.48       50.24
+{txt}        KWT {c |}{res}         12        0.48       50.72
+{txt}        LAO {c |}{res}         12        0.48       51.21
+{txt}        LBN {c |}{res}         12        0.48       51.69
+{txt}        LBR {c |}{res}         12        0.48       52.17
+{txt}        LBY {c |}{res}         12        0.48       52.66
+{txt}        LCA {c |}{res}         12        0.48       53.14
+{txt}        LKA {c |}{res}         12        0.48       53.62
+{txt}        LTU {c |}{res}         12        0.48       54.11
+{txt}        LVA {c |}{res}         12        0.48       54.59
+{txt}        MAC {c |}{res}         12        0.48       55.07
+{txt}        MAR {c |}{res}         12        0.48       55.56
+{txt}        MDA {c |}{res}         12        0.48       56.04
+{txt}        MDG {c |}{res}         12        0.48       56.52
+{txt}        MDV {c |}{res}         12        0.48       57.00
+{txt}        MEX {c |}{res}         12        0.48       57.49
+{txt}        MHL {c |}{res}         12        0.48       57.97
+{txt}        MKD {c |}{res}         12        0.48       58.45
+{txt}        MLI {c |}{res}         12        0.48       58.94
+{txt}        MLT {c |}{res}         12        0.48       59.42
+{txt}        MMR {c |}{res}         12        0.48       59.90
+{txt}        MNG {c |}{res}         12        0.48       60.39
+{txt}        MNP {c |}{res}         12        0.48       60.87
+{txt}        MOZ {c |}{res}         12        0.48       61.35
+{txt}        MRT {c |}{res}         12        0.48       61.84
+{txt}        MSR {c |}{res}         12        0.48       62.32
+{txt}        MUS {c |}{res}         12        0.48       62.80
+{txt}        MWI {c |}{res}         12        0.48       63.29
+{txt}        MYS {c |}{res}         12        0.48       63.77
+{txt}        NCL {c |}{res}         12        0.48       64.25
+{txt}        NER {c |}{res}         12        0.48       64.73
+{txt}        NFK {c |}{res}         12        0.48       65.22
+{txt}        NGA {c |}{res}         12        0.48       65.70
+{txt}        NIC {c |}{res}         12        0.48       66.18
+{txt}        NIU {c |}{res}         12        0.48       66.67
+{txt}        NLD {c |}{res}         12        0.48       67.15
+{txt}        NOR {c |}{res}         12        0.48       67.63
+{txt}        NPL {c |}{res}         12        0.48       68.12
+{txt}        NRU {c |}{res}         12        0.48       68.60
+{txt}        NZL {c |}{res}         12        0.48       69.08
+{txt}        OMN {c |}{res}         12        0.48       69.57
+{txt}        PAK {c |}{res}         12        0.48       70.05
+{txt}        PAN {c |}{res}         12        0.48       70.53
+{txt}        PCN {c |}{res}         12        0.48       71.01
+{txt}        PER {c |}{res}         12        0.48       71.50
+{txt}        PHL {c |}{res}         12        0.48       71.98
+{txt}        PLW {c |}{res}         12        0.48       72.46
+{txt}        PNG {c |}{res}         12        0.48       72.95
+{txt}        POL {c |}{res}         12        0.48       73.43
+{txt}        PRK {c |}{res}         12        0.48       73.91
+{txt}        PRT {c |}{res}         12        0.48       74.40
+{txt}        PRY {c |}{res}         12        0.48       74.88
+{txt}        PYF {c |}{res}         12        0.48       75.36
+{txt}        QAT {c |}{res}         12        0.48       75.85
+{txt}        ROM {c |}{res}         12        0.48       76.33
+{txt}        RUS {c |}{res}         12        0.48       76.81
+{txt}        RWA {c |}{res}         12        0.48       77.29
+{txt}        SAU {c |}{res}         12        0.48       77.78
+{txt}        SDN {c |}{res}         12        0.48       78.26
+{txt}        SEN {c |}{res}         12        0.48       78.74
+{txt}        SGP {c |}{res}         12        0.48       79.23
+{txt}        SHN {c |}{res}         12        0.48       79.71
+{txt}        SLB {c |}{res}         12        0.48       80.19
+{txt}        SLE {c |}{res}         12        0.48       80.68
+{txt}        SLV {c |}{res}         12        0.48       81.16
+{txt}        SOM {c |}{res}         12        0.48       81.64
+{txt}        SPM {c |}{res}         12        0.48       82.13
+{txt}        STP {c |}{res}         12        0.48       82.61
+{txt}        SUR {c |}{res}         12        0.48       83.09
+{txt}        SVK {c |}{res}         12        0.48       83.57
+{txt}        SVN {c |}{res}         12        0.48       84.06
+{txt}        SWE {c |}{res}         12        0.48       84.54
+{txt}        SYC {c |}{res}         12        0.48       85.02
+{txt}        SYR {c |}{res}         12        0.48       85.51
+{txt}        TCA {c |}{res}         12        0.48       85.99
+{txt}        TCD {c |}{res}         12        0.48       86.47
+{txt}        TGO {c |}{res}         12        0.48       86.96
+{txt}        THA {c |}{res}         12        0.48       87.44
+{txt}        TJK {c |}{res}         12        0.48       87.92
+{txt}        TKL {c |}{res}         12        0.48       88.41
+{txt}        TKM {c |}{res}         12        0.48       88.89
+{txt}        TMP {c |}{res}         12        0.48       89.37
+{txt}        TON {c |}{res}         12        0.48       89.86
+{txt}        TTO {c |}{res}         12        0.48       90.34
+{txt}        TUN {c |}{res}         12        0.48       90.82
+{txt}        TUR {c |}{res}         12        0.48       91.30
+{txt}        TUV {c |}{res}         12        0.48       91.79
+{txt}        TZA {c |}{res}         12        0.48       92.27
+{txt}        UGA {c |}{res}         12        0.48       92.75
+{txt}        UKR {c |}{res}         12        0.48       93.24
+{txt}        URY {c |}{res}         12        0.48       93.72
+{txt}        USA {c |}{res}         12        0.48       94.20
+{txt}        UZB {c |}{res}         12        0.48       94.69
+{txt}        VCT {c |}{res}         12        0.48       95.17
+{txt}        VEN {c |}{res}         12        0.48       95.65
+{txt}        VGB {c |}{res}         12        0.48       96.14
+{txt}        VNM {c |}{res}         12        0.48       96.62
+{txt}        VUT {c |}{res}         12        0.48       97.10
+{txt}        WLF {c |}{res}         12        0.48       97.58
+{txt}        WSM {c |}{res}         12        0.48       98.07
+{txt}        YEM {c |}{res}         12        0.48       98.55
+{txt}        ZAF {c |}{res}         12        0.48       99.03
+{txt}        ZMB {c |}{res}         12        0.48       99.52
+{txt}        ZWE {c |}{res}         12        0.48      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      2,484      100.00
+{txt}
+{com}. 
+. * Rename some variables so they align in the table
+. rename lngdp_d lngdp
+{res}{txt}
+{com}. rename lngdpcap_d lngdpcap
+{res}{txt}
+{com}. rename gatt_d gatt
+{res}{txt}
+{com}. rename remoteness_d remoteness
+{res}{txt}
+{com}. 
+. * Estimate
+. regress  imp_fe_network lngdp lngdpcap gatt, vce(robust)
+
+{txt}Linear regression                               Number of obs     = {res}     2,078
+                                                {txt}F(3, 2074)        =  {res}    28.98
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.2137
+                                                {txt}Root MSE          =    {res} 8706.6
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}imp_fe_net~k{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lngdp {c |}{col 14}{res}{space 2} 1746.475{col 26}{space 2} 198.6874{col 37}{space 1}    8.79{col 46}{space 3}0.000{col 54}{space 4} 1356.827{col 67}{space 3} 2136.122
+{txt}{space 4}lngdpcap {c |}{col 14}{res}{space 2} 389.6257{col 26}{space 2} 71.77419{col 37}{space 1}    5.43{col 46}{space 3}0.000{col 54}{space 4} 248.8687{col 67}{space 3} 530.3826
+{txt}{space 8}gatt {c |}{col 14}{res}{space 2}-604.1266{col 26}{space 2} 190.6186{col 37}{space 1}   -3.17{col 46}{space 3}0.002{col 54}{space 4}-977.9503{col 67}{space 3}-230.3028
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-16509.36{col 26}{space 2}  1905.76{col 37}{space 1}   -8.66{col 46}{space 3}0.000{col 54}{space 4}-20246.76{col 67}{space 3}-12771.95
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. estimates store importer_fe_basic
+{txt}
+{com}. 
+. regress  imp_fe_network lngdp lngdpcap gatt remoteness, vce(robust)
+
+{txt}Linear regression                               Number of obs     = {res}     2,078
+                                                {txt}F(4, 2073)        =  {res}    22.22
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.2138
+                                                {txt}Root MSE          =    {res} 8708.3
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}imp_fe_net~k{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lngdp {c |}{col 14}{res}{space 2} 1743.918{col 26}{space 2} 199.3193{col 37}{space 1}    8.75{col 46}{space 3}0.000{col 54}{space 4} 1353.031{col 67}{space 3} 2134.805
+{txt}{space 4}lngdpcap {c |}{col 14}{res}{space 2} 382.9876{col 26}{space 2} 74.06029{col 37}{space 1}    5.17{col 46}{space 3}0.000{col 54}{space 4} 237.7473{col 67}{space 3} 528.2279
+{txt}{space 8}gatt {c |}{col 14}{res}{space 2}-582.2094{col 26}{space 2} 197.7431{col 37}{space 1}   -2.94{col 46}{space 3}0.003{col 54}{space 4}-970.0051{col 67}{space 3}-194.4137
+{txt}{space 2}remoteness {c |}{col 14}{res}{space 2} 790603.9{col 26}{space 2}  1753335{col 37}{space 1}    0.45{col 46}{space 3}0.652{col 54}{space 4} -2647877{col 67}{space 3}  4229085
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-17069.44{col 26}{space 2} 2173.275{col 37}{space 1}   -7.85{col 46}{space 3}0.000{col 54}{space 4}-21331.47{col 67}{space 3}-12807.41
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. estimates store importer_fe_remote
+{txt}
+{com}. 
+. regress  imp_fe_network lngdp lngdpcap gatt remoteness max_importer_imp_degree importer_exp_degree, vce(robust)
+
+{txt}Linear regression                               Number of obs     = {res}     2,078
+                                                {txt}F(6, 2071)        =  {res}    50.86
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.2462
+                                                {txt}Root MSE          =    {res} 8531.1
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 25}{c |}{col 37}    Robust
+{col 1}         imp_fe_network{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      t{col 57}   P>|t|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 18}lngdp {c |}{col 25}{res}{space 2} 2925.999{col 37}{space 2} 438.0881{col 48}{space 1}    6.68{col 57}{space 3}0.000{col 65}{space 4}  2066.86{col 78}{space 3} 3785.138
+{txt}{space 15}lngdpcap {c |}{col 25}{res}{space 2} 466.9663{col 37}{space 2} 86.46749{col 48}{space 1}    5.40{col 57}{space 3}0.000{col 65}{space 4}  297.394{col 78}{space 3} 636.5385
+{txt}{space 19}gatt {c |}{col 25}{res}{space 2} 469.3683{col 37}{space 2} 243.8995{col 48}{space 1}    1.92{col 57}{space 3}0.054{col 65}{space 4}-8.945387{col 78}{space 3}  947.682
+{txt}{space 13}remoteness {c |}{col 25}{res}{space 2}  3023335{col 37}{space 2}  1780049{col 48}{space 1}    1.70{col 57}{space 3}0.090{col 65}{space 4}-467536.7{col 78}{space 3}  6514206
+{txt}max_importer_imp_degree {c |}{col 25}{res}{space 2} 47.73691{col 37}{space 2}  8.48383{col 48}{space 1}    5.63{col 57}{space 3}0.000{col 65}{space 4} 31.09918{col 78}{space 3} 64.37463
+{txt}{space 4}importer_exp_degree {c |}{col 25}{res}{space 2}-104.2118{col 37}{space 2} 19.58683{col 48}{space 1}   -5.32{col 57}{space 3}0.000{col 65}{space 4}-142.6237{col 78}{space 3}-65.79983
+{txt}{space 18}_cons {c |}{col 25}{res}{space 2}-24746.53{col 37}{space 2} 3512.973{col 48}{space 1}   -7.04{col 57}{space 3}0.000{col 65}{space 4}-31635.86{col 78}{space 3} -17857.2
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. estimates store importer_fe_remote_network
+{txt}
+{com}. 
+. regress  imp_fe_network lngdp lngdpcap gatt max_importer_imp_degree importer_exp_degree, vce(robust)
+
+{txt}Linear regression                               Number of obs     = {res}     2,078
+                                                {txt}F(5, 2072)        =  {res}    60.91
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.2450
+                                                {txt}Root MSE          =    {res} 8535.6
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 25}{c |}{col 37}    Robust
+{col 1}         imp_fe_network{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      t{col 57}   P>|t|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 18}lngdp {c |}{col 25}{res}{space 2} 2889.527{col 37}{space 2} 434.3246{col 48}{space 1}    6.65{col 57}{space 3}0.000{col 65}{space 4} 2037.769{col 78}{space 3} 3741.285
+{txt}{space 15}lngdpcap {c |}{col 25}{res}{space 2} 487.3662{col 37}{space 2}  87.3191{col 48}{space 1}    5.58{col 57}{space 3}0.000{col 65}{space 4} 316.1239{col 78}{space 3} 658.6086
+{txt}{space 19}gatt {c |}{col 25}{res}{space 2}  337.351{col 37}{space 2} 226.4645{col 48}{space 1}    1.49{col 57}{space 3}0.136{col 65}{space 4}-106.7707{col 78}{space 3} 781.4727
+{txt}max_importer_imp_degree {c |}{col 25}{res}{space 2} 48.41083{col 37}{space 2} 8.542304{col 48}{space 1}    5.67{col 57}{space 3}0.000{col 65}{space 4} 31.65843{col 78}{space 3} 65.16322
+{txt}{space 4}importer_exp_degree {c |}{col 25}{res}{space 2}-102.1661{col 37}{space 2} 19.37912{col 48}{space 1}   -5.27{col 57}{space 3}0.000{col 65}{space 4}-140.1706{col 78}{space 3}-64.16148
+{txt}{space 18}_cons {c |}{col 25}{res}{space 2} -22413.5{col 37}{space 2} 3016.178{col 48}{space 1}   -7.43{col 57}{space 3}0.000{col 65}{space 4}-28328.55{col 78}{space 3}-16498.44
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. estimates store importer_fe_network
+{txt}
+{com}. 
+. 
+. 
+. 
+. **
+. * Exporter FEs
+. **
+. 
+. * Restore earlier dataset
+. restore 
+{txt}
+{com}. 
+. preserve
+{txt}
+{com}. * Generate a unilateral degree measure as the original was exclsive of link ij itselve, which created two values depending on the value of ij (x or x+1)
+. egen max_exporter_exp_degree = max(exporter_exp_degree), by(exporter year)
+{txt}
+{com}. 
+. keep exporter year exp_fe_network gdp_o gdpcap_o gatt_o max_exporter_exp_degree exporter_imp_degree  lngdp_o lngdpcap_o remoteness_o
+{txt}
+{com}. duplicates drop
+
+{p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
+
+(509,220 observations deleted)
+
+{com}. gen constant = 1
+{txt}
+{com}. tab exporter
+
+   {txt}exporter {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+        AFG {c |}{res}         12        0.48        0.48
+{txt}        AGO {c |}{res}         12        0.48        0.97
+{txt}        AIA {c |}{res}         12        0.48        1.45
+{txt}        ALB {c |}{res}         12        0.48        1.93
+{txt}        AND {c |}{res}         12        0.48        2.42
+{txt}        ANT {c |}{res}         12        0.48        2.90
+{txt}        ARE {c |}{res}         12        0.48        3.38
+{txt}        ARG {c |}{res}         12        0.48        3.86
+{txt}        ARM {c |}{res}         12        0.48        4.35
+{txt}        ATG {c |}{res}         12        0.48        4.83
+{txt}        AUS {c |}{res}         12        0.48        5.31
+{txt}        AUT {c |}{res}         12        0.48        5.80
+{txt}        AZE {c |}{res}         12        0.48        6.28
+{txt}        BDI {c |}{res}         12        0.48        6.76
+{txt}        BEL {c |}{res}         12        0.48        7.25
+{txt}        BEN {c |}{res}         12        0.48        7.73
+{txt}        BFA {c |}{res}         12        0.48        8.21
+{txt}        BGD {c |}{res}         12        0.48        8.70
+{txt}        BGR {c |}{res}         12        0.48        9.18
+{txt}        BHR {c |}{res}         12        0.48        9.66
+{txt}        BHS {c |}{res}         12        0.48       10.14
+{txt}        BIH {c |}{res}         12        0.48       10.63
+{txt}        BLR {c |}{res}         12        0.48       11.11
+{txt}        BLZ {c |}{res}         12        0.48       11.59
+{txt}        BMU {c |}{res}         12        0.48       12.08
+{txt}        BOL {c |}{res}         12        0.48       12.56
+{txt}        BRA {c |}{res}         12        0.48       13.04
+{txt}        BRB {c |}{res}         12        0.48       13.53
+{txt}        BRN {c |}{res}         12        0.48       14.01
+{txt}        BTN {c |}{res}         12        0.48       14.49
+{txt}        CAF {c |}{res}         12        0.48       14.98
+{txt}        CAN {c |}{res}         12        0.48       15.46
+{txt}        CCK {c |}{res}         12        0.48       15.94
+{txt}        CHE {c |}{res}         12        0.48       16.43
+{txt}        CHL {c |}{res}         12        0.48       16.91
+{txt}        CHN {c |}{res}         12        0.48       17.39
+{txt}        CIV {c |}{res}         12        0.48       17.87
+{txt}        CMR {c |}{res}         12        0.48       18.36
+{txt}        COG {c |}{res}         12        0.48       18.84
+{txt}        COK {c |}{res}         12        0.48       19.32
+{txt}        COL {c |}{res}         12        0.48       19.81
+{txt}        COM {c |}{res}         12        0.48       20.29
+{txt}        CPV {c |}{res}         12        0.48       20.77
+{txt}        CRI {c |}{res}         12        0.48       21.26
+{txt}        CUB {c |}{res}         12        0.48       21.74
+{txt}        CXR {c |}{res}         12        0.48       22.22
+{txt}        CYM {c |}{res}         12        0.48       22.71
+{txt}        CYP {c |}{res}         12        0.48       23.19
+{txt}        CZE {c |}{res}         12        0.48       23.67
+{txt}        DEU {c |}{res}         12        0.48       24.15
+{txt}        DJI {c |}{res}         12        0.48       24.64
+{txt}        DMA {c |}{res}         12        0.48       25.12
+{txt}        DNK {c |}{res}         12        0.48       25.60
+{txt}        DOM {c |}{res}         12        0.48       26.09
+{txt}        DZA {c |}{res}         12        0.48       26.57
+{txt}        ECU {c |}{res}         12        0.48       27.05
+{txt}        EGY {c |}{res}         12        0.48       27.54
+{txt}        ERI {c |}{res}         12        0.48       28.02
+{txt}        ESH {c |}{res}         12        0.48       28.50
+{txt}        ESP {c |}{res}         12        0.48       28.99
+{txt}        EST {c |}{res}         12        0.48       29.47
+{txt}        ETH {c |}{res}         12        0.48       29.95
+{txt}        FIN {c |}{res}         12        0.48       30.43
+{txt}        FJI {c |}{res}         12        0.48       30.92
+{txt}        FLK {c |}{res}         12        0.48       31.40
+{txt}        FRA {c |}{res}         12        0.48       31.88
+{txt}        FSM {c |}{res}         12        0.48       32.37
+{txt}        GAB {c |}{res}         12        0.48       32.85
+{txt}        GBR {c |}{res}         12        0.48       33.33
+{txt}        GEO {c |}{res}         12        0.48       33.82
+{txt}        GHA {c |}{res}         12        0.48       34.30
+{txt}        GIB {c |}{res}         12        0.48       34.78
+{txt}        GIN {c |}{res}         12        0.48       35.27
+{txt}        GMB {c |}{res}         12        0.48       35.75
+{txt}        GNB {c |}{res}         12        0.48       36.23
+{txt}        GNQ {c |}{res}         12        0.48       36.71
+{txt}        GRC {c |}{res}         12        0.48       37.20
+{txt}        GRD {c |}{res}         12        0.48       37.68
+{txt}        GRL {c |}{res}         12        0.48       38.16
+{txt}        GTM {c |}{res}         12        0.48       38.65
+{txt}        GUY {c |}{res}         12        0.48       39.13
+{txt}        HKG {c |}{res}         12        0.48       39.61
+{txt}        HND {c |}{res}         12        0.48       40.10
+{txt}        HRV {c |}{res}         12        0.48       40.58
+{txt}        HTI {c |}{res}         12        0.48       41.06
+{txt}        HUN {c |}{res}         12        0.48       41.55
+{txt}        IDN {c |}{res}         12        0.48       42.03
+{txt}        IND {c |}{res}         12        0.48       42.51
+{txt}        IRL {c |}{res}         12        0.48       43.00
+{txt}        IRN {c |}{res}         12        0.48       43.48
+{txt}        IRQ {c |}{res}         12        0.48       43.96
+{txt}        ISL {c |}{res}         12        0.48       44.44
+{txt}        ISR {c |}{res}         12        0.48       44.93
+{txt}        ITA {c |}{res}         12        0.48       45.41
+{txt}        JAM {c |}{res}         12        0.48       45.89
+{txt}        JOR {c |}{res}         12        0.48       46.38
+{txt}        JPN {c |}{res}         12        0.48       46.86
+{txt}        KAZ {c |}{res}         12        0.48       47.34
+{txt}        KEN {c |}{res}         12        0.48       47.83
+{txt}        KGZ {c |}{res}         12        0.48       48.31
+{txt}        KHM {c |}{res}         12        0.48       48.79
+{txt}        KIR {c |}{res}         12        0.48       49.28
+{txt}        KNA {c |}{res}         12        0.48       49.76
+{txt}        KOR {c |}{res}         12        0.48       50.24
+{txt}        KWT {c |}{res}         12        0.48       50.72
+{txt}        LAO {c |}{res}         12        0.48       51.21
+{txt}        LBN {c |}{res}         12        0.48       51.69
+{txt}        LBR {c |}{res}         12        0.48       52.17
+{txt}        LBY {c |}{res}         12        0.48       52.66
+{txt}        LCA {c |}{res}         12        0.48       53.14
+{txt}        LKA {c |}{res}         12        0.48       53.62
+{txt}        LTU {c |}{res}         12        0.48       54.11
+{txt}        LVA {c |}{res}         12        0.48       54.59
+{txt}        MAC {c |}{res}         12        0.48       55.07
+{txt}        MAR {c |}{res}         12        0.48       55.56
+{txt}        MDA {c |}{res}         12        0.48       56.04
+{txt}        MDG {c |}{res}         12        0.48       56.52
+{txt}        MDV {c |}{res}         12        0.48       57.00
+{txt}        MEX {c |}{res}         12        0.48       57.49
+{txt}        MHL {c |}{res}         12        0.48       57.97
+{txt}        MKD {c |}{res}         12        0.48       58.45
+{txt}        MLI {c |}{res}         12        0.48       58.94
+{txt}        MLT {c |}{res}         12        0.48       59.42
+{txt}        MMR {c |}{res}         12        0.48       59.90
+{txt}        MNG {c |}{res}         12        0.48       60.39
+{txt}        MNP {c |}{res}         12        0.48       60.87
+{txt}        MOZ {c |}{res}         12        0.48       61.35
+{txt}        MRT {c |}{res}         12        0.48       61.84
+{txt}        MSR {c |}{res}         12        0.48       62.32
+{txt}        MUS {c |}{res}         12        0.48       62.80
+{txt}        MWI {c |}{res}         12        0.48       63.29
+{txt}        MYS {c |}{res}         12        0.48       63.77
+{txt}        NCL {c |}{res}         12        0.48       64.25
+{txt}        NER {c |}{res}         12        0.48       64.73
+{txt}        NFK {c |}{res}         12        0.48       65.22
+{txt}        NGA {c |}{res}         12        0.48       65.70
+{txt}        NIC {c |}{res}         12        0.48       66.18
+{txt}        NIU {c |}{res}         12        0.48       66.67
+{txt}        NLD {c |}{res}         12        0.48       67.15
+{txt}        NOR {c |}{res}         12        0.48       67.63
+{txt}        NPL {c |}{res}         12        0.48       68.12
+{txt}        NRU {c |}{res}         12        0.48       68.60
+{txt}        NZL {c |}{res}         12        0.48       69.08
+{txt}        OMN {c |}{res}         12        0.48       69.57
+{txt}        PAK {c |}{res}         12        0.48       70.05
+{txt}        PAN {c |}{res}         12        0.48       70.53
+{txt}        PCN {c |}{res}         12        0.48       71.01
+{txt}        PER {c |}{res}         12        0.48       71.50
+{txt}        PHL {c |}{res}         12        0.48       71.98
+{txt}        PLW {c |}{res}         12        0.48       72.46
+{txt}        PNG {c |}{res}         12        0.48       72.95
+{txt}        POL {c |}{res}         12        0.48       73.43
+{txt}        PRK {c |}{res}         12        0.48       73.91
+{txt}        PRT {c |}{res}         12        0.48       74.40
+{txt}        PRY {c |}{res}         12        0.48       74.88
+{txt}        PYF {c |}{res}         12        0.48       75.36
+{txt}        QAT {c |}{res}         12        0.48       75.85
+{txt}        ROM {c |}{res}         12        0.48       76.33
+{txt}        RUS {c |}{res}         12        0.48       76.81
+{txt}        RWA {c |}{res}         12        0.48       77.29
+{txt}        SAU {c |}{res}         12        0.48       77.78
+{txt}        SDN {c |}{res}         12        0.48       78.26
+{txt}        SEN {c |}{res}         12        0.48       78.74
+{txt}        SGP {c |}{res}         12        0.48       79.23
+{txt}        SHN {c |}{res}         12        0.48       79.71
+{txt}        SLB {c |}{res}         12        0.48       80.19
+{txt}        SLE {c |}{res}         12        0.48       80.68
+{txt}        SLV {c |}{res}         12        0.48       81.16
+{txt}        SOM {c |}{res}         12        0.48       81.64
+{txt}        SPM {c |}{res}         12        0.48       82.13
+{txt}        STP {c |}{res}         12        0.48       82.61
+{txt}        SUR {c |}{res}         12        0.48       83.09
+{txt}        SVK {c |}{res}         12        0.48       83.57
+{txt}        SVN {c |}{res}         12        0.48       84.06
+{txt}        SWE {c |}{res}         12        0.48       84.54
+{txt}        SYC {c |}{res}         12        0.48       85.02
+{txt}        SYR {c |}{res}         12        0.48       85.51
+{txt}        TCA {c |}{res}         12        0.48       85.99
+{txt}        TCD {c |}{res}         12        0.48       86.47
+{txt}        TGO {c |}{res}         12        0.48       86.96
+{txt}        THA {c |}{res}         12        0.48       87.44
+{txt}        TJK {c |}{res}         12        0.48       87.92
+{txt}        TKL {c |}{res}         12        0.48       88.41
+{txt}        TKM {c |}{res}         12        0.48       88.89
+{txt}        TMP {c |}{res}         12        0.48       89.37
+{txt}        TON {c |}{res}         12        0.48       89.86
+{txt}        TTO {c |}{res}         12        0.48       90.34
+{txt}        TUN {c |}{res}         12        0.48       90.82
+{txt}        TUR {c |}{res}         12        0.48       91.30
+{txt}        TUV {c |}{res}         12        0.48       91.79
+{txt}        TZA {c |}{res}         12        0.48       92.27
+{txt}        UGA {c |}{res}         12        0.48       92.75
+{txt}        UKR {c |}{res}         12        0.48       93.24
+{txt}        URY {c |}{res}         12        0.48       93.72
+{txt}        USA {c |}{res}         12        0.48       94.20
+{txt}        UZB {c |}{res}         12        0.48       94.69
+{txt}        VCT {c |}{res}         12        0.48       95.17
+{txt}        VEN {c |}{res}         12        0.48       95.65
+{txt}        VGB {c |}{res}         12        0.48       96.14
+{txt}        VNM {c |}{res}         12        0.48       96.62
+{txt}        VUT {c |}{res}         12        0.48       97.10
+{txt}        WLF {c |}{res}         12        0.48       97.58
+{txt}        WSM {c |}{res}         12        0.48       98.07
+{txt}        YEM {c |}{res}         12        0.48       98.55
+{txt}        ZAF {c |}{res}         12        0.48       99.03
+{txt}        ZMB {c |}{res}         12        0.48       99.52
+{txt}        ZWE {c |}{res}         12        0.48      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      2,484      100.00
+{txt}
+{com}. 
+. * Rename some variables so they align in the table
+. rename lngdp_o lngdp
+{res}{txt}
+{com}. rename lngdpcap_o lngdpcap
+{res}{txt}
+{com}. rename gatt_o gatt
+{res}{txt}
+{com}. rename remoteness_o remoteness
+{res}{txt}
+{com}. 
+. * Estimate
+. regress  exp_fe_network lngdp lngdpcap gatt, vce(robust)
+
+{txt}Linear regression                               Number of obs     = {res}     2,078
+                                                {txt}F(3, 2074)        =  {res}    52.90
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.2943
+                                                {txt}Root MSE          =    {res} 7137.7
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}exp_fe_net~k{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lngdp {c |}{col 14}{res}{space 2} 1903.002{col 26}{space 2} 161.4598{col 37}{space 1}   11.79{col 46}{space 3}0.000{col 54}{space 4} 1586.361{col 67}{space 3} 2219.642
+{txt}{space 4}lngdpcap {c |}{col 14}{res}{space 2} 107.5481{col 26}{space 2} 102.6627{col 37}{space 1}    1.05{col 46}{space 3}0.295{col 54}{space 4}-93.78469{col 67}{space 3} 308.8808
+{txt}{space 8}gatt {c |}{col 14}{res}{space 2}-937.4362{col 26}{space 2} 205.3294{col 37}{space 1}   -4.57{col 46}{space 3}0.000{col 54}{space 4}-1340.109{col 67}{space 3}-534.7629
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}   -15420{col 26}{space 2} 1333.331{col 37}{space 1}  -11.57{col 46}{space 3}0.000{col 54}{space 4}-18034.81{col 67}{space 3}-12805.19
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. estimates store exporter_fe_basic
+{txt}
+{com}. 
+. regress  exp_fe_network lngdp lngdpcap gatt remoteness, vce(robust)
+
+{txt}Linear regression                               Number of obs     = {res}     2,078
+                                                {txt}F(4, 2073)        =  {res}    40.01
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.2960
+                                                {txt}Root MSE          =    {res} 7130.8
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}exp_fe_net~k{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lngdp {c |}{col 14}{res}{space 2} 1892.935{col 26}{space 2} 160.0764{col 37}{space 1}   11.83{col 46}{space 3}0.000{col 54}{space 4} 1579.008{col 67}{space 3} 2206.862
+{txt}{space 4}lngdpcap {c |}{col 14}{res}{space 2} 81.41703{col 26}{space 2} 109.3654{col 37}{space 1}    0.74{col 46}{space 3}0.457{col 54}{space 4}-133.0605{col 67}{space 3} 295.8946
+{txt}{space 8}gatt {c |}{col 14}{res}{space 2}-851.1584{col 26}{space 2} 213.7444{col 37}{space 1}   -3.98{col 46}{space 3}0.000{col 54}{space 4}-1270.335{col 67}{space 3}-431.9822
+{txt}{space 2}remoteness {c |}{col 14}{res}{space 2}  3112250{col 26}{space 2}  1766542{col 37}{space 1}    1.76{col 46}{space 3}0.078{col 54}{space 4}-352130.7{col 67}{space 3}  6576631
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-17624.81{col 26}{space 2} 1801.838{col 37}{space 1}   -9.78{col 46}{space 3}0.000{col 54}{space 4}-21158.41{col 67}{space 3}-14091.21
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. estimates store exporter_fe_remote
+{txt}
+{com}. 
+. regress  exp_fe_network lngdp lngdpcap gatt remoteness max_exporter_exp_degree exporter_imp_degree, vce(robust)
+
+{txt}Linear regression                               Number of obs     = {res}     2,078
+                                                {txt}F(6, 2071)        =  {res}    67.07
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.3220
+                                                {txt}Root MSE          =    {res} 7001.3
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 25}{c |}{col 37}    Robust
+{col 1}         exp_fe_network{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      t{col 57}   P>|t|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 18}lngdp {c |}{col 25}{res}{space 2} 2860.192{col 37}{space 2} 318.1848{col 48}{space 1}    8.99{col 57}{space 3}0.000{col 65}{space 4} 2236.197{col 78}{space 3} 3484.187
+{txt}{space 15}lngdpcap {c |}{col 25}{res}{space 2} 153.8286{col 37}{space 2} 109.8409{col 48}{space 1}    1.40{col 57}{space 3}0.162{col 65}{space 4}-61.58152{col 78}{space 3} 369.2388
+{txt}{space 19}gatt {c |}{col 25}{res}{space 2} 46.91905{col 37}{space 2} 261.2022{col 48}{space 1}    0.18{col 57}{space 3}0.857{col 65}{space 4}-465.3273{col 78}{space 3} 559.1654
+{txt}{space 13}remoteness {c |}{col 25}{res}{space 2}  4961972{col 37}{space 2}  1809457{col 48}{space 1}    2.74{col 57}{space 3}0.006{col 65}{space 4}  1413428{col 78}{space 3}  8510517
+{txt}max_exporter_exp_degree {c |}{col 25}{res}{space 2}-77.66677{col 37}{space 2} 13.48422{col 48}{space 1}   -5.76{col 57}{space 3}0.000{col 65}{space 4}-104.1108{col 78}{space 3}-51.22273
+{txt}{space 4}exporter_imp_degree {c |}{col 25}{res}{space 2} 29.46026{col 37}{space 2} 6.810475{col 48}{space 1}    4.33{col 57}{space 3}0.000{col 65}{space 4} 16.10417{col 78}{space 3} 42.81635
+{txt}{space 18}_cons {c |}{col 25}{res}{space 2} -23749.7{col 37}{space 2} 2644.192{col 48}{space 1}   -8.98{col 57}{space 3}0.000{col 65}{space 4}-28935.25{col 78}{space 3}-18564.15
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. estimates store exporter_fe_remote_network
+{txt}
+{com}. 
+. regress  exp_fe_network lngdp lngdpcap gatt max_exporter_exp_degree exporter_imp_degree, vce(robust)
+
+{txt}Linear regression                               Number of obs     = {res}     2,078
+                                                {txt}F(5, 2072)        =  {res}    80.21
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.3178
+                                                {txt}Root MSE          =    {res} 7021.2
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 25}{c |}{col 37}    Robust
+{col 1}         exp_fe_network{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      t{col 57}   P>|t|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 18}lngdp {c |}{col 25}{res}{space 2} 2800.368{col 37}{space 2} 312.8055{col 48}{space 1}    8.95{col 57}{space 3}0.000{col 65}{space 4} 2186.923{col 78}{space 3} 3413.814
+{txt}{space 15}lngdpcap {c |}{col 25}{res}{space 2} 187.3067{col 37}{space 2}  105.554{col 48}{space 1}    1.77{col 57}{space 3}0.076{col 65}{space 4}-19.69622{col 78}{space 3} 394.3096
+{txt}{space 19}gatt {c |}{col 25}{res}{space 2}-169.7289{col 37}{space 2} 238.9738{col 48}{space 1}   -0.71{col 57}{space 3}0.478{col 65}{space 4}-638.3827{col 78}{space 3} 298.9249
+{txt}max_exporter_exp_degree {c |}{col 25}{res}{space 2} -74.3134{col 37}{space 2} 13.30816{col 48}{space 1}   -5.58{col 57}{space 3}0.000{col 65}{space 4}-100.4122{col 78}{space 3}-48.21464
+{txt}{space 4}exporter_imp_degree {c |}{col 25}{res}{space 2} 30.56926{col 37}{space 2} 6.853398{col 48}{space 1}    4.46{col 57}{space 3}0.000{col 65}{space 4}   17.129{col 78}{space 3} 44.00953
+{txt}{space 18}_cons {c |}{col 25}{res}{space 2}-19920.86{col 37}{space 2} 2054.387{col 48}{space 1}   -9.70{col 57}{space 3}0.000{col 65}{space 4}-23949.74{col 78}{space 3}-15891.99
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. estimates store exporter_fe_network
+{txt}
+{com}. 
+. esttab importer_fe_basic importer_fe_remote importer_fe_remote_network importer_fe_network exporter_fe_basic exporter_fe_remote exporter_fe_remote_network exporter_fe_network using second_stage_v1c.txt, se ar2 noobs star(* 0.1 ** 0.05 *** 0.01) replace
+{res}{txt}(output written to {browse  `"second_stage_v1c.txt"'})
+
+{com}. esttab importer_fe_basic importer_fe_remote importer_fe_remote_network importer_fe_network exporter_fe_basic exporter_fe_remote exporter_fe_remote_network exporter_fe_network using second_stage_v1c.tex, se ar2 noobs star(* 0.1 ** 0.05 *** 0.01) replace
+{res}{txt}(output written to {browse  `"second_stage_v1c.tex"'})
+
+{com}. 
+. esttab  importer_fe_remote importer_fe_remote_network importer_fe_network  exporter_fe_remote exporter_fe_remote_network exporter_fe_network using second_stage_fewer_v1c.txt, se ar2 noobs star(* 0.1 ** 0.05 *** 0.01) replace
+{res}{txt}(output written to {browse  `"second_stage_fewer_v1c.txt"'})
+
+{com}. esttab  importer_fe_remote importer_fe_remote_network importer_fe_network  exporter_fe_remote exporter_fe_remote_network exporter_fe_network using second_stage_fewer_v1c.tex, se ar2 noobs star(* 0.1 ** 0.05 *** 0.01) replace
+{res}{txt}(output written to {browse  `"second_stage_fewer_v1c.tex"'})
+
+{com}. 
+. restore
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}D:\work\Peter_Herman\projects\trade_network_revisions_2020\github_repo\new analysis\gravity\main_analysis\PPML\results_v1c\two_stage_ppml_log_v1a.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}22 Jan 2021, 15:36:37
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

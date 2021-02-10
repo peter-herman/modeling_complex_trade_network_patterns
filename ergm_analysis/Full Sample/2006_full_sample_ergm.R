@@ -1,44 +1,113 @@
+# Description: ERGM estimation of the full sample in 1995. 
+
+
+#"C:\Program Files\Microsoft\R Open\R-4.0.2\bin\x64\R.exe"
 #rm(list = ls())
 library(statnet)
 library(foreign)
+require(stargazer)
+library(tidyr)
 
 
+# ----
+# Set specification and Paths
+# ----
+
+# Set working directory
+setwd("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\Full Sample\\ERGM_full_sample_results")
+
+save_name = "1995_full_sample_ergm_results.txt"
+model_fit_save = "1995_full_sample_ergm_model_fit.rda"
+ergm_results_name = "1995_full_sample_ergm_results_ext"
+
+# Set paths
+countrylist.path = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data\\207countrylist.csv"
+cepii.geo.path = "D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\data\\geo_cepii.dta"
+cepii.grav.path = "D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\data\\grav_data_1995to2015.csv"
+mr_path = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\gravity\\main_analysis\\PPML\\results\\standard_fe_estimates.csv"
 
 
-
-setwd("D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\ergm_analysis\\Full Sample") #USITC Laptop
-
-
-
-source("D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\ergm_analysis\\BACI.functions.R")
-source("D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\ergm_analysis\\BACI_node_attributes.R")
+# load functions from other files
+source("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\BACI.functions.R")
+source("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\BACI_node_attributes.R")
 
 
 ## Load data sources
-#To change year, alter both the "data <- read.csv" line and the "year.used" line 
-year.used <- 2006
-data <- read.csv("file:///P:\\Documents\\Working Papers\\Data Various\\BACI (HS92)\\baci92_2004.csv", header = TRUE, sep = ",")
+#To change year, alter both the "data <- read.csv" line and the "year.used" line
+year.used <- 1995
+data <- read.csv("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data\\baci92_2006.csv", header = TRUE, sep = ",")
 
 
-data <- countrycode.replacer(data, "D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\data\\country_name_correspondence.dta")
 
+# ----
+# Prep Data
+# ----
 
-countrylist.path = "D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\data\\207countrylist.csv"
-cepii.geo.path = "D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\data\\geo_cepii.dta"
-cepii.grav.path = "D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\data\\grav_data_1995to2015.csv"
-#EEA.entry.path = "P:\\Documents\\Working Papers\\Data Various\\EEA Entry Dates.csv"
+# Replace Country codes with iso3-alphas
+data <- countrycode.replacer(data, "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data\\country_name_correspondence.dta")
 
+# Drop some countries 
 dropcountries <- c("NULL","ARB", "ATF", "COD", "IOT", "SCG") #missing grav data at least.
 
-#Prepwork
-
-data <- BACI.data.prep(data, dropcountries) #Preps the data a bit more.  Also adds in a second list item containing a list of countries.
+# Prepwork
+data <- BACI.data.prep(data, dropcountries) #Preps the data a bit more.  Also adds in a second list item (attribute) containing a list of countries.
 #identify.missingdata.countries(data, cepii.grav.path, year.used, c("distw","comlang_ethno", "contig", "rta", "colony"))
 
 
 cepii.grav <- read.csv(cepii.grav.path)
-#agg.network <- agg.network.isolates(data)
-agg.network <- agg.network.fast(data)
+
+# ---
+# Add estimates of MRTs
+# ---
+mr_data = read.csv(mr_path, header = TRUE, sep = ",")
+# Check if countries are coded the same
+mr_countries = c(unique(mr_data$exporter))
+cepii_countries = c(unique(cepii.grav$iso3_o))
+setdiff(mr_countries, cepii_countries)
+
+cepii.grav = merge(cepii.grav, mr_data, by.x = c('iso3_o', 'iso3_d','year'), by.y = c('exporter','importer', 'year'), all = FALSE) 
+summary(cepii.grav$imp_fe)
+summary(cepii.grav$exp_fe)
+
+cepii.grav$mr_prod = cepii.grav$imp_fe * cepii.grav$exp_fe
+max_mr_prod = max(cepii.grav$mr_prod)
+cepii.grav$mr_prod = cepii.grav$mr_prod/max_mr_prod
+if (min(cepii.grav$mr_prod) < 0) {
+    stop('There are negative fixed effect values!')
+}
+
+
+# ---
+# Create Aggregate Network
+# ---
+# Create all combinations of countries
+countrypairs <- expand.grid(data$countries, data$countries)
+# Rename columns
+colnames(countrypairs) <- c( "iso3_o","iso3_d")
+# Create dataframe containing all unique pairs in the trade data that exhibit possitive trade
+trade = unique(data.frame(data$data$exporter, data$data$importer))
+# Add indicator for positive trade
+trade$value <- 1
+# Merge all pairs with trading pairs
+allflows <- merge(countrypairs, trade, by.x = c("iso3_o", "iso3_d"), by.y = c("data.data.exporter", "data.data.importer"), all.x = TRUE ) 
+# reshape wide (row = importer/destination, column = exporter/origin )
+allflows.adj <- tidyr::spread(allflows,iso3_d, value)
+# add importer ID as row name
+rownames(allflows.adj) <- as.vector(allflows.adj$iso3_o)
+# converts DataFrame to matrix and drops the "iso3_o" column, which is now stored as a row name
+allflows.adj <- as.matrix(subset(allflows.adj, select = -c(iso3_o)))
+# Convert missing values to 0
+allflows.adj[is.na(allflows.adj)] <- 0
+# Convert to a network object
+agg.network <- network(allflows.adj, loops = FALSE)
+# Set node names
+network.vertex.names(agg.network) <- as.character(data$countries)
+
+
+
+# ---
+# Create additional networks and attributes
+# ---
 
 #   Edge Attribute Generation:
 #     subnetwork.valued.edge.attribute(data, edge.attribute, year, cepii.grav) is to be used for valued edge attributes. call in ergm using "edgecov(attribute.network, attrname = "edge.attribute")"
@@ -47,35 +116,55 @@ lang.network <- subnetwork.unvalued(data, cepii.grav, "comlang_ethno", year.used
 dist.network <- subnetwork.valued.edge.attribute(data, "distw", year.used, cepii.grav )
 contig.network <- subnetwork.unvalued(data, cepii.grav, "contig", year.used)
 rta.network <- subnetwork.unvalued(data, cepii.grav, "rta", year.used)
+mrt.network <- subnetwork.valued.edge.attribute(data, "mr_prod", year.used, cepii.grav )
 
-#Node Attribute Generators:
+
+# Node Attribute Generators:
 agg.network <- node.attribute.adder(agg.network, data, cepii.grav, year.used, "gdp_o")
 
 #
 Sys.time()
 
-ergm.output <-  ergm( agg.network ~ edges + mutual   +   nodecov("gdp_o") + edgecov(dist.network, attrname = "distw") + edgecov(lang.network) + edgecov(contig.network) + edgecov(rta.network) ,   control=control.ergm(MCMC.burnin=1e+5, MCMC.interval=1000, MCMC.samplesize=100000, MCMLE.maxit = 100, seed=1))
 
+# ---
+# Estimate ERGM and conduct post estimation analysis and output
+# ---
 
+ergm.output <-  ergm( agg.network ~ edges + mutual   +   nodecov("gdp_o") + edgecov(dist.network, attrname = "distw") + edgecov(lang.network) + edgecov(contig.network) + edgecov(rta.network) + edgecov(mrt.network, attrname = "mr_prod"),   control=control.ergm(MCMC.burnin=1e+5, MCMC.interval=1000, MCMC.samplesize=100000, MCMLE.maxit = 100, seed=1))
+
+# Save results object 
 Sys.time()
-save(ergm.output, file = "2006_model_fit.rda")
+save(ergm.output, file = model_fit_save)
 
-#summary(ergm.output.2004)
-#ergm.output.2004$mle.lik
-#pdf("diagnostic_plots_2004.pdf")
-#mcmc.diagnostics(ergm.output.2004)
-#dev.off()
-#goffit <- gof(ergm.output.2004, GOF=~model)
-#par(mfrow = c(1,1))
-#goffit2 <-gof(ergm.output.2004)
-#pdf("gof_plots_2004.pdf")
-#plot(goffit)
-#plot(goffit2)
-#dev.off()
+summary(ergm.output)
+ergm.output$mle.lik
+# Conduct MCMC diagnostics
+mcmc.diagnostics(ergm.output)
+# Conduct GOF tests
+goffit <- gof(ergm.output, GOF=~model)
+# Plot GOF figures
+par(mfrow = c(1,1))
+plot(goffit)
+goffit2 <-gof(ergm.output)
+plot(goffit2)
 
-write_ergm_results(ergm.output, "2006_full_sample_results")
-#require(stargazer)
-#hold <- summary(ergm.output.2004)
-#stargazer(hold$coefs, summary = FALSE)
+# Create formatted table
+hold <- summary(ergm.output)
+stargazer(hold$coefs, summary = FALSE)
 
-#stargazer(summary(ergm.output.20041995)$coefs, summary(ergm.output.20042006)$coefs,summary = FALSE)
+# Write sequence of results to a file
+sink(save_name)
+summary(ergm.output)
+
+cat("\n\n===========")
+cat("\nDiagnostics\n")
+cat("=========== \n")
+
+mcmc.diagnostics(ergm.output)
+stargazer(hold$coefs, summary = FALSE)
+sink()
+
+# Runner custom function to write out results (might be duplicative)
+write_ergm_results(ergm.output, ergm_results_name)
+
+

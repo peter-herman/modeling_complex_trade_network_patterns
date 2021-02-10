@@ -9,9 +9,9 @@ library(tidyr)
 # Set directories
 #------------
 
-working_directory = "D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\data"
-country_name_concordance = "P:\\Documents\\Working Papers\\Data Various\\countrynamecorrespondence_stata12.dta"
-gravity_data_path = "P:\\Documents\\Working Papers\\Data Various\\gravdata_cepii.dta"
+working_directory = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data"
+country_name_concordance = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data\\country_name_correspondence.dta"
+gravity_data_path = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data\\grav_data_1995to2015.csv"
 baci_data_path = "P:\\Documents\\Working Papers\\Data Various\\BACI"
 
 
@@ -140,7 +140,7 @@ for(yr in firstyear:lastyear){
     networkdata$cyclical_value[[k]] <- cyclval
     networkdata$cyclical_count[[k]] <- cyclcnt
     
-    ##Degree
+    ##Degree                                      if A_ij > 0, then sum_k(A_ik/A_ik) - 1, else sum_k(A_ik/A_ik)
     networkdata$importer_imp_degree[k] <- ifelse(adjmathold[networkdata$importer[k],  networkdata$exporter[k]]>0, sum(adjmathold[networkdata$importer[k],]/adjmathold[networkdata$importer[k],], na.rm = TRUE)-1, sum(adjmathold[networkdata$importer[k],]/adjmathold[networkdata$importer[k],],na.rm = TRUE)) #calculates importer import degree (indegree) excluding the current link.
     networkdata$importer_exp_degree[k] <- sum(adjmathold[,networkdata$importer[k]]/adjmathold[,networkdata$importer[k]], na.rm = TRUE) #calculates importer export degree (indegree) excluding the current link.
     networkdata$exporter_exp_degree[k] <- ifelse(adjmathold[networkdata$importer[k], networkdata$exporter[k]]>0, sum(adjmathold[,networkdata$exporter[k]]/adjmathold[,networkdata$exporter[k]],na.rm = TRUE)-1, sum(adjmathold[,networkdata$exporter[k]]/adjmathold[,networkdata$exporter[k]],na.rm = TRUE)) #calculates importer import degree (indegree) excluding the current link.
