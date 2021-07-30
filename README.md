@@ -1,7 +1,3 @@
-# **README UPDATES ToDo: **
-    * update the ERGM Section to reflect reorganization of main scripts
-
-
 # Replication Instructions
 This repository contains instructions for how to replicate the work in the 2021 revision of "Modeling Complex Network Patterns in Trade" by Peter Herman. To do so, follow the instructions below in sequence to reproduce all of the analysis. 
 
