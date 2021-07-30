@@ -9,10 +9,10 @@ library(tidyr)
 # Set directories
 #------------
 
-working_directory = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data"
-country_name_concordance = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data\\country_name_correspondence.dta"
-gravity_data_path = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data\\grav_data_1995to2015.csv"
-baci_data_path = "P:\\Documents\\Working Papers\\Data Various\\BACI"
+working_directory = "data"
+country_name_concordance = "data\\country_name_correspondence.dta"
+gravity_data_path = "data\\grav_data_1995to2015.csv"
+baci_data_path = "data\\BACI (HS92)"
 
 
 

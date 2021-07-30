@@ -1,6 +1,7 @@
-#C:\Program Files\Microsoft\R Open\R-4.0.2\bin\x64\R.exe"
+#"C:\Program Files\Microsoft\R Open\R-4.0.2\bin\x64\R.exe"
 
-# Description:  ERGM Estimation of HS36 in 2006. ERGM includes gwesp and MRT covariate. The MRT term is the product of the fixed effects divided by the max of the products.
+# Description:  ERGM Estimation of HS45 in 1995. ERGM includes gwesp and MRT covariate. The MRT term is the product of the fixed effects divided by the max of the products.
+
 
 library(statnet)
 library(foreign)
@@ -13,32 +14,26 @@ library(dplyr)
 #------------------------
 
 # Version Characteristics
-setwd("ergm_analysis\\HS 50 countries\\ERGM_results")
+setwd("ergm_analysis\\HS 50 countries\\hs45")
 
 total_countries = 50
-year.used = 2006
-version_name = "2006_ergm_hs36_top50"
+year.used = 1995
+version_name = "1995_ergm_hs45_top50"
 
 
 dropcountries <- c("NULL","ARB", "ATF", "COD", "IOT", "SCG") # ("NULL","ARB", "ATF", "COD", "IOT", "SCG") are missing in gravity data.
 
 # Paths for data
-trade_data_path = "ergm_analysis\\HS 50 countries\\hs36_baci_data_2006_top50_traders.csv"
-mr_path = "ergm_analysis\\HS 50 countries\\ppml_hs36_top50_standard_fe_estimates.csv"
+trade_data_path = "ergm_analysis\\HS 50 countries\\data\\hs45_baci_data_1995_top50_traders.csv"
+mr_path = "ergm_analysis\\HS 50 countries\\hs45\\ppml_hs45_top50_standard_fe_estimates.csv"
 
-cepii.geo.path <- "data\\geo_cepii.dta"
 cepii.grav.path <- "data\\grav_data_1995to2015.csv"
-
-
 
 #---------------------
 # Load and Prep Data
 #---------------------
 
 # Load functions
-# source("D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\original_code\\BACI.functions.R")
-# source("D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\original_code\\BACI_node_attributes.R")
-
 source("ergm_analysis\\BACI.functions.R")
 source("ergm_analysis\\BACI_node_attributes.R")
 
@@ -131,20 +126,20 @@ agg.network %v% 'gdp_o' <- node.att.mat[,2]
 
 version_number <- 1
 
-ergm.output <-  ergm( agg.network ~ edges + mutual  + gwesp(decay=1) + nodecov("gdp_o") + edgecov(dist.network, attrname = "distw") +
-                             edgecov(lang.network) + edgecov(contig.network) + edgecov(rta.network) + edgecov(mrt.network, attrname = "mr_prod"),   
+ergm.output.1995 <-  ergm( agg.network ~ edges + mutual   + gwesp(decay=1) + edgecov(dist.network, attrname = "distw") +
+                             edgecov(lang.network) + edgecov(contig.network) + edgecov(rta.network) + edgecov(mrt.network, attrname = "mr_prod") ,   
                            control=control.ergm(MCMC.burnin=1e+5, MCMC.interval=1000, MCMC.samplesize=100000,
                                                 MCMLE.maxit = 250, seed=1))
 
 # Save ERGM object
 
-save(ergm.output, file = paste(version_name,"_output.rda", sep = ""))
+save(ergm.output.1995, file = paste(version_name,"_output.rda", sep = ""))
 
 # Print estimates
-summary(ergm.output)
-ergm.output$mle.lik
+summary(ergm.output.1995)
+ergm.output.1995$mle.lik
 
 # Write results to files and pdfs
-write_ergm_results(ergm.output, file_name = version_name)
+write_ergm_results(ergm.output.1995, file_name = version_name)
 
 

@@ -12,7 +12,7 @@ BACI.data.prep <- function(data, dropcountries, countrylist.path){
   #countries <- countries[order(countries)]
   
   ## \-> Just use the premaid list
-  countrylist <- read.csv("G:\\data\\Peter Herman\\Trade Network Reserach\\Data\\207countrylist.csv")
+  countrylist <- read.csv("data\\207countrylist.csv")
   countrylist <- countrylist$x
   countrylist <-countrylist[order(countrylist)]
   prepped.data = list("data"=data, "countries"=countrylist) 

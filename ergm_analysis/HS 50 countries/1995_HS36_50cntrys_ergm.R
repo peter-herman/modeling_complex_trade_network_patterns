@@ -14,7 +14,7 @@ library(dplyr)
 #------------------------
 
 # Version Characteristics
-setwd("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\HS 50 countries\\ERGM_results")
+setwd("ergm_analysis\\HS 50 countries\\ERGM_results")
 
 total_countries = 50
 year.used = 1995
@@ -24,18 +24,18 @@ version_name = "1995_ergm_hs36_top50"
 dropcountries <- c("NULL","ARB", "ATF", "COD", "IOT", "SCG") # ("NULL","ARB", "ATF", "COD", "IOT", "SCG") are missing in gravity data.
 
 # Paths for data
-trade_data_path = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\HS 50 countries\\hs36_baci_data_1995_top50_traders.csv"
-mr_path = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\HS 50 countries\\ppml_hs36_top50_standard_fe_estimates.csv"
+trade_data_path = "ergm_analysis\\HS 50 countries\\hs36_baci_data_1995_top50_traders.csv"
+mr_path = "ergm_analysis\\HS 50 countries\\ppml_hs36_top50_standard_fe_estimates.csv"
 
-cepii.grav.path <- "D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\data\\grav_data_1995to2015.csv"
+cepii.grav.path <- "data\\grav_data_1995to2015.csv"
 
 #---------------------
 # Load and Prep Data
 #---------------------
 
 # Load functions
-source("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\BACI.functions.R")
-source("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\BACI_node_attributes.R")
+source("ergm_analysis\\BACI.functions.R")
+source("ergm_analysis\\BACI_node_attributes.R")
 
 
 trade_data <- read.csv(trade_data_path, header = TRUE, sep = ",")
@@ -43,7 +43,7 @@ trade_data <- read.csv(trade_data_path, header = TRUE, sep = ",")
 trade_data = select(trade_data, -'traded')
 trade_data = rename(trade_data, 'hs6'='hs2')
 trade_data$q = 0
-net = countrycode.replacer(trade_data, "D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\data\\country_name_correspondence.dta")
+net = countrycode.replacer(trade_data, "data\\country_name_correspondence.dta")
 net$traded = 1
 net <- net[,c('importer', 'exporter', 'traded')]
 

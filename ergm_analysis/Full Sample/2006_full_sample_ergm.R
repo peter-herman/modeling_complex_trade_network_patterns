@@ -14,28 +14,28 @@ library(tidyr)
 # ----
 
 # Set working directory
-setwd("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\Full Sample\\ERGM_full_sample_results")
+setwd("ergm_analysis\\Full Sample\\ERGM_full_sample_results")
 
 save_name = "1995_full_sample_ergm_results.txt"
 model_fit_save = "1995_full_sample_ergm_model_fit.rda"
 ergm_results_name = "1995_full_sample_ergm_results_ext"
 
 # Set paths
-countrylist.path = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data\\207countrylist.csv"
-cepii.geo.path = "D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\data\\geo_cepii.dta"
-cepii.grav.path = "D:\\work\\Peter_Herman\\projects\\trade_network_research\\files_used_in_submission\\data\\grav_data_1995to2015.csv"
-mr_path = "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\gravity\\main_analysis\\PPML\\results\\standard_fe_estimates.csv"
+countrylist.path = "data\\207countrylist.csv"
+cepii.geo.path = "data\\geo_cepii.dta"
+cepii.grav.path = "data\\grav_data_1995to2015.csv"
+mr_path = "gravity\\main_analysis\\PPML\\results\\standard_fe_estimates.csv"
 
 
 # load functions from other files
-source("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\BACI.functions.R")
-source("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\github_repo\\new analysis\\ergm_analysis\\BACI_node_attributes.R")
+source("ergm_analysis\\BACI.functions.R")
+source("ergm_analysis\\BACI_node_attributes.R")
 
 
 ## Load data sources
 #To change year, alter both the "data <- read.csv" line and the "year.used" line
 year.used <- 1995
-data <- read.csv("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data\\baci92_2006.csv", header = TRUE, sep = ",")
+data <- read.csv("data\\baci92_2006.csv", header = TRUE, sep = ",")
 
 
 
@@ -44,7 +44,7 @@ data <- read.csv("D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020
 # ----
 
 # Replace Country codes with iso3-alphas
-data <- countrycode.replacer(data, "D:\\work\\Peter_Herman\\projects\\trade_network_revisions_2020\\submission_files\\data\\country_name_correspondence.dta")
+data <- countrycode.replacer(data, "data\\country_name_correspondence.dta")
 
 # Drop some countries 
 dropcountries <- c("NULL","ARB", "ATF", "COD", "IOT", "SCG") #missing grav data at least.

@@ -3,6 +3,10 @@
 .idea/
 
 
+*.txt
+*.log
+*.tex
+
 # Images and graphical
 *.pdf
 *.png

@@ -3,11 +3,11 @@
 clear all
 set matsize 8000
 set maxvar 30000
-cd "D:\work\Peter_Herman\projects\trade_network_revisions_2020\submission_files\gravity\extensive_margin\results_ols"
+cd "gravity\extensive_margin\results_ols"
 log using "extensive_margin_estimation_log.txt", replace
 set more off
 
-use "D:\work\Peter_Herman\projects\trade_network_revisions_2020\submission_files\data\gravity_estimation_data.csv", clear
+use "data\gravity_estimation_data.csv", clear
 
 
 

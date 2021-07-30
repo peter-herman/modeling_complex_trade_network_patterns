@@ -1,6 +1,6 @@
 #C:\Program Files\Microsoft\R Open\R-4.0.2\bin\x64\R.exe"
 
-# Description:  ERGM Estimation of HS36 in 2006. ERGM includes gwesp and MRT covariate. The MRT term is the product of the fixed effects divided by the max of the products.
+# Description:  ERGM Estimation of HS51 in 2006. ERGM includes gwesp and MRT covariate. The MRT term is the product of the fixed effects divided by the max of the products.
 
 library(statnet)
 library(foreign)
@@ -13,20 +13,19 @@ library(dplyr)
 #------------------------
 
 # Version Characteristics
-setwd("ergm_analysis\\HS 50 countries\\ERGM_results")
+setwd("ergm_analysis\\HS 50 countries\\hs51")
 
 total_countries = 50
 year.used = 2006
-version_name = "2006_ergm_hs36_top50"
+version_name = "2006_ergm_hs51_top50"
 
 
 dropcountries <- c("NULL","ARB", "ATF", "COD", "IOT", "SCG") # ("NULL","ARB", "ATF", "COD", "IOT", "SCG") are missing in gravity data.
 
 # Paths for data
-trade_data_path = "ergm_analysis\\HS 50 countries\\hs36_baci_data_2006_top50_traders.csv"
-mr_path = "ergm_analysis\\HS 50 countries\\ppml_hs36_top50_standard_fe_estimates.csv"
+trade_data_path = "ergm_analysis\\HS 50 countries\\data\\hs51_baci_data_2006_top50_traders.csv"
+mr_path = "ergm_analysis\\HS 50 countries\\hs51\\ppml_hs51_top50_standard_fe_estimates.csv"
 
-cepii.geo.path <- "data\\geo_cepii.dta"
 cepii.grav.path <- "data\\grav_data_1995to2015.csv"
 
 
@@ -36,9 +35,6 @@ cepii.grav.path <- "data\\grav_data_1995to2015.csv"
 #---------------------
 
 # Load functions
-# source("D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\original_code\\BACI.functions.R")
-# source("D:\\work\\Peter_Herman\\projects\\trade_network_research\\rr_ergm_analysis\\original_code\\BACI_node_attributes.R")
-
 source("ergm_analysis\\BACI.functions.R")
 source("ergm_analysis\\BACI_node_attributes.R")
 
@@ -131,7 +127,7 @@ agg.network %v% 'gdp_o' <- node.att.mat[,2]
 
 version_number <- 1
 
-ergm.output <-  ergm( agg.network ~ edges + mutual  + gwesp(decay=1) + nodecov("gdp_o") + edgecov(dist.network, attrname = "distw") +
+ergm.output <-  ergm( agg.network ~ edges + mutual + nodecov("gdp_o") + edgecov(dist.network, attrname = "distw") +
                              edgecov(lang.network) + edgecov(contig.network) + edgecov(rta.network) + edgecov(mrt.network, attrname = "mr_prod"),   
                            control=control.ergm(MCMC.burnin=1e+5, MCMC.interval=1000, MCMC.samplesize=100000,
                                                 MCMLE.maxit = 250, seed=1))

@@ -1,8 +1,0 @@
-	&	1995	&		&		&	&	2006	&		&		\\
-	&	Standard	&	Network	&		&	&	Standard	&	Network	&		\\
-Attribute	&	probit	&	probit	&	ERGM	&	&	probit	&	probit	&	ERGM	\\
-Edges	&	1565.78	&	117.29	&	38.69	&	&	8738.51	&	5762.33	&	6.15	\\
-Shared partners	&	2164.40	&	2271.28	&	1696.16	&	&	9091.70	&	2887.15	&	3296.20	\\
-In-degrees	&	29.70	&	33.55	&	42.42	&	&	47.24	&	42.52	&	103.24	\\
-Out-degrees	&	31.89	&	48.29	&	61.61	&	&	40.62	&	52.17	&	54.73	\\
-Geometric distances	&	16619.57	&	86366.26	&	44782.62	&	&	21811.52	&	22594.43	&	29190.00	\\

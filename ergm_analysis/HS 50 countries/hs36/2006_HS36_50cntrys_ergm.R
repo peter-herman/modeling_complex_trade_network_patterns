@@ -13,7 +13,7 @@ library(dplyr)
 #------------------------
 
 # Version Characteristics
-setwd("ergm_analysis\\HS 50 countries\\ERGM_results")
+setwd("ergm_analysis\\HS 50 countries\\hs36")
 
 total_countries = 50
 year.used = 2006
@@ -23,8 +23,8 @@ version_name = "2006_ergm_hs36_top50"
 dropcountries <- c("NULL","ARB", "ATF", "COD", "IOT", "SCG") # ("NULL","ARB", "ATF", "COD", "IOT", "SCG") are missing in gravity data.
 
 # Paths for data
-trade_data_path = "ergm_analysis\\HS 50 countries\\hs36_baci_data_2006_top50_traders.csv"
-mr_path = "ergm_analysis\\HS 50 countries\\ppml_hs36_top50_standard_fe_estimates.csv"
+trade_data_path = "ergm_analysis\\HS 50 countries\\data\\hs36_baci_data_2006_top50_traders.csv"
+mr_path = "ergm_analysis\\HS 50 countries\\hs36\\ppml_hs36_top50_standard_fe_estimates.csv"
 
 cepii.geo.path <- "data\\geo_cepii.dta"
 cepii.grav.path <- "data\\grav_data_1995to2015.csv"

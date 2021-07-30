@@ -25,7 +25,7 @@ years = [1995, 2006]
 save_loc = "ergm_analysis\\HS 50 countries\\data"
 
 country_number = 50
-sector_list = ['45', '36', '51']
+sector_list = ['0901','8703']
 
 # ----
 # Examine Density of HS2 networks in 1995 and 2006
@@ -37,7 +37,7 @@ for file in data_locs:
     loaded_data = pd.read_csv(file, dtype={'hs6':str})
     raw_datas.append(loaded_data)
 raw_data = pd.concat(raw_datas, axis = 0)
-raw_data['hs2'] = raw_data['hs6'].str[0:2]
+raw_data['hs2'] = raw_data['hs6'].str[0:4]
 
 sectors = raw_data['hs2'].unique()
 
@@ -103,7 +103,7 @@ for file in baci_files:
 baci_data = pd.concat(raw_bacis, axis=0)
 
 # Create HS2 variable
-baci_data['hs2'] = baci_data['hs6'].str[0:2]
+baci_data['hs2'] = baci_data['hs6'].str[0:4]
 # Aggregate to HS Chapter
 baci_agg = baci_data.groupby(['i','j','t','hs2']).agg({'v':sum}).reset_index()
 
