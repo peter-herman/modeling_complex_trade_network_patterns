@@ -1,8 +1,11 @@
 # Replication Instructions
-This repository contains instructions for how to replicate the work in the 2021 revision of "Modeling Complex Network Patterns in Trade" by Peter Herman. To do so, follow the instructions below in sequence to reproduce all of the analysis. 
+This repository contains instructions for how to replicate the work in "Modeling Complex Network Patterns in Trade" by Peter Herman. To do so, follow the instructions below in sequence to reproduce all of the analysis. 
+
+### Citation
+Herman, Peter R. (2021) "Modeling Complex Network Patterns in International Trade," Review of World Economics. https://doi.org/10.1007/s10290-021-00429-y
 
 ## Source Data Files
-The following files reflect the source data used in the analysis. Two of the files are included here as comma separated text files. The remaining files are not included due to file size, but are readily available from their original sources at http://www.cepii.fr/cepii/en/bdd_modele/bdd.asp. The specific versions used for the original analysis are available by request from the author.
+The following files reflect the source data used in the analysis. Two of the files are included here as comma separated text files. The remaining files are not included due to file size, but are available via the Harvard Dataverse at https://doi.org/10.7910/DVN/FI9MYK. 
 
 **Data Files:**
 * data/207countrylist.csv  (A list of countries for use in main analysis, included in repo in .txt format)
